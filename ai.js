@@ -24,25 +24,31 @@ $(document).ready(function () {
         })
         //console.log(obj)
 
-    })
+    });
+
+
 var stackCounter = 0;
 var stepsTaken = 0;
+var found;
   function findSolution(target) {
     function find(current, num) {
-      stackCounter++;   if (stackCounter > 1000) { return null;};
+      stackCounter++;   if (stackCounter > 1000 || found == true) { return null;};
 
-      // console.log(current)
+     //console.log(obj[current])
       // console.log(target)
 
       if (obj[current] == target) {
-        console.log('found');
-        var string = obj[[1,5]] + num;
+        //console.log('found');
+        found = true
+        console.log('steps taken: ' + stepsTaken)
+        var string = obj[[1,6]] + num;
         var stringSplit = string.split(',')
         var newArr = [];
         for (let x of stringSplit) {
           newArr.push(x.charAt(0))
         }
           return newArr;
+
       }
       else if (!obj[current]) {
 
@@ -53,9 +59,9 @@ var stepsTaken = 0;
       }
       else {
           obj[current] = obj[current] + ' marked'
-          console.log(obj[current] )
+
           stepsTaken++;
-          console.log('steps: ' + stepsTaken)
+        //
      		if (num == undefined) { num = '' }
         let left = [ current[0] - 1, current[1] ]
         let right = [current[0] + 1, current[1] ]
@@ -63,27 +69,31 @@ var stepsTaken = 0;
         let down = [current[0], current[1] -1 ]
 
         let toAdd = num + ',';
-        console.log(toAdd)
+      //  console.log(toAdd)
+        // let findDown = find(down, toAdd + obj[down]);
+        // let findLeft = find(left,   toAdd + obj[left]);
+        // let findRight = find(right, toAdd + obj[right]);
+        // let findUp = find(up, toAdd + obj[up]);
+        //
+        //
+        //
+        // return findLeft || findRight || findUp || findDown;
 
-        let findLeft = find(left,   toAdd + obj[left]);
-        let findRight = find(right, toAdd + obj[right]);
-        let findUp = find(up, toAdd + obj[up]);
-        let findDown = find(down, toAdd + obj[down]);
-
-
-        return findDown || findRight || findUp || findLeft;
-
-        // return find(left, obj[left] + ' ' + num) || find(right, obj[right] + ' ' + num) ||
-        // find(up, obj[up] + ' ' + num) || find(down, obj[down] + ' ' + num);
+        return find(down, toAdd + obj[down]) || find(left,   toAdd + obj[left])||
+        find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
        }
     }
-    return find([1,5]);
+    return find([1,6]);
   }
 
    //console.clear();
    $('#calc').on('click', function () {
+     stepsTaken = 0;
+     found = false;
     // console.log( obj[[4,1]] )
-      var solution = findSolution( obj[[4,1]] );
+    console.time('f')
+      var solution = findSolution( obj[[1,1]] );
+    console.timeEnd('f')
       console.log(solution)
         $('.wrapper').find('div').each(function (i,el) {
             el.style.border = 'none';
