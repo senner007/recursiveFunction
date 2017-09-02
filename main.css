@@ -21,3 +21,9 @@ body {
 .set {
   background-color:  blue;
 }
+
+button {
+  margin-top: 10px;
+  font-size: 22px;
+
+}
