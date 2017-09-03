@@ -59,7 +59,7 @@ $(document).ready(function () {
 
         return newArr;
       }
-      else if (!obj[current]) {  console.log(current); console.log('out'); return null;  }  // if key does not exist in object - return null
+      else if (!obj[current]) { return null;  }  // if key does not exist in object - return null
 
       else if ( obj[current].search("set") == -1 || obj[current].search("marked") != -1) { return null;} // if 'set' not in property or 'marked' in poperty
       else {
@@ -73,6 +73,8 @@ $(document).ready(function () {
 
         let toAdd = num + ',';
         var orderArray;
+        orderArray = [down,left,right,up];
+        //shuffle(orderArray)
 
         if (direction == 'southwest') {
           orderArray = [down,left,right,up];
@@ -82,6 +84,18 @@ $(document).ready(function () {
           orderArray = [up,left,right,down];
         } else if (direction == 'northeast') {
           orderArray = [up,right,left,down];
+        } else if (direction == 'westsouth') {
+          orderArray = [left,down,right,up];
+        } else if (direction == 'westnorth') {
+          orderArray = [left,up,right,down];
+        } else if (direction == 'eastsouth') {
+          orderArray = [right,down,left,up];
+        } else if (direction == 'eastnorth') {
+          orderArray = [right,up,left,down];
+        } else if (direction == 'eastwest') {
+            orderArray = [right,left,down,up];
+        } else if (direction == 'westeast') {
+            orderArray = [left,right,down,up];
         }
 
       //  shuffle(orderArray);
@@ -107,22 +121,27 @@ $(document).ready(function () {
    $('#calc').on('click', function () {
      stepsTaken = 0;
      found = false;
-     var directions = ['northeast', 'southeast', 'northwest','southwest']
+     var directions = ['northeast', 'southeast', 'northwest','southwest','westsouth', 'westnorth', 'eastsouth', 'eastnorth', 'eastwest', 'westeast']
+     //directions.length = 100;
      var solution;
-     console.time('f')
+      console.time('f')
      for (let i = 0; i < directions.length; i++) {
+
        var tempSolution = findSolution( obj[[1,1]] , directions[i]);
+      // console.log(tempSolution.length)
 
        if (tempSolution != null) {
          if (solution == undefined ) { solution = tempSolution}
 
          if (tempSolution.length < solution.length) { solution = tempSolution}
         }
-        console.log(tempSolution)
+
        clear();
 
      }
-     console.timeEnd('f')
+     //console.log(solution)
+      console.timeEnd('f')
+
      animateSolution(solution);
      function animateSolution(solution) {
        var wrapper = $('.wrapper');
