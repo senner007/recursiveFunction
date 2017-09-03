@@ -7,7 +7,7 @@ $(document).ready(function () {
     $('.wrapper').on('click', 'div',function () {
 
         this.classList.toggle('set')
-        divs.css('border', 'none');
+
 
         divs.each(function (i,el) {
           var $el = $(el);
@@ -74,31 +74,8 @@ $(document).ready(function () {
         let toAdd = num + ',';
         var orderArray;
         orderArray = [down,left,right,up];
-        //shuffle(orderArray)
+        shuffle(orderArray)
 
-        if (direction == 'southwest') {
-          orderArray = [down,left,right,up];
-        } else if (direction == 'southeast') {
-          orderArray = [down,right,left,up];
-        }  else if (direction == 'northwest') {
-          orderArray = [up,left,right,down];
-        } else if (direction == 'northeast') {
-          orderArray = [up,right,left,down];
-        } else if (direction == 'westsouth') {
-          orderArray = [left,down,right,up];
-        } else if (direction == 'westnorth') {
-          orderArray = [left,up,right,down];
-        } else if (direction == 'eastsouth') {
-          orderArray = [right,down,left,up];
-        } else if (direction == 'eastnorth') {
-          orderArray = [right,up,left,down];
-        } else if (direction == 'eastwest') {
-            orderArray = [right,left,down,up];
-        } else if (direction == 'westeast') {
-            orderArray = [left,right,down,up];
-        }
-
-      //  shuffle(orderArray);
         stepsTaken++;
 
       let o = {
@@ -121,14 +98,14 @@ $(document).ready(function () {
    $('#calc').on('click', function () {
      stepsTaken = 0;
      found = false;
-     var directions = ['northeast', 'southeast', 'northwest','southwest','westsouth', 'westnorth', 'eastsouth', 'eastnorth', 'eastwest', 'westeast']
-     //directions.length = 100;
+    var directions = []
+    directions.length = 50;
      var solution;
       console.time('f')
      for (let i = 0; i < directions.length; i++) {
 
-       var tempSolution = findSolution( obj[[1,1]] , directions[i]);
-      // console.log(tempSolution.length)
+       var tempSolution = findSolution( obj[[1,1]]);
+
 
        if (tempSolution != null) {
          if (solution == undefined ) { solution = tempSolution}
@@ -139,7 +116,7 @@ $(document).ready(function () {
        clear();
 
      }
-     //console.log(solution)
+    console.log(solution)
       console.timeEnd('f')
 
      animateSolution(solution);
@@ -151,10 +128,11 @@ $(document).ready(function () {
 
           let findDiv = wrapper.find('.' + x);
           setTimeout(function () {
-            findDiv.fadeOut().fadeIn();
+
+            findDiv.stop(true,true).fadeOut().fadeIn();
           }, time)
 
-          time = time + 100;
+          time = time + 40;
        }
      }
      function clear() {
