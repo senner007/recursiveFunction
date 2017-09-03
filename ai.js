@@ -13,16 +13,19 @@ $(document).ready(function () {
           var $el = $(el);
           var tempArr = []
           var str = $el.attr('id');
-          var res = str.split("");
+          var res = str.split(",");
+
           tempArr.push(res[0]);
-          tempArr.push(res[2]);
-        //  console.log(tempArr)
+          tempArr.push(res[1]);
+
           obj[tempArr] = el.classList[1];
           if ($el.hasClass('set')) {
             obj[tempArr] = el.classList[1] + ' set';
           }
         })
+
     });
+
 
   function shuffle(a) { // shuffle array
       var j, x, i;
@@ -40,18 +43,23 @@ $(document).ready(function () {
     var stepsTaken = 0;
     var found;
     function find(current, num) {
-      stackCounter++;   if (stackCounter > 10000 || found == true) { return null;}; // opt out if function is called too many times or found
-
+    //  stackCounter++;   if (stackCounter > 10000 || found == true) { return null;}; // opt out if function is called too many times or found
+      //console.log(num)
       if (obj[current] == target) {  // if destination has been reached - return array
         found = true
-        console.log('steps taken: ' + stepsTaken);
-        var string = obj[[5,6]] + num;
+        //console.log('steps taken: ' + stepsTaken);
+        var string = obj[[5,11]] + num;
         var stringSplit = string.split(',')
+
         var newArr = [];
-        for (let x of stringSplit) { newArr.push(x.charAt(0)) }
+        for (let x of stringSplit) {
+          let myArr  = x.split(' ');
+          newArr.push(myArr[0])
+        }
+
         return newArr;
       }
-      else if (!obj[current]) {  return null;  }  // if key does not exist in object - return null
+      else if (!obj[current]) {  console.log(current); console.log('out'); return null;  }  // if key does not exist in object - return null
 
       else if ( obj[current].search("set") == -1 || obj[current].search("marked") != -1) { return null;} // if 'set' not in property or 'marked' in poperty
       else {
@@ -61,6 +69,7 @@ $(document).ready(function () {
         let right = [current[0] + 1, current[1] ]
         let up = [current[0], current[1]  + 1 ]
         let down = [current[0], current[1] -1 ]
+
 
         let toAdd = num + ',';
         var orderArray;
@@ -91,7 +100,7 @@ $(document).ready(function () {
         // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
        }
     }
-    return find([5,6]);
+    return find([5,11]);
   }
 
    //console.clear();
@@ -100,6 +109,7 @@ $(document).ready(function () {
      found = false;
      var directions = ['northeast', 'southeast', 'northwest','southwest']
      var solution;
+     console.time('f')
      for (let i = 0; i < directions.length; i++) {
        var tempSolution = findSolution( obj[[1,1]] , directions[i]);
 
@@ -108,24 +118,24 @@ $(document).ready(function () {
 
          if (tempSolution.length < solution.length) { solution = tempSolution}
         }
-
+        console.log(tempSolution)
        clear();
 
      }
+     console.timeEnd('f')
      animateSolution(solution);
      function animateSolution(solution) {
        var wrapper = $('.wrapper');
        var time = 0
-       console.log(divs)
+
        for(let x of solution) {
-          console.log(x)
 
           let findDiv = wrapper.find('.' + x);
           setTimeout(function () {
             findDiv.fadeOut().fadeIn();
           }, time)
 
-          time = time + 150;
+          time = time + 100;
        }
      }
      function clear() {
@@ -136,9 +146,10 @@ $(document).ready(function () {
             obj[val] = $.trim(ret);
         }
 
-        $('.wrapper').find('div').each(function (i,el) {
+        divs.each(function (i,el) {
             el.style.border = 'none';
             for (let x of solution) {
+            //  console.log(x)
                 if (el.classList[1] == x) {  el.style.border = '2px solid red' }
             }
         })
