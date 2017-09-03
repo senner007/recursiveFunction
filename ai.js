@@ -44,11 +44,11 @@ $(document).ready(function () {
     var stepsTaken = 0;
     var found;
     function find(current, num) {
-    //  stackCounter++;   if (stackCounter > 10000 || found == true) { return null;}; // opt out if function is called too many times or found
-      //console.log(num)
+      stackCounter++;   if (stackCounter > 10000 || found == true) { return null;}; // opt out if function is called too many times or found
+    //  console.log(num)
       if (obj[current] == target) {  // if destination has been reached - return array
         found = true
-        //console.log('steps taken: ' + stepsTaken);
+      //  console.log('steps taken: ' + stepsTaken);
         var string = obj[[10,0]] + num;
         var stringSplit = string.split(',')
 
