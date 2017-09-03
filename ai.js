@@ -24,6 +24,7 @@ $(document).ready(function () {
           }
         })
 
+
     });
 
 
@@ -48,7 +49,7 @@ $(document).ready(function () {
       if (obj[current] == target) {  // if destination has been reached - return array
         found = true
         //console.log('steps taken: ' + stepsTaken);
-        var string = obj[[5,11]] + num;
+        var string = obj[[10,0]] + num;
         var stringSplit = string.split(',')
 
         var newArr = [];
@@ -91,7 +92,7 @@ $(document).ready(function () {
         // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
        }
     }
-    return find([5,11]);
+    return find([10,10]);
   }
 
    //console.clear();
@@ -116,7 +117,7 @@ $(document).ready(function () {
        clear();
 
      }
-    console.log(solution)
+    console.log(solution.length)
       console.timeEnd('f')
 
      animateSolution(solution);
