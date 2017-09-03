@@ -1,0 +1,3 @@
++ create ids for grid items with javascript
++ calculate multiple routes and select the shortest
++ add 'waypoints'
