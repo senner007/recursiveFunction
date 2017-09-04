@@ -3,11 +3,6 @@ $(document).ready(function() {
   var divs = $('.wrapper').find('div'),
     obj = {};
 
-  $('.wrapper').on('click', 'div', function() {
-
-    this.classList.toggle('set')
-
-
     divs.each(function(i, el) {
       var $el = $(el);
       var tempArr = []
@@ -17,17 +12,28 @@ $(document).ready(function() {
       tempArr.push(res[0]);
       tempArr.push(res[1]);
 
-      obj[tempArr] = el.classList[1];
-      if ($el.hasClass('set')) {
-        obj[tempArr] = el.classList[1] + ' set';
-      }
+      obj[tempArr] = {}
+      obj[tempArr].name = el.classList[1];
+      obj[tempArr].isSet = false;
+      obj[tempArr].marked = false;
+      obj[tempArr].isPath = false;
     })
 
+
+  $('.wrapper').on('click', 'div', function() {
+
+    this.classList.toggle('set')
+
+    if (obj[this.id].isSet == false) {
+      obj[this.id].isSet = true;
+    } else {
+      obj[this.id].isSet = false;
+    }
 
   });
 
 
-  function shuffle(a) { // shuffle array
+  function _shuffle(a) { // shuffle array
     var j, x, i;
     for (i = a.length; i; i--) {
       j = Math.floor(Math.random() * i);
@@ -38,67 +44,62 @@ $(document).ready(function() {
   }
 
   function findSolution(start, target, obj) {
-    var obj = Object.assign({}, obj);
+
     var stackCount = 0;
     var stepsTaken = 0;
     var isFound = false;
 
     function find(current, num) {
       stackCount++;
-      if (stackCount > 10000 || isFound == true) {
-        return null;
-      }; // opt out if function is called too many times or isFound
-      //  console.log(num)
+      if (stackCount > 10000 || isFound == true) { return null;  }; // opt out if function is called too many times or isFound
+
       if (obj[current] == target) { // if destination has been reached - return array
-        isFound = true
-        //  console.log('steps taken: ' + stepsTaken);
-        var string = obj[start] + num;
-        var stringSplit = string.split(',')
-
-        var newArr = [];
-        for (let x of stringSplit) {
-          let myArr = x.split(' ');
-          newArr.push(myArr[0])
-        }
-
+        isFound = true;
+        let string = obj[start].name + num;
+        let stringSplit = string.split(',');
         return {
           stepsTaken: stepsTaken,
           stackCount : stackCount,
-          newArr: newArr,
+          newArr: stringSplit,
           obj: obj
         }
-      } else if (!obj[current]) {
-        return null;
-      } // if key does not exist in object - return null
-      else if (obj[current].search("set") == -1 || obj[current].search("marked") != -1) {
-        return null;
-      } // if 'set' not in property or 'marked' in poperty
+      }
+
+      // else if (obj[current].isSet == false || obj[current].isMarked == true) {
+      //   return null;
+      // } // if 'set' not in property or 'marked' in poperty
+
       else {
-        obj[current] = obj[current] + ' marked'
-        if (num == undefined) {
-          num = ''
-        }
+        obj[current].isMarked = true
+        if (num == undefined) {  num = '' }
         let left = [current[0] - 1, current[1]]
         let right = [current[0] + 1, current[1]]
         let up = [current[0], current[1] + 1]
         let down = [current[0], current[1] - 1]
 
-
         let toAdd = num + ',';
-        var orderArray;
-        orderArray = [down, left, right, up];
-        shuffle(orderArray)
+        let orderArray = [down, left, right, up];
+        _shuffle(orderArray);
+
+        if (obj[orderArray[0]] != undefined) {
+          var objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
+        }
+        if (obj[orderArray[1]] != undefined) {
+          var objVal_1 = obj[orderArray[1]].isMarked == true || obj[orderArray[1]].isSet == false ? false : true
+        }
+        if (obj[orderArray[2]] != undefined) {
+          var objVal_2 = obj[orderArray[2]].isMarked == true || obj[orderArray[2]].isSet == false ? false : true
+        }
+        if (obj[orderArray[3]] != undefined) {
+          var objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
+        }
 
         stepsTaken++;
 
-        let o = {
-          '0': find(orderArray[0], toAdd + obj[orderArray[0]]),
-          '1': find(orderArray[1], toAdd + obj[orderArray[1]]),
-          '2': find(orderArray[2], toAdd + obj[orderArray[2]]),
-          '3': find(orderArray[3], toAdd + obj[orderArray[3]])
-        }
-
-        return o['0'] || o['1'] || o['2'] || o['3'];
+        return (objVal_0 ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
+               || (objVal_1 ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
+               || (objVal_2 ? find(orderArray[2], toAdd + obj[orderArray[2]].name) : null)
+               || (objVal_3 ? find(orderArray[3], toAdd + obj[orderArray[3]].name): null);
 
         // return find(down, toAdd + obj[down]) || find(left,   toAdd + obj[left])||
         // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
@@ -109,15 +110,21 @@ $(document).ready(function() {
 
   //console.clear();
   $('#calc').on('click', function() {
+
     var directions = []
     var functionCalls = 50;
     var solution;
     var start = [1, 3];
     var target = obj[[1, 1]];
-    console.time('f')
+    var startTime = performance.now();
+
     for (let i = 0; i < functionCalls; i++) {
 
       let tempSolution = findSolution(start, target, obj);
+
+      for (let x in obj) {
+        obj[x].isMarked = false;
+      }
 
       if (tempSolution != null) {
         if (solution == undefined) {  solution = tempSolution }
@@ -127,12 +134,16 @@ $(document).ready(function() {
       }
 
     }
-    document.getElementById('stepsTaken').textContent = 'Steps taken: ' + solution.stepsTaken;
-    document.getElementById('stackCount').textContent = 'Stack count: '  + solution.stackCount;
-    document.getElementById('pathLength').textContent = 'Path length: ' + solution.newArr.length;
- +
+    if (solution == undefined) { alert('Path not found!')}
+    var endTime = performance.now();;
+    var time = endTime - startTime;
 
-    console.timeEnd('f')
+
+    document.getElementById('stepsTaken').textContent = 'Steps taken: ' + solution.stepsTaken;
+    document.getElementById('pathLength').textContent = 'Path length: ' + solution.newArr.length;
+    document.getElementById('additionalSteps').textContent = 'Additional steps taken : ' + (solution.stepsTaken - solution.newArr.length);
+    document.getElementById('time').textContent = 'time to do ' + functionCalls + ' function calls: ' + Math.floor(time * 100)/100 + ' ms';
+
 
     _animateSolution(solution, 50);
 

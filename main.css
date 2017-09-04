@@ -19,7 +19,7 @@ body {
 .wrapper {
 
   display: grid;
-  grid-template-columns: 100px 100px 100px 100px 100px 100px 100px 100px 100px 100px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 4px;
   background-color: #fff;
   color: #444;
@@ -31,8 +31,9 @@ body {
   color: #fff;
   border-radius: 5px;
   padding: 10px;
-  font-size: 150%;
   height: 80px;
+  font-size: 150%;
+
 }
 
 .set {
@@ -44,6 +45,7 @@ body {
 
 button {
   font-size: 22px;
+  height: 30px;
 
 
 }
@@ -55,9 +57,10 @@ span {
 
 #dataWrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 10px;
-  font-size: 22px;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 3fr;
+  grid-gap: 2%;
+  font-size: 18px;
+
 
 
 }
