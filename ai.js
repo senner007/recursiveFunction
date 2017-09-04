@@ -1,9 +1,37 @@
 $(document).ready(function() {
 
+  $.fn.disableSelection = function() {
+    return this
+      .attr('unselectable', 'on')
+      .css('user-select', 'none')
+      .on('selectstart', false);
+  };
+
+  //$("body").css("overflow", "hidden");
+  $('body').disableSelection();
+
+
+
   var divs = $('.wrapper').find('div'),
     obj = {};
-
+    var columns = 30;
+    var rows = 19;
+    var nRows = rows;
+    var nColumn = 1;
     divs.each(function(i, el) {
+
+      el.textContent = i +1
+
+      el.className = 'box ' + (i + 1)
+      el.id = [nColumn,rows];
+
+      if (nColumn == columns) {
+        nColumn = 0;
+        rows--;
+      }
+
+      nColumn++;
+
 
       var str = el.id;
       var res = str.split(",");
@@ -17,7 +45,8 @@ $(document).ready(function() {
     })
 
 
-  $('.wrapper').on('click', 'div', function() {
+  $('.wrapper').on('mouseover mousedown', 'div', function(e) {
+    if (!e.originalEvent.buttons) {return}
 
     this.classList.toggle('set')
 
@@ -92,6 +121,7 @@ $(document).ready(function() {
 
         stepsTaken++;
 
+
         return (objVal_0 ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
                || (objVal_1 ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
                || (objVal_2 ? find(orderArray[2], toAdd + obj[orderArray[2]].name) : null)
@@ -109,7 +139,7 @@ $(document).ready(function() {
 
     var functionCalls = 50;
     var solution;
-    var start = [5, 5];
+    var start = [1, 5];
     var target = obj[[1, 1]];
     var startTime = performance.now();
 
