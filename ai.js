@@ -42,7 +42,6 @@ $(document).ready(function() {
     var stackCount = 0;
     var stepsTaken = 0;
     var isFound = false;
-    var orderArr;
 
     function find(current, num) {
       stackCount++;
@@ -76,7 +75,9 @@ $(document).ready(function() {
       } // if 'set' not in property or 'marked' in poperty
       else {
         obj[current] = obj[current] + ' marked'
-        if (num == undefined) {  num = '' }
+        if (num == undefined) {
+          num = ''
+        }
         let left = [current[0] - 1, current[1]]
         let right = [current[0] + 1, current[1]]
         let up = [current[0], current[1] + 1]
@@ -84,19 +85,20 @@ $(document).ready(function() {
 
 
         let toAdd = num + ',';
-        orderArr = [down, left, right, up];
-
-        shuffle(orderArr)
+        var orderArray;
+        orderArray = [down, left, right, up];
+        shuffle(orderArray)
 
         stepsTaken++;
 
-        // return  find(orderArr[0], toAdd + obj[orderArr[0]]) || find(orderArr[1], toAdd + obj[orderArr[1]])
-        //          || find(orderArr[2], toAdd + obj[orderArr[2]]) ||  find(orderArr[3], toAdd + obj[orderArr[3]]);
+        let o = {
+          '0': find(orderArray[0], toAdd + obj[orderArray[0]]),
+          '1': find(orderArray[1], toAdd + obj[orderArray[1]]),
+          '2': find(orderArray[2], toAdd + obj[orderArray[2]]),
+          '3': find(orderArray[3], toAdd + obj[orderArray[3]])
+        }
 
-      return  (obj[orderArr[0]] ? find(orderArr[0], toAdd + obj[orderArr[0]]) : null)
-                     || (obj[orderArr[1]] ? find(orderArr[1], toAdd + obj[orderArr[1]]) : null)
-                     || (obj[orderArr[2]] ? find(orderArr[2], toAdd + obj[orderArr[2]]) : null)
-                     || (obj[orderArr[3]] ? find(orderArr[3], toAdd + obj[orderArr[3]]): null);
+        return o['0'] || o['1'] || o['2'] || o['3'];
 
         // return find(down, toAdd + obj[down]) || find(left,   toAdd + obj[left])||
         // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
@@ -128,7 +130,7 @@ $(document).ready(function() {
     document.getElementById('stepsTaken').textContent = 'Steps taken: ' + solution.stepsTaken;
     document.getElementById('stackCount').textContent = 'Stack count: '  + solution.stackCount;
     document.getElementById('pathLength').textContent = 'Path length: ' + solution.newArr.length;
-
+ +
 
     console.timeEnd('f')
 
