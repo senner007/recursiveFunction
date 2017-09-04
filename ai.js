@@ -4,19 +4,16 @@ $(document).ready(function() {
     obj = {};
 
     divs.each(function(i, el) {
-      var $el = $(el);
-      var tempArr = []
-      var str = $el.attr('id');
-      var res = str.split(",");
 
-      tempArr.push(res[0]);
-      tempArr.push(res[1]);
+      var str = el.id;
+      var res = str.split(",");
+      var tempArr = [res[0], res[1]]
 
       obj[tempArr] = {}
       obj[tempArr].name = el.classList[1];
       obj[tempArr].isSet = false;
       obj[tempArr].marked = false;
-      obj[tempArr].isPath = false;
+      obj[tempArr].isPath = false;  // not used
     })
 
 
@@ -50,26 +47,23 @@ $(document).ready(function() {
     var isFound = false;
 
     function find(current, num) {
-  
+
       stackCount++;
       if (stackCount > 10000) { return null;  }; // opt out if function is called too many times or isFound
 
-      if (obj[current] == target) { // if destination has been reached - return array
+      if (obj[current] == target) { // if destination has been reached - return obect with solution
         isFound = true;
         let string = obj[start].name + num;
         let stringSplit = string.split(',');
         return {
           stepsTaken: stepsTaken,
-          stackCount : stackCount,
           newArr: stringSplit,
           obj: obj
         }
       }
-
-      // else if (obj[current].isSet == false || obj[current].isMarked == true) {
-      //   return null;
-      // } // if 'set' not in property or 'marked' in poperty
-
+       else if (obj[current].isSet == false || obj[current].isMarked == true) {   // if 'set' not in property or 'marked' in poperty --                                                                     //
+         return null;                                                             // not sure if this is necessary, as it is already checked before the function call
+       }
       else {
         obj[current].isMarked = true
         if (num == undefined) {  num = '' }
@@ -113,7 +107,6 @@ $(document).ready(function() {
   //console.clear();
   $('#calc').on('click', function() {
 
-    var directions = []
     var functionCalls = 50;
     var solution;
     var start = [5, 5];
@@ -136,15 +129,15 @@ $(document).ready(function() {
       }
 
     }
+    var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
-    var endTime = performance.now();;
     var time = endTime - startTime;
 
 
-    document.getElementById('stepsTaken').textContent = 'Steps taken (recursive calls): ' + solution.stepsTaken;
-    document.getElementById('pathLength').textContent = 'Path length: ' + solution.newArr.length;
-    document.getElementById('additionalSteps').textContent = 'Additional steps taken : ' + (solution.stepsTaken - solution.newArr.length);
-    document.getElementById('time').textContent = 'time to do ' + functionCalls + ' function calls: ' + Math.floor(time * 100)/100 + ' ms';
+    document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
+    document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
+    document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
+    document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
 
     _animateSolution(solution, 50);
 
@@ -162,7 +155,7 @@ $(document).ready(function() {
       el.style.border = '2px solid red';
 
       setTimeout(function() {
-        $(el).stop(true, true).fadeOut().fadeIn();
+        $(el).stop(true, true).fadeOut(100).fadeIn(100);
       }, time)
 
       time = time + speed;
