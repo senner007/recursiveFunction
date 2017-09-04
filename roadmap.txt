@@ -3,3 +3,5 @@
 + add 'waypoints'
 + set start and end by clicking
 + paint path on mousedown
++ save layout to json
++ create route description from path. ex: turn right, move straight ahead 4 squares, turn left...

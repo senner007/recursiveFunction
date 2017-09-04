@@ -50,8 +50,9 @@ $(document).ready(function() {
     var isFound = false;
 
     function find(current, num) {
+  
       stackCount++;
-      if (stackCount > 10000 || isFound == true) { return null;  }; // opt out if function is called too many times or isFound
+      if (stackCount > 10000) { return null;  }; // opt out if function is called too many times or isFound
 
       if (obj[current] == target) { // if destination has been reached - return array
         isFound = true;
@@ -79,19 +80,20 @@ $(document).ready(function() {
 
         let toAdd = num + ',';
         let orderArray = [down, left, right, up];
+        let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
         _shuffle(orderArray);
 
         if (obj[orderArray[0]] != undefined) {
-          var objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
+          objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
         }
         if (obj[orderArray[1]] != undefined) {
-          var objVal_1 = obj[orderArray[1]].isMarked == true || obj[orderArray[1]].isSet == false ? false : true
+          objVal_1 = obj[orderArray[1]].isMarked == true || obj[orderArray[1]].isSet == false ? false : true
         }
         if (obj[orderArray[2]] != undefined) {
-          var objVal_2 = obj[orderArray[2]].isMarked == true || obj[orderArray[2]].isSet == false ? false : true
+          objVal_2 = obj[orderArray[2]].isMarked == true || obj[orderArray[2]].isSet == false ? false : true
         }
         if (obj[orderArray[3]] != undefined) {
-          var objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
+          objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
 
         stepsTaken++;
@@ -114,7 +116,7 @@ $(document).ready(function() {
     var directions = []
     var functionCalls = 50;
     var solution;
-    var start = [1, 3];
+    var start = [5, 5];
     var target = obj[[1, 1]];
     var startTime = performance.now();
 
@@ -139,18 +141,17 @@ $(document).ready(function() {
     var time = endTime - startTime;
 
 
-    document.getElementById('stepsTaken').textContent = 'Steps taken: ' + solution.stepsTaken;
+    document.getElementById('stepsTaken').textContent = 'Steps taken (recursive calls): ' + solution.stepsTaken;
     document.getElementById('pathLength').textContent = 'Path length: ' + solution.newArr.length;
     document.getElementById('additionalSteps').textContent = 'Additional steps taken : ' + (solution.stepsTaken - solution.newArr.length);
     document.getElementById('time').textContent = 'time to do ' + functionCalls + ' function calls: ' + Math.floor(time * 100)/100 + ' ms';
-
 
     _animateSolution(solution, 50);
 
   });
 
   function _animateSolution(solution, speed) {
-    var wrapper = $('.wrapper');
+
     var time = 0;
 
     for (let x in solution.obj) {
