@@ -33,6 +33,7 @@ body {
   padding: 10px;
   height: 80px;
   font-size: 150%;
+    border: none;
 
 }
 
@@ -40,7 +41,7 @@ body {
   background-color:  lightblue;
   outline: 3px solid black;
   color: black;
-  border: none;
+
 }
 
 button {
@@ -57,9 +58,10 @@ span {
 
 #dataWrapper {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 2fr 3fr;
+  grid-template-columns: 2fr 1fr 1fr 2fr 3fr;
   grid-gap: 2%;
   font-size: 18px;
+  margin-bottom: 10px;
 
 
 
