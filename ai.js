@@ -40,7 +40,6 @@ $(document).ready(function() {
       obj[tempArr].name = el.classList[1];
       obj[tempArr].isSet = false;
       obj[tempArr].marked = false;
-      obj[tempArr].direction = false;
       obj[tempArr].isPath = false;  // not used
       obj[tempArr].isDestination = false;
     })
@@ -116,27 +115,9 @@ var targetId;
     var stackCount = 0;
     var stepsTaken = 0;
     var isFound = false;
-    var previousN;
 
     function find(current, num) {
 
-      if (previousN != undefined) { // save directions to object
-      //  console.log(previousN)
-        if (obj[current].name - previousN == 30) {
-          obj[current].direction = 'down'
-        }
-        if (obj[current].name - previousN == -30) {
-            obj[current].direction = 'up'
-        }
-        if (obj[current].name - previousN == -1) {
-          obj[current].direction = 'right'
-        }
-        if (obj[current].name - previousN == 1) {
-            obj[current].direction = 'left'
-        }
-      }
-      previousN = obj[current].name;
-    //  console.log(obj[current])
       stackCount++;
       if (stackCount > 10000) { return null;  }; // opt out if function is called too many times or isFound
 
@@ -156,23 +137,15 @@ var targetId;
       else {
         obj[current].isMarked = true
         if (num == undefined) {  num = '' }
-
-        let dir = [
-          [current[0] - 1, current[1]], //left
-          [current[0] + 1, current[1]], //right
-          [current[0], current[1] + 1], // up
-          [current[0], current[1] - 1] // down
-        ];
+        let left = [current[0] - 1, current[1]]
+        let right = [current[0] + 1, current[1]]
+        let up = [current[0], current[1] + 1]
+        let down = [current[0], current[1] - 1]
 
         let toAdd = num + ',';
-        let n = [0,1,2,3];
-
-          _shuffle(n);
-
-        let orderArray = [dir[n[0]], dir[n[1]], dir[n[2]], dir[n[3]]];
-
+        let orderArray = [down, left, right, up];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
-
+        _shuffle(orderArray);
 
         if (obj[orderArray[0]] != undefined) {
           objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
@@ -186,7 +159,6 @@ var targetId;
         if (obj[orderArray[3]] != undefined) {
           objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
-
 
         stepsTaken++;
 
@@ -210,35 +182,11 @@ var targetId;
     var solution;
 
     var si = startId.split(',');
-    var ei = targetId.split(',');
     var start = [Number(si[0]), Number(si[1])];
-    var target = obj[[Number(ei[0]), Number(ei[1])]];
-    //
-    // var directions = [
-    //   [0,1,2,3],
-    //   [0,2,3,1],
-    //   [0,3,2,1],
-    //
-    //
-    //   [1,3,2,0],
-    //   [1,0,3,2],
-    //   [1,2,0,3],
-    //
-    //
-    //   [2,0,3,1],
-    //   [2,1,3,0],
-    //   [2,3,0,1],
-    //
-    //
-    //   [3,0,1,2],
-    //   [3,1,0,2],
-    //   [3,2,1,0],
-    // ];
+    var ei = targetId.split(',');
+    ei = [Number(ei[0]), Number(ei[1])]
 
-
-
-
-
+    var target = obj[ei];
     var startTime = performance.now();
 
     for (let i = 0; i < functionCalls; i++) {
@@ -260,13 +208,6 @@ var targetId;
     var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
     var time = endTime - startTime;
-    for (let  x in solution.obj) {
-      if (solution.obj[x].direction) {
-        console.log(solution.obj[x])
-        solution.obj[x].direction = false
-      }
-    }
-    //console.log(solution)
 
 
     document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;

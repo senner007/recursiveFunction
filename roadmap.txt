@@ -1,16 +1,16 @@
 TODO:
 0.1:
-+ calculate multiple routes and select the shortest - not optimized - 
++ + calculate multiple routes and select the shortest : not optimized
 + add 'waypoints'
 + save layout to json
-+ create route description from path. ex: turn right, move straight ahead 4 squares, turn left...
++  + create route description from path. ex: turn right, move straight ahead 4 squares, turn left... : temporary solution by storing direction to obj.directions
 + do not add start position to final solution before return;
 + set predefined directions to be called in recursive function before randomization
 + break from loop if path length is equal to actual distance
-+ return the difference between the path lenght and the straight course length 
++ return the difference between the path lenght and the straight course length
+
 
 Done:
 + create ids for grid items with javascript
-+ calculate multiple routes and select the shortest - not optimized - 
 + set start and end by clicking
 + paint path on mousedown
