@@ -111,20 +111,10 @@ var targetId;
   }
 
   function findSolution(start, target, obj) {
-
-    var stackCount = 0;
     var stepsTaken = 0;
-    var isFound = false;
-
     function find(current, num) {
-
-      stackCount++;
-      if (stackCount > 10000) { return null;  }; // opt out if function is called too many times or isFound
-
       if (obj[current] == target) { // if destination has been reached - return obect with solution
-        isFound = true;
-        let string = obj[start].name + num;
-        let stringSplit = string.split(',');
+        let stringSplit = num.split(',');
         return {
           stepsTaken: stepsTaken,
           newArr: stringSplit,
@@ -136,13 +126,15 @@ var targetId;
        }
       else {
         obj[current].isMarked = true
-        if (num == undefined) {  num = '' }
+        let toAdd = num + ',';
+        if (num == undefined) {  num = ''; toAdd = ''}
+
         let left = [current[0] - 1, current[1]]
         let right = [current[0] + 1, current[1]]
         let up = [current[0], current[1] + 1]
         let down = [current[0], current[1] - 1]
 
-        let toAdd = num + ',';
+
         let orderArray = [down, left, right, up];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
         _shuffle(orderArray);
