@@ -120,11 +120,7 @@ var targetId;
           newArr: stringSplit,
           obj: obj
         }
-      }
-       else if (obj[current].isSet == false || obj[current].isMarked == true) {   // if 'set' not in property or 'marked' in poperty --                                                                     //
-         return null;                                                             // not sure if this is necessary, as it is already checked before the function call
-       }
-      else {
+      } else {
         obj[current].isMarked = true
         let toAdd = num + ',';
         if (num == undefined) {  num = ''; toAdd = ''}
