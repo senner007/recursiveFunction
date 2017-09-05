@@ -32,7 +32,6 @@ $(document).ready(function() {
 
       nColumn++;
 
-
       var str = el.id;
       var res = str.split(",");
       var tempArr = [res[0], res[1]]
@@ -42,21 +41,63 @@ $(document).ready(function() {
       obj[tempArr].isSet = false;
       obj[tempArr].marked = false;
       obj[tempArr].isPath = false;  // not used
+      obj[tempArr].isDestination = false;
     })
 
+var startId;
+var targetId;
+  $('.wrapper').on('mouseover mousedown contextmenu', 'div', function(e) {
+    e.preventDefault();
 
-  $('.wrapper').on('mouseover mousedown', 'div', function(e) {
     if (!e.originalEvent.buttons) {return}
 
-    this.classList.toggle('set')
+    if (e.originalEvent.button == 0 && obj[this.id].isDestination == false) {
 
-    if (obj[this.id].isSet == false) {
-      obj[this.id].isSet = true;
-    } else {
-      obj[this.id].isSet = false;
-    }
+
+      if (obj[this.id].isSet == true) {
+        this.classList.remove('set')
+        obj[this.id].isSet = false;
+      } else {
+        this.classList.add('set')
+        obj[this.id].isSet = true;
+
+      }
+  }
+  if (e.originalEvent.button == 2) {
+
+
+      if (obj[this.id].isDestination == true) {
+
+        if (startId == this.id) {
+          startId = undefined
+        } else if (targetId == this.id) {
+          targetId = undefined
+        }
+        obj[this.id].isSet = false
+        obj[this.id].isDestination = false
+        this.classList.remove('set')
+        this.classList.remove('destination')
+
+      } else if (obj[this.id].isDestination == false && (startId == undefined || targetId == undefined ) ){
+
+        if (startId == undefined ) {
+          startId = this.id
+        } else if (startId != undefined && targetId == undefined) {
+          targetId = this.id
+        }
+
+
+        obj[this.id].isSet = true
+        obj[this.id].isDestination = true
+        this.classList.add('set')
+        this.classList.add('destination')
+      }
+
+  }
 
   });
+
+
 
 
   function _shuffle(a) { // shuffle array
@@ -139,8 +180,13 @@ $(document).ready(function() {
 
     var functionCalls = 50;
     var solution;
-    var start = [1, 5];
-    var target = obj[[1, 1]];
+
+    var si = startId.split(',');
+    var start = [Number(si[0]), Number(si[1])];
+    var ei = targetId.split(',');
+    ei = [Number(ei[0]), Number(ei[1])]
+
+    var target = obj[ei];
     var startTime = performance.now();
 
     for (let i = 0; i < functionCalls; i++) {
