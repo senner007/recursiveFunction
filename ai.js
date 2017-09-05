@@ -112,6 +112,7 @@ var targetId;
 
   function findSolution(start, target, obj) {
     var stepsTaken = 0;
+    
     function find(current, num) {
       if (obj[current] == target) { // if destination has been reached - return obect with solution
         let stringSplit = num.split(',');
@@ -149,7 +150,6 @@ var targetId;
         }
 
         stepsTaken++;
-
 
         return (objVal_0 ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
                || (objVal_1 ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
