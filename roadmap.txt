@@ -8,6 +8,7 @@ TODO:
 + set predefined directions to be called in recursive function before randomization
 + break from loop if path length is equal to actual distance
 + return the difference between the path lenght and the straight course length
++ learn from each iteration: if path to waypoint is bigger - return null - iterate until path is found
 
 
 Done:

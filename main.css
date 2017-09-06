@@ -52,6 +52,9 @@ body {
   outline: 3px solid black;
   color: black;
 }
+.waypoint {
+  background-color: green;
+}
 
 .destination {
   background-color: rebeccapurple;

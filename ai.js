@@ -39,6 +39,7 @@ $(document).ready(function() {
       obj[tempArr] = {}
       obj[tempArr].name = el.classList[1];
       obj[tempArr].isSet = false;
+      obj[tempArr].isWaypoint = false;
       obj[tempArr].marked = false;
       obj[tempArr].isPath = false;  // not used
       obj[tempArr].isDestination = false;
@@ -46,16 +47,56 @@ $(document).ready(function() {
 
 var startId;
 var targetId;
+var wayPointsCount = 1;
+var wayPoints = [];
   $('.wrapper').on('mouseover mousedown contextmenu', 'div', function(e) {
     e.preventDefault();
 
     if (!e.originalEvent.buttons) {return}
 
-    if (e.originalEvent.button == 0 && obj[this.id].isDestination == false) {
+    if (e.originalEvent.button == 0 && obj[this.id].isDestination == false && e.shiftKey == true) {
+          this.classList.toggle('set')
+
+          if (obj[this.id].isWaypoint == false) {
+              this.classList.add('set')
+              obj[this.id].isSet = true;
+                this.classList.add('waypoint')
+              obj[this.id].isWaypoint = true;
+              wayPoints.push(obj[this.id].name)
+              wayPointsCount++;
+          } else {
+            this.classList.remove('set')
+            obj[this.id].isSet = false;
+              this.classList.remove('waypoint')
+              obj[this.id].isWaypoint = false;
+              var index = wayPoints.indexOf(obj[this.id].name);
+              wayPoints.splice(index, 1);
+
+              wayPointsCount--;
+          }
+
+          document.getElementById('wayPoints').innerHTML = 'wayPoints ';
+          for(let i = 0; i< wayPoints.length; i++) {
+              document.getElementById('wayPoints').innerHTML += '' + (i+1) + ':' + wayPoints[i] + ' '
+          }
+          console.log(this)
+
+    }
 
 
-      if (obj[this.id].isSet == true) {
+    if (e.originalEvent.button == 0 && obj[this.id].isDestination == false && e.shiftKey == false) {
+
+
+      if (obj[this.id].isSet == true || obj[this.id].isWaypoint == true) {
+          this.classList.remove('waypoint')
         this.classList.remove('set')
+        obj[this.id].isWaypoint = false;
+        var index = wayPoints.indexOf(obj[this.id].name);
+        wayPoints.splice(index, 1);
+        document.getElementById('wayPoints').innerHTML = 'wayPoints ';
+        for(let i = 0; i< wayPoints.length; i++) {
+            document.getElementById('wayPoints').innerHTML += '' + (i+1) + ':' + wayPoints[i] + ' '
+        }
         obj[this.id].isSet = false;
       } else {
         this.classList.add('set')
@@ -94,6 +135,8 @@ var targetId;
       }
 
   }
+  // console.log(this)
+  // console.log(obj[this.id])
 
   });
 
@@ -110,15 +153,23 @@ var targetId;
     }
   }
 
-  function findSolution(start, target, obj) {
+  function findSolution(start, target, obj, wayPoints) {
     var stepsTaken = 0;
-    
+
+
     function find(current, num) {
       if (obj[current] == target) { // if destination has been reached - return obect with solution
-        let stringSplit = num.split(',');
+        let nArray = num.split(',');
+        for (let i = 0; i< wayPoints.length; i++) {
+          if (nArray.indexOf(wayPoints[i]) == -1) { return null };
+          if (wayPoints[i +1]) {
+            if (nArray.indexOf(wayPoints[i]) > nArray.indexOf(wayPoints[i +1]) ) { return null };
+          }
+        }
+
         return {
           stepsTaken: stepsTaken,
-          newArr: stringSplit,
+          newArr: nArray,
           obj: obj
         }
       } else {
@@ -169,6 +220,7 @@ var targetId;
     var functionCalls = 50;
     var solution;
 
+
     var si = startId.split(',');
     var start = [Number(si[0]), Number(si[1])];
     var ei = targetId.split(',');
@@ -176,16 +228,18 @@ var targetId;
 
     var target = obj[ei];
     var startTime = performance.now();
+    var solutionArray = [];
 
     for (let i = 0; i < functionCalls; i++) {
 
-      let tempSolution = findSolution(start, target, obj);
+      let tempSolution = findSolution(start, target, obj, wayPoints);
 
       for (let x in obj) {
         obj[x].isMarked = false;
       }
 
       if (tempSolution != null) {
+        solutionArray.push(tempSolution)
         if (solution == undefined) {  solution = tempSolution }
         if (tempSolution.newArr.length < solution.newArr.length) {
           solution = tempSolution
@@ -196,6 +250,7 @@ var targetId;
     var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
     var time = endTime - startTime;
+
 
 
     document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
