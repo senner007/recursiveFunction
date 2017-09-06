@@ -11,6 +11,7 @@ TODO:
 + learn from each iteration: if path to waypoint is bigger - return null - iterate until path is found
 + store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
 + store the path including steps taken in solutions object
++ refactor ui clicking logic
 
 Done:
 + create ids for grid items with javascript
