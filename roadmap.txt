@@ -9,7 +9,8 @@ TODO:
 + break from loop if path length is equal to actual distance
 + return the difference between the path lenght and the straight course length
 + learn from each iteration: if path to waypoint is bigger - return null - iterate until path is found
-
++ store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
++ store the path including steps taken in solutions object
 
 Done:
 + create ids for grid items with javascript
