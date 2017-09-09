@@ -13,6 +13,7 @@ TODO:
 + evaluate length of path on each recursion and return null if path length + actual direct length toarget is greater than previous solution.
 + store the path including steps taken in solutions object
 + refactor ui clicking logic
++ register each turn event and store in object. send out 'sonar' on each event meaning a for loop searching left and right on each step in the new direction for the target element.
 
 
 Done:
