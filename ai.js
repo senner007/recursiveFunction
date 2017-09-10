@@ -209,6 +209,13 @@ Array.prototype.compare = function(testArr) {
            let nArray = num.split(',');
 
           if (nArray.length > solution.newArr.length) { return null; }
+            for (let x in obj) {
+                if(nArray.includes(obj[x].name)) {
+                  obj[x].isPath = true;
+                }
+
+            }
+
 
             // console.log(nArray.length)
             // console.log(solution.newArr.length)
@@ -311,8 +318,8 @@ Array.prototype.compare = function(testArr) {
     var target = ei;
     var startTime = performance.now();
     var solutionArray = [];
-    var stepsNotUsedArray = [];
-      var functionCounter = 20
+    var stepsNotUsedCount = 0;
+    var functionCounter = 20
 
 
 
@@ -333,35 +340,26 @@ Array.prototype.compare = function(testArr) {
         }
       }
 
+
       if (solutionArray.length > functionCounter) {
 
-          var stepsUsedArray = [];
+
           var countEqual = 0;
 
           for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
             if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
               countEqual++;
-
-
             }
           }
           if (countEqual >= functionCounter) {
               console.log('hello')
           //  console.log('hello')
-                for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
-                  for (let x of solutionArray[i].newArr) {
-                    if (!stepsUsedArray.includes(x))
-                      stepsUsedArray.push(x)
-                  }
-                }
-                stepsNotUsedArray = [];
-                for (let x in obj) {
-                  if (stepsUsedArray.includes(obj[x].name)) {
-                    obj[x].isPath = true
-                  }
 
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && !stepsUsedArray.includes(obj[x].name) && obj[x].locatedFrequency < 5) {
-                      stepsNotUsedArray.push(obj[x].name)
+                stepsNotUsedCount = 0;
+                for (let x in obj) {
+
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 5) {
+                      stepsNotUsedCount++;
                       obj[x].isSet = false;
 
                     document.getElementById(x).classList.add('dottedBorder')
@@ -370,7 +368,7 @@ Array.prototype.compare = function(testArr) {
                   obj[x].isLocated = false;
 
                 }
-                if (stepsNotUsedArray.length == 0) {break;}
+                if (stepsNotUsedCount == 0) {break;}
                 functionCounter = functionCounter + functionCounter
            }
 
