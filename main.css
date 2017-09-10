@@ -23,7 +23,7 @@ body {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(30, 1fr);
+  grid-template-columns: repeat(40, 1fr);
   grid-gap: 2px;
   background-color: #fff;
   color: #444;
@@ -39,12 +39,12 @@ body {
   border-radius: 5px;
   padding: 5px;
 
-  font-size: 120%;
+  font-size: 100%;
   border: none;
-  min-height: 40px;
-  max-height: 60px;
-  min-width: 40px;
-  max-width: 60px;
+  min-height: 30px;
+  max-height: 40px;
+  min-width: 30px;
+  max-width: 40px;
 }
 
 .set {
@@ -80,4 +80,8 @@ span {
 #dataWrapper span {
   font-weight: bold;
   font-size: 16px;
+}
+
+.dottedBorder {
+  background-color: red;
 }

@@ -1,3 +1,4 @@
+'use strict'
 $(document).ready(function() {
 
   $.fn.disableSelection = function() {
@@ -14,8 +15,8 @@ $(document).ready(function() {
 
   var divs = $('.wrapper').find('div'),
     obj = {};
-    var columns = 30;
-    var rows = 19;
+    var columns = 40;
+    var rows = 25;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
@@ -43,6 +44,8 @@ $(document).ready(function() {
       obj[tempArr].marked = false;
       obj[tempArr].isPath = false;  // not used
       obj[tempArr].isDestination = false;
+      obj[tempArr].isLocated = false;
+      obj[tempArr].locatedFrequency = 0;
     })
 
 var startId;
@@ -153,31 +156,80 @@ var wayPoints = [];
     }
   }
 
-  function findSolution(start, target, obj, wayPoints, solution) {
-    var stepsTaken = 0;
+
+Array.prototype.compare = function(testArr) {
+    if (this.length != testArr.length) return false;
+    for (var i = 0; i < testArr.length; i++) {
+        if (this[i].compare) { //To test values in nested arrays
+            if (!this[i].compare(testArr[i])) return false;
+        }
+        else if (this[i] !== testArr[i]) return false;
+    }
+    return true;
+}
+// var arr1 = [1,2,3];
+// var arr2 = [1,2,3,4];
+
+
+  function findSolution(start, target, obj, wayPoints, solution, solutionArray) {
+
+    if (!solution) { var solution = {newArr: [] }
+      solution.newArr.length = 1000;
+    }
+    // var tempSolutionArray = [];
+    // for (let i = 0; i < solutionArray.length; i++) {
+    //   for (let x of solutionArray[i].newArr) {
+    //     if (!tempSolutionArray.includes(x))
+    //     tempSolutionArray.push(x)
+    //   }
+    // }
+    // console.log(tempSolutionArray)
 
 
     function find(current, num) {
-      if (obj[current] == target) { // if destination has been reached - return obect with solution
 
-        let nArray = num.split(',');
-        if(solution) {
-          if (nArray.length > solution.newArr.length) { return null; }
 
-        }
-        for (let i = 0; i< wayPoints.length; i++) {
-          if (nArray.indexOf(wayPoints[i]) == -1) { return null };
-          if (wayPoints[i +1]) {
-            if (nArray.indexOf(wayPoints[i]) > nArray.indexOf(wayPoints[i +1]) ) { return null };
+        var nArray = num == undefined ? [] : num.split(',')
+          //  console.log(nArray.length + ( Math.abs(current[0] - target[0]) ))
+        //  console.log('steps: ' +  nArray[nArray.length -1])
+
+        for (let i = 0; i < solutionArray.length; i++) {
+          if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
+            //console.log('index of ' + nArray[nArray.length -1] + ': ' + nArray.indexOf(obj[current].name) )
+            // console.log(nArray[nArray.length -1])
+            // console.log(obj[current].name)
+          //  console.log ( 'index of ' + nArray[nArray.length -1] + ': ' + solution.newArr.indexOf(obj[current].name) + ' in solution')
+          console.log('opt out')
+            return null;
           }
         }
 
-        return {
-          stepsTaken: stepsTaken,
-          newArr: nArray,
-          obj: obj
+        if (obj[current] == obj[target]) { // if destination has been reached - return obect with solution
+
+           let nArray = num.split(',');
+
+          if (nArray.length > solution.newArr.length) { return null; }
+
+            // console.log(nArray.length)
+            // console.log(solution.newArr.length)
+
+          // for (let i = 0; i< wayPoints.length; i++) {
+          //   if (nArray.indexOf(wayPoints[i]) == -1) { return null };
+          //   if (wayPoints[i +1]) {
+          //     if (nArray.indexOf(wayPoints[i]) > nArray.indexOf(wayPoints[i +1]) ) { return null };
+          //   }
+          // }
+
+          return {
+            newArr: nArray,
+            obj: obj
+          }
+        } else if (nArray.length > solution.newArr.length) { return null;
+        } else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+          console.log('too long'); return null;
         }
-      } else {
+
+      else {
         obj[current].isMarked = true
         let toAdd = num + ',';
         if (num == undefined) {  num = ''; toAdd = ''}
@@ -188,9 +240,28 @@ var wayPoints = [];
         let down = [current[0], current[1] - 1]
 
 
-        let orderArray = [down, left, right, up];
+        var orderArray = [right, left, down, up];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
-        _shuffle(orderArray);
+
+
+        if(solutionArray.length == 0) {
+          console.log('fdffddfd right')
+          orderArray = [right, left, down, up]
+        }
+        if(solutionArray.length == 1) {
+          console.log('fdffddfd left')
+            orderArray = [left, right, down, up]
+        }
+        if(solutionArray.length == 2) {
+          orderArray = [down, right, left, up]
+        }
+        if(solutionArray.length == 3) {
+          orderArray = [up, left, down, right]
+        }
+        if (solutionArray.length > 3 ){
+          _shuffle(orderArray)
+        }
+
 
         if (obj[orderArray[0]] != undefined) {
           objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
@@ -204,8 +275,14 @@ var wayPoints = [];
         if (obj[orderArray[3]] != undefined) {
           objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
+       if ( obj[current].isLocated == true) {
+          obj[current].locatedFrequency = obj[current].locatedFrequency + 1
+       } else {
+         obj[current].isLocated = true;
+       }
 
-        stepsTaken++;
+
+
 
         return (objVal_0 ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
                || (objVal_1 ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
@@ -222,7 +299,7 @@ var wayPoints = [];
   //console.clear();
   $('#calc').on('click', function() {
 
-    var functionCalls = 50;
+    var functionCalls = 0;
     var solution;
 
 
@@ -231,14 +308,19 @@ var wayPoints = [];
     var ei = targetId.split(',');
     ei = [Number(ei[0]), Number(ei[1])]
 
-    var target = obj[ei];
+    var target = ei;
     var startTime = performance.now();
     var solutionArray = [];
+    var stepsNotUsedArray = [];
+      var functionCounter = 20
 
-    for (let i = 0; i < functionCalls; i++) {
 
-      let tempSolution = findSolution(start, target, obj, wayPoints, solution);
-  
+
+
+    for (let i = 0; ; i++) {
+
+      let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray);
+
       for (let x in obj) {
         obj[x].isMarked = false;
       }
@@ -251,11 +333,77 @@ var wayPoints = [];
         }
       }
 
+      if (solutionArray.length > functionCounter) {
+
+          var stepsUsedArray = [];
+          var countEqual = 0;
+
+          for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
+            if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
+              countEqual++;
+
+
+            }
+          }
+          if (countEqual >= functionCounter) {
+              console.log('hello')
+          //  console.log('hello')
+                for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
+                  for (let x of solutionArray[i].newArr) {
+                    if (!stepsUsedArray.includes(x))
+                      stepsUsedArray.push(x)
+                  }
+                }
+                stepsNotUsedArray = [];
+                for (let x in obj) {
+                  if (stepsUsedArray.includes(obj[x].name)) {
+                    obj[x].isPath = true
+                  }
+
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && !stepsUsedArray.includes(obj[x].name) && obj[x].locatedFrequency < 5) {
+                      stepsNotUsedArray.push(obj[x].name)
+                      obj[x].isSet = false;
+
+                    document.getElementById(x).classList.add('dottedBorder')
+                  }
+                  obj[x].locatedFrequency = 0;
+                  obj[x].isLocated = false;
+
+                }
+                if (stepsNotUsedArray.length == 0) {break;}
+                functionCounter = functionCounter + functionCounter
+           }
+
+      };
+
+      functionCalls++;
+
+
     }
     var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
     var time = endTime - startTime;
-console.log(solutionArray)
+ console.log(solutionArray)
+
+    // console.log('steps used: :' +  stepsUsedArray)
+    // console.log('steps not used: :' +  stepsNotUsedArray)
+  //  console.log(stepsTaken)
+    // for (let x in obj) {
+    //   if (obj[x].isSet == true && obj[x].isLocated == true) {
+    //     console.log(obj[x].name)
+    //     console.log(obj[x].locatedFrequency)
+    //     if (obj[x].locatedFrequency < 20) {
+    //
+    //       document.getElementById(x).classList.add('dottedBorder')
+    //     }
+    //
+    //   }
+    //
+    // }
+
+
+
+
 
 
 
