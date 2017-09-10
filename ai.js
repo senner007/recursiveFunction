@@ -15,8 +15,8 @@ $(document).ready(function() {
 
   var divs = $('.wrapper').find('div'),
     obj = {};
-    var columns = 40;
-    var rows = 25;
+    var columns = 60;
+    var rows = 28;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
@@ -368,7 +368,7 @@ Array.prototype.compare = function(testArr) {
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     var functionCounter = 20
-    var frequencyCut = 2;
+    var frequencyCut = 2; // maybe eliminate the need for this
 
 
 
