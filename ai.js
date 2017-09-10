@@ -193,6 +193,7 @@ Array.prototype.compare = function(testArr) {
           //  console.log(nArray.length + ( Math.abs(current[0] - target[0]) ))
         //  console.log('steps: ' +  nArray[nArray.length -1])
 
+          //console.log('steps: ' +  nArray[nArray.length -1])
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
             //console.log('index of ' + nArray[nArray.length -1] + ': ' + nArray.indexOf(obj[current].name) )
@@ -209,12 +210,18 @@ Array.prototype.compare = function(testArr) {
            let nArray = num.split(',');
 
           if (nArray.length > solution.newArr.length) { return null; }
+          console.time('f')
+
             for (let x in obj) {
+              if (obj[x].isSet == true) {
+
                 if(nArray.includes(obj[x].name)) {
                   obj[x].isPath = true;
-                }
+                };
+              };
 
             }
+            console.timeEnd('f')
 
 
             // console.log(nArray.length)
@@ -398,6 +405,13 @@ Array.prototype.compare = function(testArr) {
     //   }
     //
     // }
+    for (let x in obj) {
+      if (obj[x].isPath == true) {
+        document.getElementById(x).classList.add('isPath')
+
+      };
+
+    }
 
 
 

@@ -85,3 +85,7 @@ span {
 .dottedBorder {
   background-color: red;
 }
+
+.isPath {
+    background-color: lightgreen;
+}
