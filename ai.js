@@ -327,6 +327,7 @@ Array.prototype.compare = function(testArr) {
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     var functionCounter = 20
+    var frequencyCut = 5;
 
 
 
@@ -345,6 +346,8 @@ Array.prototype.compare = function(testArr) {
         if (tempSolution.newArr.length < solution.newArr.length) {
           solution = tempSolution
         }
+      } else {
+        console.log('solution invalid') // never happens
       }
 
 
@@ -364,8 +367,11 @@ Array.prototype.compare = function(testArr) {
 
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
+                  if (obj[x].isSet) {
+                        console.log(obj[x].locatedFrequency)
+                  }
 
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 5) {
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                       stepsNotUsedCount++;
                       obj[x].isSet = false;
 

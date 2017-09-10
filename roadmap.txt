@@ -7,16 +7,15 @@ TODO:
 + do not add start position to final solution before return;
 + set predefined directions to be called in recursive function before randomization
 + break from loop if path length is equal to actual distance
-+ return the difference between the path lenght and the straight course length
++ return the difference between the path length and the straight course length
 + learn from each iteration: if path to waypoint is bigger - return null - iterate until path is found
-+ store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
-+ evaluate length of path on each recursion and return null if path length + actual direct length toarget is greater than previous solution.
 + store the path including steps taken in solutions object
 + refactor ui clicking logic
 + register each turn event and store in object. send out 'sonar' on each event meaning a for loop searching left and right on each step in the new direction for the target element.
 + write logic that checks if direction is the same for a while to minimize recursive function calls – or if same direction leads to distination
 + identify fork squares and make sure that each path takes a different route and doesn't randomize
-
++ identify fork squares and use amount as a basis for determining functionCounter and frequencyCut
++ write logic prevent stack overflow
 
 
 
@@ -25,3 +24,5 @@ Done:
 + create ids for grid items with javascript
 + set start and end by clicking
 + paint path on mousedown
++ evaluate length of path on each recursion and return null if path length + actual direct length to target is greater than previous solution.
++ store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
