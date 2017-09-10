@@ -14,6 +14,11 @@ TODO:
 + store the path including steps taken in solutions object
 + refactor ui clicking logic
 + register each turn event and store in object. send out 'sonar' on each event meaning a for loop searching left and right on each step in the new direction for the target element.
++ write logic that checks if direction is the same for a while to minimize recursive function calls – or if same direction leads to distination
++ identify fork squares and make sure that each path takes a different route and doesn't randomize
+
+
+
 
 
 Done:
