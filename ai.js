@@ -215,7 +215,7 @@ Array.prototype.compare = function(testArr) {
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
-                if(nArray.includes(obj[x].name)) {
+                if(nArray.includes(obj[x].name) && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
               };
@@ -289,7 +289,8 @@ Array.prototype.compare = function(testArr) {
         if (obj[orderArray[3]] != undefined) {
           objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
-       if ( obj[current].isLocated == true) {
+
+       if ( obj[current].isLocated == true && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
           obj[current].locatedFrequency = obj[current].locatedFrequency + 1
        } else {
          obj[current].isLocated = true;
@@ -362,27 +363,28 @@ Array.prototype.compare = function(testArr) {
             }
           }
           if (countEqual >= functionCounter) {
-              console.log('hello')
-          //  console.log('hello')
+              console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
 
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-                  if (obj[x].isSet) {
-                        console.log(obj[x].locatedFrequency)
-                  }
 
                   if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                       stepsNotUsedCount++;
                       obj[x].isSet = false;
 
-                    document.getElementById(x).classList.add('dottedBorder')
-                  }
-                  obj[x].locatedFrequency = 0;
-                  obj[x].isLocated = false;
+                      frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
+                    document.getElementById(x).classList.add('dottedBorder')
+                    console.log('hello ----- painting!!!')
+                  }
+
+                obj[x].locatedFrequency = 0;
+                obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
+                obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
+
                 if (stepsNotUsedCount == 0) {break;}
-                functionCounter = functionCounter + functionCounter
+                functionCounter = functionCounter + 20  // 20 is an arbitrary number - should be determined by the number of fork squares
            }
 
       };
@@ -394,7 +396,7 @@ Array.prototype.compare = function(testArr) {
     var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
     var time = endTime - startTime;
- console.log(solutionArray)
+    console.log(solutionArray)
 
     // console.log('steps used: :' +  stepsUsedArray)
     // console.log('steps not used: :' +  stepsNotUsedArray)
@@ -430,18 +432,19 @@ Array.prototype.compare = function(testArr) {
     document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
     document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
 
-    _animateSolution(solution, 50);
+    _animateSolution(solutionArray[solutionArray.length -1], 50);
+
 
   });
 
-  function _animateSolution(solution, speed) {
+  function _animateSolution(result, speed) {
 
     var time = 0;
 
-    for (let x in solution.obj) {
+    for (let x in result.obj) {
       let el = document.getElementById(x).style.border = 'none';
     }
-    for (let x of solution.newArr) {
+    for (let x of result.newArr) {
       let el = document.getElementsByClassName(x)[0]
       el.style.border = '2px solid red';
 

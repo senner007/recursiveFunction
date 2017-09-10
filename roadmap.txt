@@ -20,9 +20,11 @@ TODO:
 
 
 
+
 Done:
 + create ids for grid items with javascript
 + set start and end by clicking
 + paint path on mousedown
 + evaluate length of path on each recursion and return null if path length + actual direct length to target is greater than previous solution.
 + store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
++ fix solution path painted red
