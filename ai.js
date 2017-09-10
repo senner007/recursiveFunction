@@ -214,7 +214,7 @@ Array.prototype.compare = function(testArr) {
 
             for (let x in obj) {
               if (obj[x].isSet == true) {
-
+                  obj[x].isMarked = false;
                 if(nArray.includes(obj[x].name)) {
                   obj[x].isPath = true;
                 };
@@ -335,9 +335,9 @@ Array.prototype.compare = function(testArr) {
 
       let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray);
 
-      for (let x in obj) {
-        obj[x].isMarked = false;
-      }
+      // for (let x in obj) {
+      //   obj[x].isMarked = false;
+      // }
 
       if (tempSolution != null) {
         solutionArray.push(tempSolution)
@@ -405,13 +405,13 @@ Array.prototype.compare = function(testArr) {
     //   }
     //
     // }
-    for (let x in obj) {
-      if (obj[x].isPath == true) {
-        document.getElementById(x).classList.add('isPath')
-
-      };
-
-    }
+    // for (let x in obj) {
+    //   if (obj[x].isPath == true) {
+    //     document.getElementById(x).classList.add('isPath')
+    //
+    //   };
+    //
+    // }
 
 
 
