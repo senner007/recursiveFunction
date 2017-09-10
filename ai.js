@@ -257,24 +257,64 @@ Array.prototype.compare = function(testArr) {
         var orderArray = [right, left, down, up];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
 
+        var direction = [
 
-        if(solutionArray.length == 0) {
-          console.log('fdffddfd right')
-          orderArray = [right, left, down, up]
+            [right, left, down, up],
+            [right, left, up, down],
+            [right, up, left, down],
+            [right, up, down, left],
+            [right, down, up, left],
+            [right, down, left, up],
+
+            [left, right, down, up],
+            [left, right, up, down],
+            [left, up, right, down],
+            [left, up, down, right],
+            [left, down, up, right],
+            [left, down, right, up],
+
+            [down, right, left, up],
+            [down, right, up, left],
+            [down, up, right, left],
+            [down, up, left, right],
+            [down, left, up, right],
+            [down, left, right, up],
+
+            [up, right, left, down],
+            [up, right, down, left],
+            [up, down, right, left],
+            [up, down, left, right],
+            [up, left, down, right],
+            [up, left, right, down],
+
+        ]
+
+
+
+
+        for (let i = 0; i < 24; i++) {
+            if(solutionArray.length == i) {
+              orderArray = direction[i]
+            }
         }
-        if(solutionArray.length == 1) {
-          console.log('fdffddfd left')
-            orderArray = [left, right, down, up]
-        }
-        if(solutionArray.length == 2) {
-          orderArray = [down, right, left, up]
-        }
-        if(solutionArray.length == 3) {
-          orderArray = [up, left, down, right]
-        }
-        if (solutionArray.length > 3 ){
+        if (solutionArray.length > 24 ){
           _shuffle(orderArray)
         }
+        // if(solutionArray.length == 0) {
+        //   console.log('fdffddfd right')
+        //   orderArray = [right, left, down, up]
+        // }
+        // if(solutionArray.length == 1) {
+        //   console.log('fdffddfd left')
+        //     orderArray = [left, right, down, up]
+        // }
+        // if(solutionArray.length == 2) {
+        //   orderArray = [down, right, left, up]
+        // }
+        // if(solutionArray.length == 3) {
+        //   orderArray = [up, left, down, right]
+        // }
+
 
 
         if (obj[orderArray[0]] != undefined) {
@@ -328,7 +368,7 @@ Array.prototype.compare = function(testArr) {
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     var functionCounter = 20
-    var frequencyCut = 5;
+    var frequencyCut = 2;
 
 
 
