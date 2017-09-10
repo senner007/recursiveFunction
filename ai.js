@@ -163,8 +163,7 @@ var wayPoints = [];
         let nArray = num.split(',');
         if(solution) {
           if (nArray.length > solution.newArr.length) { return null; }
-            console.log(nArray.length)
-            console.log(solution.newArr.length)
+
         }
         for (let i = 0; i< wayPoints.length; i++) {
           if (nArray.indexOf(wayPoints[i]) == -1) { return null };
@@ -239,7 +238,7 @@ var wayPoints = [];
     for (let i = 0; i < functionCalls; i++) {
 
       let tempSolution = findSolution(start, target, obj, wayPoints, solution);
-
+  
       for (let x in obj) {
         obj[x].isMarked = false;
       }
@@ -256,7 +255,7 @@ var wayPoints = [];
     var endTime = performance.now();
     if (solution == undefined) { alert('Path not found!')}
     var time = endTime - startTime;
-    console.log(solutionArray)
+console.log(solutionArray)
 
 
 
