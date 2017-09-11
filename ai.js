@@ -171,6 +171,7 @@ Array.prototype.compare = function(testArr) {
 // var arr2 = [1,2,3,4];
 
   var directionCount;
+  var countReset;
 
   function findSolution(start, target, obj, wayPoints, solution, solutionArray) {
 
@@ -187,7 +188,7 @@ Array.prototype.compare = function(testArr) {
     // console.log(tempSolutionArray)
 
       directionCount++;
-        if (directionCount == 24) {directionCount = 0}
+      if (directionCount == 24)  { directionCount = 0; }
 
 
 
@@ -220,7 +221,7 @@ Array.prototype.compare = function(testArr) {
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
-                if(nArray.includes(obj[x].name) && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+                if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
               };
@@ -299,9 +300,14 @@ Array.prototype.compare = function(testArr) {
         console.log(directionCount)
 
 
-          orderArray = direction[directionCount]
 
-
+          // if (directionCount > 23) {
+          //   console.log('heloo shuffling!!!!!!!!!!!!!!!!!')
+          //   _shuffle(orderArray)
+          // } else {
+              orderArray = direction[directionCount]
+        //  }
+        if (param == true) {_shuffle(orderArray); console.log('shuffling')}
 
 
         // if(solutionArray.length == 0) {
@@ -334,7 +340,7 @@ Array.prototype.compare = function(testArr) {
           objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
 
-       if ( obj[current].isLocated == true && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+       if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
           obj[current].locatedFrequency = obj[current].locatedFrequency + 1
        } else {
          obj[current].isLocated = true;
@@ -354,14 +360,39 @@ Array.prototype.compare = function(testArr) {
     }
     return find(start);
   }
-var functionCounter = 24
+
   //console.clear();
+
+  $('#reset').on('click', function() {
+  var $reset = $('.dottedBorder');
+  console.log(reset)
+  $reset.each(function(i,el) {
+
+    obj[el.id].isSet = true;
+    $(el).removeClass('dottedBorder')
+
+  })
+
+
+
+
+    // for (let x in obj) {
+    //
+    //
+    //
+    //   }
+
+
+  })
+
+ var param;
   $('#calc').on('click', function() {
 
     var functionCalls = 0;
     var solution;
+    //countReset = 3;
 
-
+    var invalidCount = 0;
     var si = startId.split(',');
     var start = [Number(si[0]), Number(si[1])];
     var ei = targetId.split(',');
@@ -373,7 +404,8 @@ var functionCounter = 24
     var stepsNotUsedCount = 0;
     directionCount = -1;
     var frequencyCut = 2; // maybe eliminate the need for this
-
+    var functionCounter = 24
+    param = false;
 
 
 
@@ -393,6 +425,8 @@ var functionCounter = 24
         }
       } else {
         console.log('solution invalid') // never happens
+        invalidCount++
+        if(invalidCount > 50) break;
       }
 
 
@@ -406,7 +440,8 @@ var functionCounter = 24
               countEqual++;
             }
           }
-          if (countEqual >= functionCounter) {
+          if (countEqual >= 24) {
+
               console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
 
                 stepsNotUsedCount = 0;
@@ -427,8 +462,13 @@ var functionCounter = 24
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0) {break;}
-                functionCounter = functionCounter + 24  // 20 is an arbitrary number - should be determined by the number of fork squares
+                if (stepsNotUsedCount == 0 && param == true) {break;}
+                else {
+                  param = true;
+                  functionCounter = functionCounter + 24
+                }
+
+              //  functionCounter = functionCounter  // 20 is an arbitrary number - should be determined by the number of fork squares
            }
 
       };
