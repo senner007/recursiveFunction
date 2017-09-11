@@ -170,6 +170,7 @@ Array.prototype.compare = function(testArr) {
 // var arr1 = [1,2,3];
 // var arr2 = [1,2,3,4];
 
+  var directionCount;
 
   function findSolution(start, target, obj, wayPoints, solution, solutionArray) {
 
@@ -184,6 +185,10 @@ Array.prototype.compare = function(testArr) {
     //   }
     // }
     // console.log(tempSolutionArray)
+    if (directionCount == undefined) {directionCount = 0;}
+    else {
+      directionCount++;
+    }
 
 
     function find(current, num) {
@@ -200,7 +205,7 @@ Array.prototype.compare = function(testArr) {
             // console.log(nArray[nArray.length -1])
             // console.log(obj[current].name)
           //  console.log ( 'index of ' + nArray[nArray.length -1] + ': ' + solution.newArr.indexOf(obj[current].name) + ' in solution')
-          console.log('opt out')
+        //  console.log('opt out')
             return null;
           }
         }
@@ -210,7 +215,7 @@ Array.prototype.compare = function(testArr) {
            let nArray = num.split(',');
 
           if (nArray.length > solution.newArr.length) { return null; }
-          console.time('f')
+        //  console.time('f')
 
             for (let x in obj) {
               if (obj[x].isSet == true) {
@@ -221,7 +226,7 @@ Array.prototype.compare = function(testArr) {
               };
 
             }
-            console.timeEnd('f')
+          //  console.timeEnd('f')
 
 
             // console.log(nArray.length)
@@ -240,7 +245,7 @@ Array.prototype.compare = function(testArr) {
           }
         } else if (nArray.length > solution.newArr.length) { return null;
         } else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-          console.log('too long'); return null;
+        //  console.log('too long'); return null;
         }
 
       else {
@@ -291,15 +296,14 @@ Array.prototype.compare = function(testArr) {
 
 
 
+        console.log(directionCount)
 
-        for (let i = 0; i < 24; i++) {
-            if(solutionArray.length == i) {
-              orderArray = direction[i]
-            }
-        }
-        if (solutionArray.length > 24 ){
-          _shuffle(orderArray)
-        }
+
+          orderArray = direction[directionCount]
+
+          if (directionCount == functionCounter -1) {directionCount = 0}
+
+
         // if(solutionArray.length == 0) {
         //   console.log('fdffddfd right')
         //   orderArray = [right, left, down, up]
@@ -350,7 +354,7 @@ Array.prototype.compare = function(testArr) {
     }
     return find(start);
   }
-
+var functionCounter = 24
   //console.clear();
   $('#calc').on('click', function() {
 
@@ -367,8 +371,8 @@ Array.prototype.compare = function(testArr) {
     var startTime = performance.now();
     var solutionArray = [];
     var stepsNotUsedCount = 0;
-    var functionCounter = 20
-    var frequencyCut = 2; // maybe eliminate the need for this
+
+    var frequencyCut = 0; // maybe eliminate the need for this
 
 
 
@@ -424,7 +428,7 @@ Array.prototype.compare = function(testArr) {
                 }
 
                 if (stepsNotUsedCount == 0) {break;}
-                functionCounter = functionCounter + 20  // 20 is an arbitrary number - should be determined by the number of fork squares
+                functionCounter = functionCounter + 24  // 20 is an arbitrary number - should be determined by the number of fork squares
            }
 
       };
