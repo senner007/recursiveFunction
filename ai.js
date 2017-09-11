@@ -171,7 +171,7 @@ Array.prototype.compare = function(testArr) {
 // var arr2 = [1,2,3,4];
 
   var directionCount;
-  var countReset;
+
 
   function findSolution(start, target, obj, wayPoints, solution, solutionArray) {
 
@@ -390,7 +390,7 @@ Array.prototype.compare = function(testArr) {
 
     var functionCalls = 0;
     var solution;
-    //countReset = 3;
+
 
     var invalidCount = 0;
     var si = startId.split(',');
