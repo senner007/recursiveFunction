@@ -187,6 +187,7 @@ Array.prototype.compare = function(testArr) {
     // console.log(tempSolutionArray)
 
       directionCount++;
+        if (directionCount == 24) {directionCount = 0}
 
 
 
@@ -219,7 +220,7 @@ Array.prototype.compare = function(testArr) {
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
-                if(nArray.includes(obj[x].name) && solutionArray.length > 10) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+                if(nArray.includes(obj[x].name) && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
               };
@@ -300,7 +301,7 @@ Array.prototype.compare = function(testArr) {
 
           orderArray = direction[directionCount]
 
-          if (directionCount == 23) {directionCount = 0}
+
 
 
         // if(solutionArray.length == 0) {
@@ -333,7 +334,7 @@ Array.prototype.compare = function(testArr) {
           objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
         }
 
-       if ( obj[current].isLocated == true && solutionArray.length > 10) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+       if ( obj[current].isLocated == true && solutionArray.length > 5) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
           obj[current].locatedFrequency = obj[current].locatedFrequency + 1
        } else {
          obj[current].isLocated = true;
