@@ -16,6 +16,8 @@ TODO:
 + identify fork squares and make sure that each path takes a different route and doesn't randomize
 + identify fork squares and use amount as a basis for determining functionCounter and frequencyCut
 + write logic prevent stack overflow
++ store the the 4 directions in an object with an attached property indicting direction. Prevent uturn movements.
++ define movement patters for open space
 
 
 

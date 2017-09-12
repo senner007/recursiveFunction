@@ -126,8 +126,10 @@ var wayPoints = [];
 
         if (startId == undefined ) {
           startId = this.id
+          obj[this.id].isStart = true
         } else if (startId != undefined && targetId == undefined) {
           targetId = this.id
+          obj[this.id].isTarget = true
         }
 
 
@@ -157,18 +159,43 @@ var wayPoints = [];
   }
 
 
-Array.prototype.compare = function(testArr) {
-    if (this.length != testArr.length) return false;
-    for (var i = 0; i < testArr.length; i++) {
-        if (this[i].compare) { //To test values in nested arrays
-            if (!this[i].compare(testArr[i])) return false;
-        }
-        else if (this[i] !== testArr[i]) return false;
+// Array.prototype.compare = function(testArr) {
+//     if (this.length != testArr.length) return false;
+//     for (var i = 0; i < testArr.length; i++) {
+//         if (this[i].compare) { //To test values in nested arrays
+//             if (!this[i].compare(testArr[i])) return false;
+//         }
+//         else if (this[i] !== testArr[i]) return false;
+//     }
+//     return true;
+// }
+var arr1 = [1,2,3];
+var arr2 = [1,2,3,4];
+
+
+function _arrDiff (a1, a2) {
+
+    var a = [], diff = [];
+
+    for (var i = 0; i < a1.length; i++) {
+        a[a1[i]] = true;
     }
-    return true;
-}
-// var arr1 = [1,2,3];
-// var arr2 = [1,2,3,4];
+
+    for (var i = 0; i < a2.length; i++) {
+        if (a[a2[i]]) {
+            delete a[a2[i]];
+        } else {
+            a[a2[i]] = true;
+        }
+    }
+
+    for (var k in a) {
+        diff.push(k);
+    }
+
+    return diff;
+};
+console.log(_arrDiff(arr1,arr2).length)
 
   var directionCount;
 
@@ -365,25 +392,45 @@ Array.prototype.compare = function(testArr) {
 
   $('#reset').on('click', function() {
   var $reset = $('.dottedBorder');
-  console.log(reset)
-  $reset.each(function(i,el) {
-
-    obj[el.id].isSet = true;
-    $(el).removeClass('dottedBorder')
-
+    $reset.each(function(i,el) {
+      obj[el.id].isSet = true;
+      $(el).removeClass('dottedBorder')
+    })
   })
 
+  $('#save').on('click', function() {
+
+    var data = JSON.stringify(obj);
+
+    $.ajax({
+          type: "POST",
+          dataType: "json",
+          url: "savejson.php", //Relative or absolute path to response.php file
+          data: {data: data},
+          success: function(data) {
+
+          }
+        });
+});
+console.log(obj)
+$('#load').on('click', function() {
 
 
+  $.getJSON( "path.json", function( json ) {
+     obj =  json
+     for(let x in obj) {
+       if(obj[x].isDestination == true) {
+         document.getElementById(x).classList.add('destination')
+         if (obj[x].isStart == true) { startId = x}
+          if (obj[x].isTarget == true) { targetId = x}
+      }
+       if(obj[x].isSet == true) {
+         document.getElementById(x).classList.add('set')
+       }
 
-    // for (let x in obj) {
-    //
-    //
-    //
-    //   }
-
-
-  })
+      }
+   });
+});
 
  var param;
   $('#calc').on('click', function() {
