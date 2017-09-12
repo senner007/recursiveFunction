@@ -46,6 +46,7 @@ $(document).ready(function() {
       obj[tempArr].isDestination = false;
       obj[tempArr].isLocated = false;
       obj[tempArr].locatedFrequency = 0;
+      obj[tempArr].isBlacklisted = false
     })
 
 var startId;
@@ -145,7 +146,57 @@ var wayPoints = [];
 
   });
 
+  $('#save').on('click', function() {
 
+    for (let x in obj) {
+      obj[x].isBlacklisted = false;
+    }
+
+      var data = JSON.stringify(obj);
+
+      document.getElementById('stepsTaken').textContent = 'saving...'
+
+      $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "savejson.php", //Relative or absolute path to response.php file
+            data: {data: data},
+            success: function(data) {
+                document.getElementById('stepsTaken').textContent = 'saving... saved'
+            }
+          });
+  });
+
+  $('#load').on('click', function() {
+      document.getElementById('stepsTaken').textContent = 'loading...'
+    $.getJSON( "path.json", function( json ) {
+       obj =  json
+       for(let x in obj) {
+          if (obj[x].isMarked == true) {
+           obj[x].isMarked = false
+          }
+          if(obj[x].isDestination == true) {
+            document.getElementById(x).classList.add('destination')
+            if (obj[x].isStart == true) { startId = x}
+            if (obj[x].isTarget == true) { targetId = x}
+          }
+          if(obj[x].isSet == true) {
+           document.getElementById(x).classList.add('set')
+          }
+        document.getElementById(x).style.border = 'none';
+        }
+          document.getElementById('stepsTaken').textContent = 'loading...loaded'
+
+     });
+  });
+
+  $('#reset').on('click', function() {
+  var $reset = $('.dottedBorder');
+    $reset.each(function(i,el) {
+      obj[el.id].isSet = true;
+      $(el).removeClass('dottedBorder')
+    })
+  })
 
 
   function _shuffle(a) { // shuffle array
@@ -159,52 +210,19 @@ var wayPoints = [];
   }
 
 
-// Array.prototype.compare = function(testArr) {
-//     if (this.length != testArr.length) return false;
-//     for (var i = 0; i < testArr.length; i++) {
-//         if (this[i].compare) { //To test values in nested arrays
-//             if (!this[i].compare(testArr[i])) return false;
-//         }
-//         else if (this[i] !== testArr[i]) return false;
-//     }
-//     return true;
-// }
-var arr1 = [1,2,3];
-var arr2 = [1,2,3,4];
-
-
-function _arrDiff (a1, a2) {
-
-    var a = [], diff = [];
-
-    for (var i = 0; i < a1.length; i++) {
-        a[a1[i]] = true;
-    }
-
-    for (var i = 0; i < a2.length; i++) {
-        if (a[a2[i]]) {
-            delete a[a2[i]];
-        } else {
-            a[a2[i]] = true;
-        }
-    }
-
-    for (var k in a) {
-        diff.push(k);
-    }
-
-    return diff;
-};
-console.log(_arrDiff(arr1,arr2).length)
 
   var directionCount;
 
 
-  function findSolution(start, target, obj, wayPoints, solution, solutionArray) {
+  function findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal) {
 
     if (!solution) { var solution = {newArr: [] }
       solution.newArr.length = 1000;
     }
+    if(blacklistFinal.length > 0) {
+       var blacklistCount = 0;
+    }
+
     // var tempSolutionArray = [];
     // for (let i = 0; i < solutionArray.length; i++) {
     //   for (let x of solutionArray[i].newArr) {
@@ -213,9 +231,10 @@ console.log(_arrDiff(arr1,arr2).length)
     //   }
     // }
     // console.log(tempSolutionArray)
-
+    var objVals;
       directionCount++;
       if (directionCount == 24)  { directionCount = 0; }
+      let counter = 0;
 
 
 
@@ -237,6 +256,16 @@ console.log(_arrDiff(arr1,arr2).length)
             return null;
           }
         }
+       if(blacklistFinal[0] == obj[current].name) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
+            // counter = 0;
+            // if(  obj[[current[0] - 1, current[1]]].isMarked ) { counter++}
+            // if(  obj[[current[0] + 1, current[1]]].isMarked ) { counter++}
+            // if(  obj[[current[0], current[1] -1]].isMarked ) { counter++}
+            // if(  obj[[current[0], current[1]  + 1]].isMarked ) { counter++}
+            //     console.log(counter)
+            // if (counter > 2) { return null}
+
+
 
         if (obj[current] == obj[target]) { // if destination has been reached - return obect with solution
 
@@ -323,49 +352,11 @@ console.log(_arrDiff(arr1,arr2).length)
         ]
 
 
+          orderArray = direction[directionCount]
 
-        console.log(directionCount)
-
-
-
-          // if (directionCount > 23) {
-          //   console.log('heloo shuffling!!!!!!!!!!!!!!!!!')
-          //   _shuffle(orderArray)
-          // } else {
-              orderArray = direction[directionCount]
-        //  }
-        if (param == true) {_shuffle(orderArray); console.log('shuffling')}
+        if (param == 'true') {_shuffle(orderArray); console.log('shuffling')}
 
 
-        // if(solutionArray.length == 0) {
-        //   console.log('fdffddfd right')
-        //   orderArray = [right, left, down, up]
-        // }
-        // if(solutionArray.length == 1) {
-        //   console.log('fdffddfd left')
-        //     orderArray = [left, right, down, up]
-        // }
-        // if(solutionArray.length == 2) {
-        //   orderArray = [down, right, left, up]
-        // }
-        // if(solutionArray.length == 3) {
-        //   orderArray = [up, left, down, right]
-        // }
-
-
-
-        if (obj[orderArray[0]] != undefined) {
-          objVal_0 = obj[orderArray[0]].isMarked == true || obj[orderArray[0]].isSet == false ? false : true
-        }
-        if (obj[orderArray[1]] != undefined) {
-          objVal_1 = obj[orderArray[1]].isMarked == true || obj[orderArray[1]].isSet == false ? false : true
-        }
-        if (obj[orderArray[2]] != undefined) {
-          objVal_2 = obj[orderArray[2]].isMarked == true || obj[orderArray[2]].isSet == false ? false : true
-        }
-        if (obj[orderArray[3]] != undefined) {
-          objVal_3 = obj[orderArray[3]].isMarked == true || obj[orderArray[3]].isSet == false ? false : true
-        }
 
        if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
           obj[current].locatedFrequency = obj[current].locatedFrequency + 1
@@ -374,12 +365,36 @@ console.log(_arrDiff(arr1,arr2).length)
        }
 
 
+       let objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
+
+       for (let i = 0;i < 4; i++ ) {
+
+         if (obj[orderArray[i]] != undefined) {
+           objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isSet == false ? false : true
+
+           let step = orderArray[i];
+          //  //console.log(step)
+          //  let stepLeft = [step[0] -1, step[1]],
+          //      stepRight = [step[0] +1, step[1]],
+          //      stepUp = [step[0], step[1] +1],
+          //      stepDown = [step[0], step[1] -1];
+           //
+          //  //console.log(obj[step[0] -1, step[1]])
+          //  if(obj[stepLeft].isMarked && obj[stepLeft] != obj[current]) {  objVals[i] = false}
+          //  if(obj[stepRight].isMarked && obj[stepRight] != obj[current]) {  objVals[i] = false}
+          //  if(obj[stepUp].isMarked && obj[stepUp] != obj[current]) {  objVals[i] = false}
+          //  if(obj[stepDown].isMarked && obj[stepDown] != obj[current]) {  objVals[i] = false}
+
+         }
+
+       }
+    //   console.log(objVals)
 
 
-        return (objVal_0 ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
-               || (objVal_1 ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
-               || (objVal_2 ? find(orderArray[2], toAdd + obj[orderArray[2]].name) : null)
-               || (objVal_3 ? find(orderArray[3], toAdd + obj[orderArray[3]].name): null);
+        return (objVals[0] ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
+               || (objVals[1] ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
+               || (objVals[2]  ? find(orderArray[2], toAdd + obj[orderArray[2]].name) : null)
+               || (objVals[3]  ? find(orderArray[3], toAdd + obj[orderArray[3]].name): null);
 
         // return find(down, toAdd + obj[down]) || find(left,   toAdd + obj[left])||
         // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
@@ -390,47 +405,9 @@ console.log(_arrDiff(arr1,arr2).length)
 
   //console.clear();
 
-  $('#reset').on('click', function() {
-  var $reset = $('.dottedBorder');
-    $reset.each(function(i,el) {
-      obj[el.id].isSet = true;
-      $(el).removeClass('dottedBorder')
-    })
-  })
-
-  $('#save').on('click', function() {
-
-    var data = JSON.stringify(obj);
-
-    $.ajax({
-          type: "POST",
-          dataType: "json",
-          url: "savejson.php", //Relative or absolute path to response.php file
-          data: {data: data},
-          success: function(data) {
-
-          }
-        });
-});
-console.log(obj)
-$('#load').on('click', function() {
 
 
-  $.getJSON( "path.json", function( json ) {
-     obj =  json
-     for(let x in obj) {
-       if(obj[x].isDestination == true) {
-         document.getElementById(x).classList.add('destination')
-         if (obj[x].isStart == true) { startId = x}
-          if (obj[x].isTarget == true) { targetId = x}
-      }
-       if(obj[x].isSet == true) {
-         document.getElementById(x).classList.add('set')
-       }
 
-      }
-   });
-});
 
  var param;
   $('#calc').on('click', function() {
@@ -450,15 +427,17 @@ $('#load').on('click', function() {
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     directionCount = -1;
-    var frequencyCut = 2; // maybe eliminate the need for this
+    var frequencyCut =0; // maybe eliminate the need for this
     var functionCounter = 24
     param = false;
+    var blacklist = [];
+    var blacklistFinal = [];
 
 
 
     for (let i = 0; ; i++) {
 
-      let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray);
+      let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal);
 
       // for (let x in obj) {
       //   obj[x].isMarked = false;
@@ -481,21 +460,58 @@ $('#load').on('click', function() {
 
 
           var countEqual = 0;
-
-          for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
+          console.log('--------------------------------------------');
+          console.log('new count')
+          console.log('--------------------------------------------');
+          var differences = [];
+          for (let i = (solutionArray.length - 24); i < solutionArray.length; i++) {
             if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
+              //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
+                differences.push(_arrDiff(solutionArray[i].newArr, solutionArray[solutionArray.length -1].newArr))
+                // console.log('arr length: ' + solutionArray[i].newArr.length)
+                // console.log('arr previous length: ' + solutionArray[i -1].newArr.length)
+
+
               countEqual++;
             }
           }
+
           if (countEqual >= 24) {
+            var alternateRoutes = [];
+            blacklist = [];
+            for (let x of differences) {
+              //console.log(x)
+              if(x.length >0) {
+                  for(let y of x) {
+                    if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
+                      blacklist.push(y)
+                    if( !blacklistFinal.includes(blacklist[0])) {blacklistFinal.unshift(blacklist[0]) };
+                      //console.log(solutionArray[solutionArray.length -1].newArr)
+                    }
+                    if(!alternateRoutes.includes(y)){
+                      alternateRoutes.push(y)
+                    }
+                  }
 
-              console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
+              }
 
+            }
+
+            // console.log('arrays that are different--------------------------------------------');
+          console.log(blacklistFinal)
+          console.log(alternateRoutes);
+            // console.log('--------------------------------------------');
+            //   console.log('--------------------------------------------');
+            //   console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
+            //   console.log('--------------------------------------------');
+            //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
+                    console.log(obj[x].isBlacklisted);
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut || (blacklistFinal[0] == obj[x].name && obj[x].isBlacklisted == false)) {
+                    console.log('hello')
                       stepsNotUsedCount++;
+                      if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
                       obj[x].isSet = false;
 
                       frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
@@ -509,7 +525,7 @@ $('#load').on('click', function() {
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0 && param == true) {break;}
+                if (stepsNotUsedCount == 0 && param == true && alternateRoutes.length == 0 || functionCalls > 300) {break;}
                 else {
                   param = true;
                   functionCounter = functionCounter + 24
@@ -529,34 +545,6 @@ $('#load').on('click', function() {
     var time = endTime - startTime;
     console.log(solutionArray)
 
-    // console.log('steps used: :' +  stepsUsedArray)
-    // console.log('steps not used: :' +  stepsNotUsedArray)
-  //  console.log(stepsTaken)
-    // for (let x in obj) {
-    //   if (obj[x].isSet == true && obj[x].isLocated == true) {
-    //     console.log(obj[x].name)
-    //     console.log(obj[x].locatedFrequency)
-    //     if (obj[x].locatedFrequency < 20) {
-    //
-    //       document.getElementById(x).classList.add('dottedBorder')
-    //     }
-    //
-    //   }
-    //
-    // }
-    // for (let x in obj) {
-    //   if (obj[x].isPath == true) {
-    //     document.getElementById(x).classList.add('isPath')
-    //
-    //   };
-    //
-    // }
-
-
-
-
-
-
 
     document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
     document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
@@ -565,8 +553,53 @@ $('#load').on('click', function() {
 
     _animateSolution(solutionArray[solutionArray.length -1], 50);
 
+    for (let x in obj) {
+      if (obj[x].isMarked == true) {
+          obj[x].isMarked = false;
+        };
+      };
+
 
   });
+
+
+  // Array.prototype.compare = function(testArr) {
+  //     if (this.length != testArr.length) return false;
+  //     for (var i = 0; i < testArr.length; i++) {
+  //         if (this[i].compare) { //To test values in nested arrays
+  //             if (!this[i].compare(testArr[i])) return false;
+  //         }
+  //         else if (this[i] !== testArr[i]) return false;
+  //     }
+  //     return true;
+  // }
+  // var arr1 = [1,2,3];
+  // var arr2 = [1,2,3,4];
+
+
+  function _arrDiff (a1, a2) {
+
+      var a = [], diff = [];
+
+      for (var i = 0; i < a1.length; i++) {
+          a[a1[i]] = true;
+      }
+
+      for (var i = 0; i < a2.length; i++) {
+          if (a[a2[i]]) {
+              delete a[a2[i]];
+          } else {
+              a[a2[i]] = true;
+          }
+      }
+
+      for (var k in a) {
+          diff.push(k);
+      }
+
+      return diff;
+  };
+
 
   function _animateSolution(result, speed) {
 
