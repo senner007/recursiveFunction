@@ -232,8 +232,13 @@ var wayPoints = [];
     // }
     // console.log(tempSolutionArray)
     var objVals;
+    if (param != true) {
+      console.log('slower dirction count')
       directionCount++;
       if (directionCount == 24)  { directionCount = 0; }
+
+    }
+
       let counter = 0;
 
 
@@ -302,7 +307,7 @@ var wayPoints = [];
           }
         } else if (nArray.length > solution.newArr.length) { return null;
         } else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-        //  console.log('too long'); return null;
+          console.log('too long'); return null;
         }
 
       else {
@@ -354,7 +359,11 @@ var wayPoints = [];
 
           orderArray = direction[directionCount]
 
-        if (param == 'true') {_shuffle(orderArray); console.log('shuffling')}
+        if (param == true) {  directionCount++;
+          if (directionCount == 24)  { directionCount = 0; }
+        //  console.log('faster direction count')
+
+        }
 
 
 
