@@ -261,12 +261,12 @@ var wayPoints = [];
     // }
     // console.log(tempSolutionArray)
     var objVals;
-    if (param != true) {
-      console.log('slower dirction count')
-      directionCount++;
-      if (directionCount == 24)  { directionCount = 0; }
-
-    }
+    // if (param != true) {
+    //   console.log('slower dirction count')
+    //   directionCount++;
+    //   if (directionCount == 24)  { directionCount = 0; }
+    //
+    // }
 
       let counter = 0;
 
@@ -286,7 +286,7 @@ var wayPoints = [];
             // console.log(nArray[nArray.length -1])
             // console.log(obj[current].name)
           //  console.log ( 'index of ' + nArray[nArray.length -1] + ': ' + solution.newArr.indexOf(obj[current].name) + ' in solution')
-         console.log('opt out')
+        // console.log('opt out')
             return null;
           }
         }
@@ -336,7 +336,8 @@ var wayPoints = [];
           }
         } else if (nArray.length > solution.newArr.length) { return null;
         } else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-          console.log('too long'); return null;
+          // console.log('too long');
+          return null;
         }
 
       else {
@@ -388,11 +389,7 @@ var wayPoints = [];
 
           orderArray = direction[directionCount]
 
-        if (param == true) {  directionCount++;
-          if (directionCount == 24)  { directionCount = 0; }
-        //  console.log('faster direction count')
 
-        }
 
 
 
@@ -405,12 +402,16 @@ var wayPoints = [];
 
        let objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
 
+       var counter = 0;
        for (let i = 0;i < 4; i++ ) {
 
          if (obj[orderArray[i]] != undefined) {
            objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isSet == false ? false : true
 
            let step = orderArray[i];
+           if(objVals[i]== true) {
+             counter++
+           }
           //  //console.log(step)
           //  let stepLeft = [step[0] -1, step[1]],
           //      stepRight = [step[0] +1, step[1]],
@@ -426,8 +427,34 @@ var wayPoints = [];
          }
 
        }
-    //   console.log(objVals)
 
+
+       if (counter > 1) {
+         //directionCount++;
+
+         //  console.log('faster direction count')
+
+
+          obj[current].isFork = true
+
+         if (obj[current].hasTried  == undefined ){
+            obj[current].hasTried = 0
+          } else {
+            obj[current].hasTried++;
+          }
+
+          if (obj[current].hasTried == 24) { obj[current].hasTried = 0 }
+          directionCount = obj[current].hasTried;
+
+
+        //  console.log(obj[current].name)
+          if (obj[current].name == '757') { console.log(obj[current].name); console.log(obj[current].hasTried)}
+
+
+
+
+       }
+         //if (directionCount == 24)  { directionCount = 0; }
 
         return (objVals[0] ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
                || (objVals[1] ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
@@ -464,7 +491,7 @@ var wayPoints = [];
     var startTime = performance.now();
     var solutionArray = [];
     var stepsNotUsedCount = 0;
-    directionCount = -1;
+    directionCount = 0;
     var frequencyCut =0; // maybe eliminate the need for this
     var functionCounter = 24
     param = false;
@@ -545,12 +572,13 @@ var wayPoints = [];
             //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-                  
+
                   if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                     console.log('hello')
                       stepsNotUsedCount++;
                       if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
                       obj[x].isSet = false;
+                      obj[x].hasTried = 0;
 
                       frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
@@ -563,10 +591,10 @@ var wayPoints = [];
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0 && param == true && alternateRoutes.length == 0 || functionCalls > 100) {break;}
+                if (stepsNotUsedCount == 0 && param == true || functionCalls > 100) {break;}
                 else {
                   param = true;
-                  functionCounter = functionCounter + 24
+                  functionCounter = functionCounter
                 }
 
               //  functionCounter = functionCounter  // 20 is an arbitrary number - should be determined by the number of fork squares
