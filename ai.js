@@ -190,6 +190,35 @@ var wayPoints = [];
      });
   });
 
+
+  $('.predef').on('click', function() {
+    var thisButton = this.id;
+
+    document.getElementById('stepsTaken').textContent = 'loading...'
+  $.getJSON( "bak/" + thisButton + ".json", function( json ) {
+     obj =  json
+     for(let x in obj) {
+        if (obj[x].isMarked == true) {
+         obj[x].isMarked = false
+        }
+        if(obj[x].isDestination == true) {
+          document.getElementById(x).classList.add('destination')
+          if (obj[x].isStart == true) { startId = x}
+          if (obj[x].isTarget == true) { targetId = x}
+        }
+        if(obj[x].isSet == true) {
+         document.getElementById(x).classList.add('set')
+        }
+      document.getElementById(x).style.border = 'none';
+      }
+        document.getElementById('stepsTaken').textContent = 'loading...loaded'
+
+   });
+
+
+
+  });
+
   $('#reset').on('click', function() {
   var $reset = $('.dottedBorder');
     $reset.each(function(i,el) {
@@ -257,11 +286,11 @@ var wayPoints = [];
             // console.log(nArray[nArray.length -1])
             // console.log(obj[current].name)
           //  console.log ( 'index of ' + nArray[nArray.length -1] + ': ' + solution.newArr.indexOf(obj[current].name) + ' in solution')
-        //  console.log('opt out')
+         console.log('opt out')
             return null;
           }
         }
-       if(blacklistFinal[0] == obj[current].name) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
+    //   if(blacklistFinal[0] == obj[current].name) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
             // counter = 0;
             // if(  obj[[current[0] - 1, current[1]]].isMarked ) { counter++}
             // if(  obj[[current[0] + 1, current[1]]].isMarked ) { counter++}
@@ -517,7 +546,7 @@ var wayPoints = [];
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
                     console.log(obj[x].isBlacklisted);
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut || (blacklistFinal[0] == obj[x].name && obj[x].isBlacklisted == false)) {
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                     console.log('hello')
                       stepsNotUsedCount++;
                       if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
@@ -534,7 +563,7 @@ var wayPoints = [];
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0 && param == true && alternateRoutes.length == 0 || functionCalls > 300) {break;}
+                if (stepsNotUsedCount == 0 && param == true && alternateRoutes.length == 0 || functionCalls > 100) {break;}
                 else {
                   param = true;
                   functionCounter = functionCounter + 24
@@ -560,7 +589,7 @@ var wayPoints = [];
     document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
     document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
 
-    _animateSolution(solutionArray[solutionArray.length -1], 50);
+    _animateSolution(solutionArray[solutionArray.length -1], 20);
 
     for (let x in obj) {
       if (obj[x].isMarked == true) {
