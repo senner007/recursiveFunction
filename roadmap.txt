@@ -17,11 +17,10 @@ TODO:
 + identify fork squares and use amount as a basis for determining functionCounter and frequencyCut
 + write logic prevent stack overflow
 + store the the 4 directions in an object with an attached property indicting direction. Prevent uturn movements.
-+ define movement patters for open space
-
-
-
-
++ define movement patterns for open space
++ create 10 predefined
++ save with localstorage
++ show expected result with predefined
 
 Done:
 + create ids for grid items with javascript

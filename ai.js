@@ -545,7 +545,7 @@ var wayPoints = [];
             //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-                    console.log(obj[x].isBlacklisted);
+                  
                   if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                     console.log('hello')
                       stepsNotUsedCount++;
