@@ -150,6 +150,7 @@ var wayPoints = [];
 
     for (let x in obj) {
       obj[x].isBlacklisted = false;
+      obj[x].hasTried = 0
     }
 
       var data = JSON.stringify(obj);
@@ -242,7 +243,7 @@ var wayPoints = [];
 
   var directionCount;
 
-
+    var forkSquares = [];
   function findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal) {
 
     if (!solution) { var solution = {newArr: [] }
@@ -440,17 +441,19 @@ var wayPoints = [];
          if (obj[current].hasTried  == undefined ){
             obj[current].hasTried = 0
           } else {
-            obj[current].hasTried++;
+            obj[current].hasTried = obj[current].hasTried + 7;
           }
 
-          if (obj[current].hasTried == 24) { obj[current].hasTried = 0 }
+          if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
           directionCount = obj[current].hasTried;
 
 
         //  console.log(obj[current].name)
-          if (obj[current].name == '757') { console.log(obj[current].name); console.log(obj[current].hasTried)}
-
-
+          if (obj[current].name == '1110') { console.log(obj[current].name); console.log(obj[current].hasTried)}
+          if (!forkSquares.includes(obj[current].name)) {
+            forkSquares.push(obj[current].name)
+          }
+        //  console.log(forkSquares);
 
 
        }
@@ -479,7 +482,7 @@ var wayPoints = [];
 
     var functionCalls = 0;
     var solution;
-
+    forkSquares = [];
 
     var invalidCount = 0;
     var si = startId.split(',');
@@ -620,6 +623,7 @@ var wayPoints = [];
     _animateSolution(solutionArray[solutionArray.length -1], 20);
 
     for (let x in obj) {
+      obj[x].hasTried = 0;
       if (obj[x].isMarked == true) {
           obj[x].isMarked = false;
         };
