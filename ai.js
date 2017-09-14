@@ -449,7 +449,7 @@ var wayPoints = [];
 
 
         //  console.log(obj[current].name)
-          if (obj[current].name == '1110') { console.log(obj[current].name); console.log(obj[current].hasTried)}
+          if (obj[current].name == '809') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
           if (!forkSquares.includes(obj[current].name)) {
             forkSquares.push(obj[current].name)
           }
@@ -676,11 +676,23 @@ var wayPoints = [];
     var time = 0;
 
     for (let x in result.obj) {
-      let el = document.getElementById(x).style.border = 'none';
+        let el = document.getElementById(x)
+      if (result.newArr.includes(result.obj[x].name)) {
+          el.style.border = '2px solid red';
+      }
+      else if (el.style.border == '2px solid red') {
+            el.style.border = 'none';
+        $(el).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+
+      }
+
     }
     for (let x of result.newArr) {
       let el = document.getElementsByClassName(x)[0]
-      el.style.border = '2px solid red';
+
+
+
+
 
       setTimeout(function() {
         $(el).stop(true, true).fadeOut(100).fadeIn(100);
