@@ -41,7 +41,7 @@ $(document).ready(function() {
       obj[tempArr].name = el.classList[1];
       obj[tempArr].isSet = false;
       obj[tempArr].isWaypoint = false;
-      obj[tempArr].marked = false;
+      obj[tempArr].isMarked = false;
       obj[tempArr].isPath = false;  // not used
       obj[tempArr].isDestination = false;
       obj[tempArr].isLocated = false;
@@ -291,7 +291,8 @@ var wayPoints = [];
             return null;
           }
         }
-    //   if(blacklistFinal[0] == obj[current].name) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
+      //  if ( obj[current].name == '825') {console.log('hello name')}
+      // if(obj[current].isBlacklisted) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
             // counter = 0;
             // if(  obj[[current[0] - 1, current[1]]].isMarked ) { counter++}
             // if(  obj[[current[0] + 1, current[1]]].isMarked ) { counter++}
@@ -355,6 +356,7 @@ var wayPoints = [];
         var orderArray = [right, left, down, up];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
 
+
         var direction = [
 
             [right, left, down, up],
@@ -386,12 +388,12 @@ var wayPoints = [];
             [up, left, right, down],
 
         ]
+           if (obj[current].name == '765') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
+
+          orderArray = direction[obj[current].hasTried]
 
 
-          orderArray = direction[directionCount]
-
-
-
+        if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
 
 
        if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
@@ -407,7 +409,7 @@ var wayPoints = [];
        for (let i = 0;i < 4; i++ ) {
 
          if (obj[orderArray[i]] != undefined) {
-           objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isSet == false ? false : true
+           objVals[i] = obj[orderArray[i]].isMarked == true || obj[current].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
 
            let step = orderArray[i];
            if(objVals[i]== true) {
@@ -429,6 +431,16 @@ var wayPoints = [];
 
        }
 
+       //
+       // var directionNumbers = [0,6,12,18,
+       //                 1,7,13,19,
+       //                 2,8,14,20,
+       //                 3,9,15,21,
+       //                 4,10,16,22,
+       //                 5,11,17,23];
+
+
+
 
        if (counter > 1) {
          //directionCount++;
@@ -437,23 +449,27 @@ var wayPoints = [];
 
 
           obj[current].isFork = true
+             if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
+             else {
+                 obj[current].hasTried = obj[current].hasTried + 6;
+             }
 
-         if (obj[current].hasTried  == undefined ){
-            obj[current].hasTried = 0
-          } else {
-            obj[current].hasTried = obj[current].hasTried + 7;
-          }
+
+
+
+
 
           if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
-          directionCount = obj[current].hasTried;
+
+          //directionCount = obj[current].hasTried;
 
 
         //  console.log(obj[current].name)
-          if (obj[current].name == '809') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
+
           if (!forkSquares.includes(obj[current].name)) {
             forkSquares.push(obj[current].name)
           }
-        //  console.log(forkSquares);
+         //console.log(forkSquares);
 
 
        }
@@ -479,6 +495,7 @@ var wayPoints = [];
 
  var param;
   $('#calc').on('click', function() {
+
 
     var functionCalls = 0;
     var solution;
@@ -553,7 +570,7 @@ var wayPoints = [];
                   for(let y of x) {
                     if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
                       blacklist.push(y)
-                    if( !blacklistFinal.includes(blacklist[0])) {blacklistFinal.unshift(blacklist[0]) };
+                    if( !blacklistFinal.includes(blacklist[0]) ) {blacklistFinal.unshift(blacklist[0]) };
                       //console.log(solutionArray[solutionArray.length -1].newArr)
                     }
                     if(!alternateRoutes.includes(y)){
@@ -567,7 +584,9 @@ var wayPoints = [];
 
             // console.log('arrays that are different--------------------------------------------');
           console.log(blacklistFinal)
-          console.log(alternateRoutes);
+      ///    console.log('solution: ' + solutionArray[solutionArray.length -1].newArr)
+
+         console.log(alternateRoutes);
             // console.log('--------------------------------------------');
             //   console.log('--------------------------------------------');
             //   console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
@@ -575,11 +594,13 @@ var wayPoints = [];
             //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
+                    //if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
 
+                  // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
                   if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
                     console.log('hello')
                       stepsNotUsedCount++;
-                      if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
+
                       obj[x].isSet = false;
                       obj[x].hasTried = 0;
 
@@ -594,7 +615,7 @@ var wayPoints = [];
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0 && param == true || functionCalls > 100) {break;}
+                if (stepsNotUsedCount == 0 && param == true|| functionCalls > 100) {break;}
                 else {
                   param = true;
                   functionCounter = functionCounter
