@@ -46,7 +46,8 @@ $(document).ready(function() {
       obj[tempArr].isDestination = false;
       obj[tempArr].isLocated = false;
       obj[tempArr].locatedFrequency = 0;
-      obj[tempArr].isBlacklisted = false
+      obj[tempArr].isBlacklisted = false;
+      obj[tempArr].hasTried = 0;
     })
 
 var startId;
@@ -173,6 +174,7 @@ var wayPoints = [];
     $.getJSON( "path.json", function( json ) {
        obj =  json
        for(let x in obj) {
+
           if (obj[x].isMarked == true) {
            obj[x].isMarked = false
           }
@@ -199,6 +201,7 @@ var wayPoints = [];
   $.getJSON( "bak/" + thisButton + ".json", function( json ) {
      obj =  json
      for(let x in obj) {
+      
         if (obj[x].isMarked == true) {
          obj[x].isMarked = false
         }
