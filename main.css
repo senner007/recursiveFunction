@@ -23,7 +23,7 @@ body {
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(60, 1fr);
+  grid-template-columns: repeat(100, 1fr);
   grid-gap: 0px;
   background-color: #fff;
   color: #444;
@@ -39,12 +39,12 @@ body {
 
   padding: 5px;
 
-  font-size: 70%;
+  font-size: 50%;
   border: none;
-  min-height: 30px;
-  max-height: 40px;
-  min-width: 20px;
-  max-width: 30px;
+  min-height: 15px;
+  max-height: 20px;
+  min-width: 15px;
+  max-width: 20px;
 }
 
 .set {
