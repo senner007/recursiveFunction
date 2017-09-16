@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = i +1
+      el.textContent = ''
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
