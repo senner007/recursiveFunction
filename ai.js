@@ -15,13 +15,13 @@ $(document).ready(function() {
 
   var divs = $('.wrapper').find('div'),
     obj = {};
-    var columns = 100;
-    var rows = 56;
+    var columns = 60;
+    var rows = 28;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = '';
+      el.textContent = i +1
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -391,7 +391,7 @@ var wayPoints = [];
             [up, left, right, down],
 
         ]
-           if (obj[current].name == '3454') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].isBlacklisted)}
+           if (obj[current].name == '765') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
 
           orderArray = direction[obj[current].hasTried]
 
@@ -515,12 +515,11 @@ var wayPoints = [];
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     directionCount = 0;
-    var frequencyCut =10; // maybe eliminate the need for this
-    var functionCounter = 24
+    var frequencyCut =0; // maybe eliminate the need for this
+    var functionCounter = 10
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
-    var blackCount = -1;
 
 
 
@@ -553,7 +552,7 @@ var wayPoints = [];
           console.log('new count')
           console.log('--------------------------------------------');
           var differences = [];
-          for (let i = (solutionArray.length - 24); i < solutionArray.length; i++) {
+          for (let i = (solutionArray.length - 10); i < solutionArray.length; i++) {
             if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
               //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
                 differences.push(_arrDiff(solutionArray[i].newArr, solutionArray[solutionArray.length -1].newArr))
@@ -565,7 +564,7 @@ var wayPoints = [];
             }
           }
 
-          if (countEqual >= 24) {
+          if (countEqual >= 10) {
             var alternateRoutes = [];
             blacklist = [];
             for (let x of differences) {
@@ -588,13 +587,9 @@ var wayPoints = [];
 
             // console.log('arrays that are different--------------------------------------------');
           console.log(blacklistFinal)
-
-
-
-
       ///    console.log('solution: ' + solutionArray[solutionArray.length -1].newArr)
 
-      //   console.log(alternateRoutes);
+         console.log(alternateRoutes);
             // console.log('--------------------------------------------');
             //   console.log('--------------------------------------------');
             //   console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
@@ -602,27 +597,24 @@ var wayPoints = [];
             //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-
-                    // if (blacklistFinal[0] == obj[x].name) {
-                    //   obj[x].isBlacklisted = true
-                    // }
+                    //if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
 
                   // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
                   if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
-                  //  console.log('hello')
+                    console.log('hello')
                       stepsNotUsedCount++;
 
                       obj[x].isSet = false;
-                    //  obj[x].hasTried = 0;
+                      obj[x].hasTried = 0;
 
                       frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
                     document.getElementById(x).classList.add('dottedBorder')
-                //    console.log('hello ----- painting!!!')
+                    console.log('hello ----- painting!!!')
                   }
 
-                // obj[x].locatedFrequency = 0;
-                // obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
+                obj[x].locatedFrequency = 0;
+                obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
