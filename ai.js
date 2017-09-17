@@ -15,8 +15,8 @@ $(document).ready(function() {
 
   var divs = $('.wrapper').find('div'),
     obj = {};
-    var columns = 60;
-    var rows = 28;
+    var columns = 100;
+    var rows = 56;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
@@ -48,6 +48,7 @@ $(document).ready(function() {
       obj[tempArr].locatedFrequency = 0;
       obj[tempArr].isBlacklisted = false;
       obj[tempArr].hasTried = 0;
+        obj[tempArr].hasTriedCount = 0;
     })
 
 var startId;
@@ -152,6 +153,7 @@ var wayPoints = [];
     for (let x in obj) {
       obj[x].isBlacklisted = false;
       obj[x].hasTried = 0
+      obj[x].hasTriedCount = 0
     }
 
       var data = JSON.stringify(obj);
@@ -174,7 +176,9 @@ var wayPoints = [];
     $.getJSON( "path.json", function( json ) {
        obj =  json
        for(let x in obj) {
-
+            if (obj[x].isFork == true) {
+            obj[x].isFork = false
+          }
           if (obj[x].isMarked == true) {
            obj[x].isMarked = false
           }
@@ -340,12 +344,7 @@ var wayPoints = [];
             obj: obj
           }
         } else if (nArray.length > solution.newArr.length) { return null;
-        } else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-          // console.log('too long');
-          return null;
-        }
-
-      else {
+        } else {
         obj[current].isMarked = true
         let toAdd = num + ',';
         if (num == undefined) {  num = ''; toAdd = ''}
@@ -412,8 +411,19 @@ var wayPoints = [];
        for (let i = 0;i < 4; i++ ) {
 
          if (obj[orderArray[i]] != undefined) {
-           objVals[i] = obj[orderArray[i]].isMarked == true || obj[current].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
+           objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
 
+
+        //  if (nArray.length + ( Math.abs(obj[orderArray[i]][0] - target[0]) ) + ( Math.abs(obj[orderArray[i]][1] - target[1]) ) > solution.newArr.length) {
+        //     console.log('too long');
+        //    return null;
+        //  }
+
+           //
+          //  if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+          //     console.log('too long');
+          //    return null;
+          //  }
            let step = orderArray[i];
            if(objVals[i]== true) {
              counter++
@@ -459,7 +469,7 @@ var wayPoints = [];
 
 
 
-
+         obj[current].hasTriedCount++;;
 
 
           if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
@@ -515,8 +525,8 @@ var wayPoints = [];
     var solutionArray = [];
     var stepsNotUsedCount = 0;
     directionCount = 0;
-    var frequencyCut =0; // maybe eliminate the need for this
-    var functionCounter = 10
+    var frequencyCut =2; // maybe eliminate the need for this
+    var functionCounter = 15
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
@@ -552,7 +562,7 @@ var wayPoints = [];
           console.log('new count')
           console.log('--------------------------------------------');
           var differences = [];
-          for (let i = (solutionArray.length - 10); i < solutionArray.length; i++) {
+          for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
             if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
               //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
                 differences.push(_arrDiff(solutionArray[i].newArr, solutionArray[solutionArray.length -1].newArr))
@@ -564,7 +574,7 @@ var wayPoints = [];
             }
           }
 
-          if (countEqual >= 10) {
+          if (countEqual >= functionCounter) {
             var alternateRoutes = [];
             blacklist = [];
             for (let x of differences) {
@@ -597,24 +607,27 @@ var wayPoints = [];
             //   console.log('--------------------------------------------');
                 stepsNotUsedCount = 0;
                 for (let x in obj) {
-                    //if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
+                    // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
+                    // else {
+                    //   obj[x].isBlacklisted = false;
+                    // }
 
                   // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < frequencyCut) {
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 5) {
                     console.log('hello')
-                      stepsNotUsedCount++;
+                    //  stepsNotUsedCount++;
 
                       obj[x].isSet = false;
-                      obj[x].hasTried = 0;
+                      //obj[x].hasTried = 0;
 
                       frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
                     document.getElementById(x).classList.add('dottedBorder')
-                    console.log('hello ----- painting!!!')
+                //    console.log('hello ----- painting!!!')
                   }
 
-                obj[x].locatedFrequency = 0;
-                obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
+               obj[x].locatedFrequency = 0;
+               obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
@@ -648,6 +661,14 @@ var wayPoints = [];
 
     for (let x in obj) {
       obj[x].hasTried = 0;
+
+      if (obj[x].isFork == true && obj[x].isSet == true) {
+      //  console.log(obj[x].hasTriedCount)
+
+      if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
+      obj[x].hasTriedCount = 0
+}
+
       if (obj[x].isMarked == true) {
           obj[x].isMarked = false;
         };
@@ -701,6 +722,7 @@ var wayPoints = [];
 
     for (let x in result.obj) {
         let el = document.getElementById(x)
+      //  console.log(el)
       if (result.newArr.includes(result.obj[x].name)) {
           el.style.border = '2px solid red';
       }
