@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent =''
+      el.textContent = ''
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -216,7 +216,7 @@ var wayPoints = [];
     var thisButton = this.id;
 
     document.getElementById('stepsTaken').textContent = 'loading...'
-  $.getJSON( "bak/" + thisButton + ".json", function( json ) {
+  $.getJSON( "bak_large/" + thisButton + ".json", function( json ) {
      obj =  json
      for(let x in obj) {
 
@@ -287,13 +287,13 @@ var wayPoints = [];
     //    console.log(obj[current])
         var nArray = num == undefined ? [] : num.split(',')
         nArray.pop();
-        console.log(nArray)
+    //    console.log(nArray)
 
-        if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
+       if (nArray.length  > solution.newArr.length ) {   return null; }
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
-        console.log('opt out')
+    //    console.log('opt out')
             return null;
           }
         }
@@ -338,7 +338,7 @@ var wayPoints = [];
       //      console.log('too far away');
       //     return null;
       //      }
-    // }
+
       else {
         obj[current].isMarked = true
         let toAdd = num;
@@ -526,12 +526,12 @@ var wayPoints = [];
       arr[indexA] = arr[indexB];
       arr[indexB] = temp;
     };
-
-   console.log(objValsArray)
-   console.log('current: ' + obj[current].name)
-     console.log('last in array '  + nArray)
-  console.log(  obj[current].storeObject)
-
+// if (obj[current].name == 2894) {
+//   console.log(objValsArray)
+//   console.log('current: ' + obj[current].name)
+//     console.log('last in array '  + nArray)
+//   console.log(  obj[current].storeObject)
+// }
 if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
 if (!(nArray.length in obj[current].storeObject) )  {
   obj[current].storeObject[nArray.length] = {'arrays': []};
@@ -550,24 +550,28 @@ var arrayCount = -1
   obj[current].storeObject[nArray.length].forks =  obj[current].storeObject[nArray.length]['arrays'].length;
 
 if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'].join() ) {
+//  console.log('same sequence')
 
-    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 1) {
+    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 2) {
         obj[current].storeObject[nArray.length].swapFactor = 0
     }
     else {
-        obj[current].storeObject[nArray.length].swapFactor = 1
+        obj[current].storeObject[nArray.length].swapFactor++;
     }
 
     // console.log(objValsArray)
     //   objValsArray.swap(indexes[indexes.length -1], indexes[0])
     // console.log(objValsArray)
     //
-    if (obj[current].storeObject[nArray.length].swapFactor ) {
+    if (obj[current].storeObject[nArray.length].swapFactor ==2 && indexes.length > 1) {
       swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
       swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
+      console.log('swapping')
     }
 
-
+}
+else {
+//  console.log('new sequence')
 }
 
 
@@ -713,67 +717,69 @@ if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'
           }
 
           if (countEqual >= functionCounter) {
-            var alternateRoutes = [];
-            blacklist = [];
-            for (let x of differences) {
-              //console.log(x)
-              if(x.length >0) {
-                  for(let y of x) {
-                    if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
-                      blacklist.push(y)
-                    if( !blacklistFinal.includes(blacklist[0]) ) {blacklistFinal.unshift(blacklist[0]) };
-                      //console.log(solutionArray[solutionArray.length -1].newArr)
-                    }
-                    if(!alternateRoutes.includes(y)){
-                      alternateRoutes.push(y)
-                    }
-                  }
+              break;
 
-              }
+      //       var alternateRoutes = [];
+      //       blacklist = [];
+      //       for (let x of differences) {
+      //         //console.log(x)
+      //         if(x.length >0) {
+      //             for(let y of x) {
+      //               if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
+      //                 blacklist.push(y)
+      //               if( !blacklistFinal.includes(blacklist[0]) ) {blacklistFinal.unshift(blacklist[0]) };
+      //                 //console.log(solutionArray[solutionArray.length -1].newArr)
+      //               }
+      //               if(!alternateRoutes.includes(y)){
+      //                 alternateRoutes.push(y)
+      //               }
+      //             }
+      //
+      //         }
+      //
+      //       }
+      //
+      //       // console.log('arrays that are different--------------------------------------------');
+      //     console.log(blacklistFinal)
+      // ///    console.log('solution: ' + solutionArray[solutionArray.length -1].newArr)
+      //
+      //    console.log(alternateRoutes);
+      //       // console.log('--------------------------------------------');
+      //       //   console.log('--------------------------------------------');
+      //       //   console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
+      //       //   console.log('--------------------------------------------');
+      //       //   console.log('--------------------------------------------');
+              //   stepsNotUsedCount = 0;
+              //   for (let x in obj) {
+              //       // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
+              //       // else {
+              //       //   obj[x].isBlacklisted = false;
+              //       // }
+               //
+              //     // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
+              //     if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 2) {
+              //       console.log('hello')
+              //       //  stepsNotUsedCount++;
+               //
+              //     //   obj[x].isSet = false;
+              //     //    obj[x].hasTried = 0;
+               //
+              //       //  frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
+               //
+              //   //   document.getElementById(x).classList.add('dottedBorder')
+              //   //    console.log('hello ----- painting!!!')
+              //     }
+               //
+              //  obj[x].locatedFrequency = 0;
+              //  obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
+              //   obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
+              //  }
 
-            }
 
-            // console.log('arrays that are different--------------------------------------------');
-          console.log(blacklistFinal)
-      ///    console.log('solution: ' + solutionArray[solutionArray.length -1].newArr)
-
-         console.log(alternateRoutes);
-            // console.log('--------------------------------------------');
-            //   console.log('--------------------------------------------');
-            //   console.log('The last ' + countEqual + ' solutions have an identical length. Proceed to cut items located less frequently(frequencyCut)')
-            //   console.log('--------------------------------------------');
-            //   console.log('--------------------------------------------');
-                stepsNotUsedCount = 0;
-                for (let x in obj) {
-                    // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = true}
-                    // else {
-                    //   obj[x].isBlacklisted = false;
-                    // }
-
-                  // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 2) {
-                    console.log('hello')
-                    //  stepsNotUsedCount++;
-
-                     obj[x].isSet = false;
-                  //    obj[x].hasTried = 0;
-
-                    //  frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
-
-                   document.getElementById(x).classList.add('dottedBorder')
-                //    console.log('hello ----- painting!!!')
-                  }
-
-               obj[x].locatedFrequency = 0;
-               obj[x].isLocated = false; // squares that are located, but not necessarily part of solution path are reset to be located again.
-                obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
-                }
-
-                if (stepsNotUsedCount == 0 || functionCalls > 100) {break;}
-                else {
-
-                  functionCounter = functionCounter
-                }
+                // else {
+                //
+                //   functionCounter = functionCounter
+                // }
 
               //  functionCounter = functionCounter  // 20 is an arbitrary number - should be determined by the number of fork squares
            }
@@ -781,6 +787,7 @@ if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'
       };
 
       functionCalls++;
+      if (functionCalls > 100) {break;}
 
 
     }
