@@ -289,7 +289,7 @@ var wayPoints = [];
         nArray.pop();
     //    console.log(nArray)
 
-       if (nArray.length  > solution.newArr.length ) {   return null; }
+     if (nArray.length  > solution.newArr.length ) {   console.log('too long!'); return null; }
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
@@ -334,10 +334,10 @@ var wayPoints = [];
           }
 
       }
-      // else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-      //      console.log('too far away');
-      //     return null;
-      //      }
+      else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+           console.log('too far away');
+          return null;
+           }
 
       else {
         obj[current].isMarked = true
@@ -391,7 +391,7 @@ var wayPoints = [];
         ]
 
 
-        orderArray = direction[obj[current].hasTried]
+        orderArray = direction[0]
 
 
         // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
@@ -478,7 +478,7 @@ var wayPoints = [];
                ]
 
 
-           var orderArray2 = direction[obj[current].hasTried];
+           var orderArray2 = direction[0];
 
            var count = 0;
 
@@ -526,12 +526,12 @@ var wayPoints = [];
       arr[indexA] = arr[indexB];
       arr[indexB] = temp;
     };
-// if (obj[current].name == 2894) {
-//   console.log(objValsArray)
-//   console.log('current: ' + obj[current].name)
-//     console.log('last in array '  + nArray)
-//   console.log(  obj[current].storeObject)
-// }
+
+  console.log(objValsArray)
+  console.log('current: ' + obj[current].name)
+    console.log('last in array '  + nArray)
+  console.log(  obj[current].storeObject)
+
 if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
 if (!(nArray.length in obj[current].storeObject) )  {
   obj[current].storeObject[nArray.length] = {'arrays': []};
@@ -550,9 +550,9 @@ var arrayCount = -1
   obj[current].storeObject[nArray.length].forks =  obj[current].storeObject[nArray.length]['arrays'].length;
 
 if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'].join() ) {
-//  console.log('same sequence')
+ if (obj[current] == obj[start]) { console.log('same sequence') }
 
-    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 2) {
+    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 4) {
         obj[current].storeObject[nArray.length].swapFactor = 0
     }
     else {
@@ -563,11 +563,27 @@ if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'
     //   objValsArray.swap(indexes[indexes.length -1], indexes[0])
     // console.log(objValsArray)
     //
-    if (obj[current].storeObject[nArray.length].swapFactor ==2 && indexes.length > 1) {
-      swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
-      swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
-      console.log('swapping')
+    var swpFactor = obj[current].storeObject[nArray.length].swapFactor;
+    if (indexes.length > 1) {
+      if (swpFactor == 2 && indexes.length == 2) {
+        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
+        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
+        console.log('swapping')
+      }
+
+      if (indexes.length == 3 && swpFactor < 2) {
+        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+        console.log('swapping')
+      }
+
+      if (indexes.length == 4 && swpFactor > 0 && swpFactor < 3) {
+        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+        console.log('swapping')
+      }
     }
+
 
 }
 else {
