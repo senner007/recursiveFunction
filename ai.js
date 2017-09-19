@@ -15,8 +15,8 @@ $(document).ready(function() {
 
   var divs = $('.wrapper').find('div'),
     obj = {};
-    var columns = 100;
-    var rows = 56;
+    var columns = 80;
+    var rows = 45;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
@@ -48,8 +48,13 @@ $(document).ready(function() {
       obj[tempArr].locatedFrequency = 0;
       obj[tempArr].isBlacklisted = false;
       obj[tempArr].hasTried = 0;
-        obj[tempArr].hasTriedCount = 0;
+      obj[tempArr].hasTriedCount = 0;
+      obj[tempArr].isFork = false;
     })
+
+
+
+
 
 var startId;
 var targetId;
@@ -145,6 +150,15 @@ var wayPoints = [];
   }
   // console.log(this)
   // console.log(obj[this.id])
+
+
+
+
+
+
+
+
+
 
   });
 
@@ -260,21 +274,9 @@ var wayPoints = [];
        var blacklistCount = 0;
     }
 
-    // var tempSolutionArray = [];
-    // for (let i = 0; i < solutionArray.length; i++) {
-    //   for (let x of solutionArray[i].newArr) {
-    //     if (!tempSolutionArray.includes(x))
-    //     tempSolutionArray.push(x)
-    //   }
-    // }
-    // console.log(tempSolutionArray)
+
     var objVals;
-    // if (param != true) {
-    //   console.log('slower dirction count')
-    //   directionCount++;
-    //   if (directionCount == 24)  { directionCount = 0; }
-    //
-    // }
+
 
       let counter = 0;
 
@@ -282,37 +284,22 @@ var wayPoints = [];
 
     function find(current, num) {
 
-
+    //    console.log(obj[current])
         var nArray = num == undefined ? [] : num.split(',')
-          //  console.log(nArray.length + ( Math.abs(current[0] - target[0]) ))
-        //  console.log('steps: ' +  nArray[nArray.length -1])
 
-          //console.log('steps: ' +  nArray[nArray.length -1])
+       if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
-            //console.log('index of ' + nArray[nArray.length -1] + ': ' + nArray.indexOf(obj[current].name) )
-            // console.log(nArray[nArray.length -1])
-            // console.log(obj[current].name)
-          //  console.log ( 'index of ' + nArray[nArray.length -1] + ': ' + solution.newArr.indexOf(obj[current].name) + ' in solution')
-        // console.log('opt out')
+
+        console.log('opt out')
             return null;
           }
         }
-      //  if ( obj[current].name == '825') {console.log('hello name')}
-      // if(obj[current].isBlacklisted) { console.log('blacklisT!!!!'); console.log('blacklist ' + blacklistFinal[blacklistFinal.length -1]); return null;}
-            // counter = 0;
-            // if(  obj[[current[0] - 1, current[1]]].isMarked ) { counter++}
-            // if(  obj[[current[0] + 1, current[1]]].isMarked ) { counter++}
-            // if(  obj[[current[0], current[1] -1]].isMarked ) { counter++}
-            // if(  obj[[current[0], current[1]  + 1]].isMarked ) { counter++}
-            //     console.log(counter)
-            // if (counter > 2) { return null}
-
-
 
         if (obj[current] == obj[target]) { // if destination has been reached - return obect with solution
 
            let nArray = num.split(',');
+
 
           if (nArray.length > solution.newArr.length) { return null; }
         //  console.time('f')
@@ -343,10 +330,16 @@ var wayPoints = [];
             newArr: nArray,
             obj: obj
           }
-        } else if (nArray.length > solution.newArr.length) { return null;
-        } else {
+
+      }
+      else if (nArray.length -2 + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+           console.log('too far away');
+          return null;
+         //  }
+    }
+      else {
         obj[current].isMarked = true
-        let toAdd = num + ',';
+        let toAdd = num;
         if (num == undefined) {  num = ''; toAdd = ''}
 
         let left = [current[0] - 1, current[1]]
@@ -355,18 +348,13 @@ var wayPoints = [];
         let down = [current[0], current[1] - 1]
 
 
-        var orderArray = [right, left, down, up];
+        var orderArray = [left, right, up, down];
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
 
 
         var direction = [
 
-            [right, left, down, up],
-            [right, left, up, down],
-            [right, up, left, down],
-            [right, up, down, left],
-            [right, down, up, left],
-            [right, down, left, up],
+
 
             [left, right, down, up],
             [left, right, up, down],
@@ -375,12 +363,12 @@ var wayPoints = [];
             [left, down, up, right],
             [left, down, right, up],
 
-            [down, right, left, up],
-            [down, right, up, left],
-            [down, up, right, left],
-            [down, up, left, right],
-            [down, left, up, right],
-            [down, left, right, up],
+            [right, left, down, up],
+            [right, left, up, down],
+            [right, up, left, down],
+            [right, up, down, left],
+            [right, down, up, left],
+            [right, down, left, up],
 
             [up, right, left, down],
             [up, right, down, left],
@@ -388,6 +376,15 @@ var wayPoints = [];
             [up, down, left, right],
             [up, left, down, right],
             [up, left, right, down],
+
+            [down, right, left, up],
+            [down, right, up, left],
+            [down, up, right, left],
+            [down, up, left, right],
+            [down, left, up, right],
+            [down, left, right, up],
+
+
 
         ]
            if (obj[current].name == '765') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
@@ -405,96 +402,148 @@ var wayPoints = [];
        }
 
 
-       let objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
+       var objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
 
-       var counter = 0;
+
        for (let i = 0;i < 4; i++ ) {
 
          if (obj[orderArray[i]] != undefined) {
-           objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
-
-
-        //  if (nArray.length + ( Math.abs(obj[orderArray[i]][0] - target[0]) ) + ( Math.abs(obj[orderArray[i]][1] - target[1]) ) > solution.newArr.length) {
-        //     console.log('too long');
-        //    return null;
-        //  }
-
-           //
-          //  if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-          //     console.log('too long');
-          //    return null;
-          //  }
-           let step = orderArray[i];
-           if(objVals[i]== true) {
-             counter++
-           }
-          //  //console.log(step)
-          //  let stepLeft = [step[0] -1, step[1]],
-          //      stepRight = [step[0] +1, step[1]],
-          //      stepUp = [step[0], step[1] +1],
-          //      stepDown = [step[0], step[1] -1];
-           //
-          //  //console.log(obj[step[0] -1, step[1]])
-          //  if(obj[stepLeft].isMarked && obj[stepLeft] != obj[current]) {  objVals[i] = false}
-          //  if(obj[stepRight].isMarked && obj[stepRight] != obj[current]) {  objVals[i] = false}
-          //  if(obj[stepUp].isMarked && obj[stepUp] != obj[current]) {  objVals[i] = false}
-          //  if(obj[stepDown].isMarked && obj[stepDown] != obj[current]) {  objVals[i] = false}
-
+            objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
          }
 
        }
 
-       //
-       // var directionNumbers = [0,6,12,18,
-       //                 1,7,13,19,
-       //                 2,8,14,20,
-       //                 3,9,15,21,
-       //                 4,10,16,22,
-       //                 5,11,17,23];
+     var newObj = current
+     var num0 = '';
+     var num1 = '';
+     var num2 = '';
+     var num3 = '';
+     var objValsArray = [num0,num1,num2,num3];
+     var stackCount = 0;
+     var num2ArrayTotal = [];
+     var toBeCurrentArray = ['1','2','3','4'];
 
 
 
+   for(var y = 0; y< objVals.length; y++) {
 
-       if (counter > 1) {
-         //directionCount++;
+       if (objVals[y] != true) { objValsArray[y] = false;}
 
-         //  console.log('faster direction count')
+      if (objVals[y] == true && (obj[current].isFork || obj[current].isDestination)) {
+
+      var index = y
+
+      newObj = current
+
+      while (( obj[newObj].isFork == false  && obj[newObj].isDestination == false ) || newObj == current  ) {
+        stackCount++;
+
+               let left = [newObj[0] - 1, newObj[1]]
+               let right = [newObj[0] + 1, newObj[1]]
+               let up = [newObj[0], newObj[1] + 1]
+               let down = [newObj[0], newObj[1] - 1]
+
+               let direction = [
+
+                   [left, right, down, up],
+                   [left, right, up, down],
+                   [left, up, right, down],
+                   [left, up, down, right],
+                   [left, down, up, right],
+                   [left, down, right, up],
+
+                   [right, left, down, up],
+                   [right, left, up, down],
+                   [right, up, left, down],
+                   [right, up, down, left],
+                   [right, down, up, left],
+                   [right, down, left, up],
+
+                   [up, right, left, down],
+                   [up, right, down, left],
+                   [up, down, right, left],
+                   [up, down, left, right],
+                   [up, left, down, right],
+                   [up, left, right, down],
+
+                   [down, right, left, up],
+                   [down, right, up, left],
+                   [down, up, right, left],
+                   [down, up, left, right],
+                   [down, left, up, right],
+                   [down, left, right, up],
+
+               ]
 
 
-          obj[current].isFork = true
-             if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
-             else {
-                 obj[current].hasTried = obj[current].hasTried + 6;
+           var orderArray2 = direction[obj[current].hasTried];
+
+           var count = 0;
+
+            for (let i = 0;i < 4; i++ ) {
+
+              if (obj[orderArray2[i]] != undefined) {
+
+                 if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+
+                    count++;
+                    newObj = orderArray2[i];
+                    if (!obj[newObj].isFork && !obj[newObj].isDestination || !objValsArray.includes(obj[newObj])) {
+                        num2ArrayTotal.push(obj[newObj].name);
+                    }
+
+
+                    objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
+                   break;
+
+                 }
+
+              }
+
              }
 
 
+             if (count == 0) {     if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}  break;}
+             toBeCurrentArray[index] = newObj
 
-         obj[current].hasTriedCount++;;
-
-
-          if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
-
-          //directionCount = obj[current].hasTried;
+            if(stackCount > 1000) { console.log('broke out'); break}
+           }; // while end
 
 
-        //  console.log(obj[current].name)
 
-          if (!forkSquares.includes(obj[current].name)) {
-            forkSquares.push(obj[current].name)
-          }
-         //console.log(forkSquares);
+        };
 
 
-       }
-         //if (directionCount == 24)  { directionCount = 0; }
+    }  // for of end
 
-        return (objVals[0] ? find(orderArray[0], toAdd + obj[orderArray[0]].name) : null)
-               || (objVals[1] ? find(orderArray[1], toAdd + obj[orderArray[1]].name) : null)
-               || (objVals[2]  ? find(orderArray[2], toAdd + obj[orderArray[2]].name) : null)
-               || (objVals[3]  ? find(orderArray[3], toAdd + obj[orderArray[3]].name): null);
+   console.log(objValsArray)
+   console.log('current: ' + obj[current].name)
+     console.log('current has tried: ' + obj[current].hasTried )
+  if (  obj[current].isFork) {
 
-        // return find(down, toAdd + obj[down]) || find(left,   toAdd + obj[left])||
-        // find(right, toAdd + obj[right]) || find(up, toAdd + obj[up]);
+        if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
+        else {
+            obj[current].hasTried = obj[current].hasTried + 6;
+        }
+
+
+
+
+      if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
+
+
+
+  }
+
+
+
+         if (directionCount == 24)  { directionCount = 0; }
+
+        return (objValsArray[0] ? find(toBeCurrentArray[0], toAdd + objValsArray[0]) : null)
+               || (objValsArray[1] ? find(toBeCurrentArray[1], toAdd + objValsArray[1]) : null)
+               || (objValsArray[2]  ? find(toBeCurrentArray[2], toAdd + objValsArray[2]) : null)
+               || (objValsArray[3]  ? find(toBeCurrentArray[3], toAdd + objValsArray[3]): null);
+
       }
     }
     return find(start);
@@ -509,6 +558,36 @@ var wayPoints = [];
  var param;
   $('#calc').on('click', function() {
 
+
+
+      var forkCounter = 0;
+    for (let x in obj) {
+
+      var val = x.split(',')
+
+      let left = [Number(val[0]) - 1, Number(val[1])]
+      let right = [Number(val[0]) + 1, Number(val[1])]
+      let up = [Number(val[0]), Number(val[1]) + 1]
+      let down = [Number(val[0]), Number(val[1]) - 1]
+      let objDir = [left,right,up,down]
+        forkCounter = 0;
+
+      for(let i = 0; i< 4; i++) {
+
+            if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true && obj[x].isSet == true) {
+
+              forkCounter++;
+            }
+      }
+      if(forkCounter > 2) {
+        obj[x].isFork = true;
+        if (obj[x].isDestination == false) {
+            document.getElementById(x).style.backgroundColor = 'green'
+        }
+
+      }
+
+    }
 
     var functionCalls = 0;
     var solution;
@@ -526,7 +605,7 @@ var wayPoints = [];
     var stepsNotUsedCount = 0;
     directionCount = 0;
     var frequencyCut =2; // maybe eliminate the need for this
-    var functionCounter = 15
+    var functionCounter = 24
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
@@ -536,6 +615,7 @@ var wayPoints = [];
     for (let i = 0; ; i++) {
 
       let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal);
+
 
       // for (let x in obj) {
       //   obj[x].isMarked = false;
@@ -613,16 +693,16 @@ var wayPoints = [];
                     // }
 
                   // if (blacklistFinal[0] == obj[x].name) { obj[x].isBlacklisted = false}
-                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 5) {
+                  if (obj[x].isDestination == false && obj[x].isPath == false && obj[x].isSet == true && obj[x].locatedFrequency < 2) {
                     console.log('hello')
                     //  stepsNotUsedCount++;
 
-                      obj[x].isSet = false;
-                      //obj[x].hasTried = 0;
+                  //    obj[x].isSet = false;
+                  //    obj[x].hasTried = 0;
 
-                      frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
+                    //  frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
-                    document.getElementById(x).classList.add('dottedBorder')
+                  //  document.getElementById(x).classList.add('dottedBorder')
                 //    console.log('hello ----- painting!!!')
                   }
 
@@ -631,9 +711,9 @@ var wayPoints = [];
                 obj[x].isPath = false;   // squares that make up a solution path are reset to be found again
                 }
 
-                if (stepsNotUsedCount == 0 && param == true|| functionCalls > 100) {break;}
+                if (stepsNotUsedCount == 0 || functionCalls > 100) {break;}
                 else {
-                  param = true;
+
                   functionCounter = functionCounter
                 }
 
@@ -665,7 +745,7 @@ var wayPoints = [];
       if (obj[x].isFork == true && obj[x].isSet == true) {
       //  console.log(obj[x].hasTriedCount)
 
-      if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
+  //    if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
       obj[x].hasTriedCount = 0
 }
 
