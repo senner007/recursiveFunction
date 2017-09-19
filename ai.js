@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = i +1
+      el.textContent =''
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -286,8 +286,10 @@ var wayPoints = [];
 
     //    console.log(obj[current])
         var nArray = num == undefined ? [] : num.split(',')
+        nArray.pop();
+        console.log(nArray)
 
-  //     if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
+        if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
@@ -298,7 +300,7 @@ var wayPoints = [];
 
         if (obj[current] == obj[target]) { // if destination has been reached - return obect with solution
 
-           let nArray = num.split(',');
+
 
 
           if (nArray.length > solution.newArr.length) { return null; }
@@ -332,10 +334,10 @@ var wayPoints = [];
           }
 
       }
-    //   else if (nArray.length -2 + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-    //        console.log('too far away');
-    //       return null;
-    //      //  }
+      // else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+      //      console.log('too far away');
+      //     return null;
+      //      }
     // }
       else {
         obj[current].isMarked = true
@@ -387,12 +389,12 @@ var wayPoints = [];
 
 
         ]
-           if (obj[current].name == '765') { console.log('--------------------------------------' + obj[current].name); console.log(obj[current].hasTried)}
-
-          orderArray = direction[obj[current].hasTried]
 
 
-        if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
+        orderArray = direction[obj[current].hasTried]
+
+
+        // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
 
 
        if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
@@ -490,7 +492,7 @@ var wayPoints = [];
                     newObj = orderArray2[i];
                     var s = objValsArray[index].split(',')
                     if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {
-                  
+
                         num2ArrayTotal.push(obj[newObj].name);
                     }
 
@@ -524,12 +526,12 @@ var wayPoints = [];
       arr[indexA] = arr[indexB];
       arr[indexB] = temp;
     };
-// if (obj[current].name == 1079) {
-//    console.log(objValsArray)
-//    console.log('current: ' + obj[current].name)
-//      console.log('last in array '  + nArray)
-//   console.log(  obj[current].storeObject)
-// }
+
+   console.log(objValsArray)
+   console.log('current: ' + obj[current].name)
+     console.log('last in array '  + nArray)
+  console.log(  obj[current].storeObject)
+
 if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
 if (!(nArray.length in obj[current].storeObject) )  {
   obj[current].storeObject[nArray.length] = {'arrays': []};
@@ -559,8 +561,8 @@ if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'
     // console.log(objValsArray)
     //   objValsArray.swap(indexes[indexes.length -1], indexes[0])
     // console.log(objValsArray)
-
-      if(obj[current].storeObject[nArray.length].swapFactor) {
+    //
+    if (obj[current].storeObject[nArray.length].swapFactor ) {
       swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
       swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
     }
@@ -803,6 +805,7 @@ if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'
 
   //    if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
       obj[x].hasTriedCount = 0
+      obj[x].storeObject = {};
 }
 
       if (obj[x].isMarked == true) {
