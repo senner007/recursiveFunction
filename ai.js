@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = ''
+      el.textContent = i +1
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -287,7 +287,7 @@ var wayPoints = [];
     //    console.log(obj[current])
         var nArray = num == undefined ? [] : num.split(',')
 
-       if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
+  //     if (nArray.length  > solution.newArr.length ) {    console.log('longer than previous');  return null; }
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
@@ -332,11 +332,11 @@ var wayPoints = [];
           }
 
       }
-      else if (nArray.length -2 + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-           console.log('too far away');
-          return null;
-         //  }
-    }
+    //   else if (nArray.length -2 + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
+    //        console.log('too far away');
+    //       return null;
+    //      //  }
+    // }
       else {
         obj[current].isMarked = true
         let toAdd = num;
@@ -488,7 +488,9 @@ var wayPoints = [];
 
                     count++;
                     newObj = orderArray2[i];
-                    if (!obj[newObj].isFork && !obj[newObj].isDestination || !objValsArray.includes(obj[newObj])) {
+                    var s = objValsArray[index].split(',')
+                    if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {
+                  
                         num2ArrayTotal.push(obj[newObj].name);
                     }
 
@@ -503,7 +505,9 @@ var wayPoints = [];
              }
 
 
-             if (count == 0) {     if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}  break;}
+             if (count == 0) {
+               if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
+             break;}
              toBeCurrentArray[index] = newObj
 
             if(stackCount > 1000) { console.log('broke out'); break}
@@ -515,10 +519,62 @@ var wayPoints = [];
 
 
     }  // for of end
+    var swapArrayElements = function(arr, indexA, indexB) {
+      var temp = arr[indexA];
+      arr[indexA] = arr[indexB];
+      arr[indexB] = temp;
+    };
+// if (obj[current].name == 1079) {
+//    console.log(objValsArray)
+//    console.log('current: ' + obj[current].name)
+//      console.log('last in array '  + nArray)
+//   console.log(  obj[current].storeObject)
+// }
+if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
+if (!(nArray.length in obj[current].storeObject) )  {
+  obj[current].storeObject[nArray.length] = {'arrays': []};
+}
+var newObjValsArray = [];
+var indexes = []
+var arrayCount = -1
+    for (let val of objValsArray) {
+      arrayCount++;
+        if (val != false) { indexes.push(arrayCount); newObjValsArray.push(val)}
+      if (val != false && !obj[current].storeObject[nArray.length]['arrays'].includes(val)) {
 
-   console.log(objValsArray)
-   console.log('current: ' + obj[current].name)
-     console.log('current has tried: ' + obj[current].hasTried )
+            obj[current].storeObject[nArray.length]['arrays'].push(val)
+      }
+    }
+  obj[current].storeObject[nArray.length].forks =  obj[current].storeObject[nArray.length]['arrays'].length;
+
+if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'].join() ) {
+
+    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 1) {
+        obj[current].storeObject[nArray.length].swapFactor = 0
+    }
+    else {
+        obj[current].storeObject[nArray.length].swapFactor = 1
+    }
+
+    // console.log(objValsArray)
+    //   objValsArray.swap(indexes[indexes.length -1], indexes[0])
+    // console.log(objValsArray)
+
+      if(obj[current].storeObject[nArray.length].swapFactor) {
+      swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
+      swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
+    }
+
+
+}
+
+
+
+
+
+
+
+
   if (  obj[current].isFork) {
 
         if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
@@ -697,12 +753,12 @@ var wayPoints = [];
                     console.log('hello')
                     //  stepsNotUsedCount++;
 
-                  //    obj[x].isSet = false;
+                     obj[x].isSet = false;
                   //    obj[x].hasTried = 0;
 
                     //  frequencyCut = frequencyCut; // 5 is an arbitrary number - it is added to gradually allow more and more squares to be cut.
 
-                  //  document.getElementById(x).classList.add('dottedBorder')
+                   document.getElementById(x).classList.add('dottedBorder')
                 //    console.log('hello ----- painting!!!')
                   }
 
