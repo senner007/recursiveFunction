@@ -349,42 +349,42 @@ var wayPoints = [];
         let up = [current[0], current[1] + 1]
         let down = [current[0], current[1] - 1]
 
-
         var orderArray = [left, right, up, down];
+        
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
-
+        var objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
 
         var direction = [
 
 
 
-            [left, right, down, up],
-            [left, right, up, down],
-            [left, up, right, down],
-            [left, up, down, right],
-            [left, down, up, right],
-            [left, down, right, up],
-
-            [right, left, down, up],
-            [right, left, up, down],
-            [right, up, left, down],
-            [right, up, down, left],
-            [right, down, up, left],
-            [right, down, left, up],
-
-            [up, right, left, down],
-            [up, right, down, left],
-            [up, down, right, left],
-            [up, down, left, right],
-            [up, left, down, right],
-            [up, left, right, down],
-
-            [down, right, left, up],
-            [down, right, up, left],
-            [down, up, right, left],
-            [down, up, left, right],
-            [down, left, up, right],
-            [down, left, right, up],
+            [left, right, down, up]
+            // [left, right, up, down],
+            // [left, up, right, down],
+            // [left, up, down, right],
+            // [left, down, up, right],
+            // [left, down, right, up],
+            //
+            // [right, left, down, up],
+            // [right, left, up, down],
+            // [right, up, left, down],
+            // [right, up, down, left],
+            // [right, down, up, left],
+            // [right, down, left, up],
+            //
+            // [up, right, left, down],
+            // [up, right, down, left],
+            // [up, down, right, left],
+            // [up, down, left, right],
+            // [up, left, down, right],
+            // [up, left, right, down],
+            //
+            // [down, right, left, up],
+            // [down, right, up, left],
+            // [down, up, right, left],
+            // [down, up, left, right],
+            // [down, left, up, right],
+            // [down, left, right, up],
 
 
 
@@ -396,15 +396,14 @@ var wayPoints = [];
 
         // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
 
+       //
+      //  if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+      //     obj[current].locatedFrequency = obj[current].locatedFrequency + 1
+      //  } else {
+      //    obj[current].isLocated = true;
+      //  }
 
-       if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
-          obj[current].locatedFrequency = obj[current].locatedFrequency + 1
-       } else {
-         obj[current].isLocated = true;
-       }
 
-
-       var objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
 
 
        for (let i = 0;i < 4; i++ ) {
@@ -447,33 +446,33 @@ var wayPoints = [];
 
                let direction = [
 
-                   [left, right, down, up],
-                   [left, right, up, down],
-                   [left, up, right, down],
-                   [left, up, down, right],
-                   [left, down, up, right],
-                   [left, down, right, up],
-
-                   [right, left, down, up],
-                   [right, left, up, down],
-                   [right, up, left, down],
-                   [right, up, down, left],
-                   [right, down, up, left],
-                   [right, down, left, up],
-
-                   [up, right, left, down],
-                   [up, right, down, left],
-                   [up, down, right, left],
-                   [up, down, left, right],
-                   [up, left, down, right],
-                   [up, left, right, down],
-
-                   [down, right, left, up],
-                   [down, right, up, left],
-                   [down, up, right, left],
-                   [down, up, left, right],
-                   [down, left, up, right],
-                   [down, left, right, up],
+                   [left, right, down, up]
+                  //  [left, right, up, down],
+                  //  [left, up, right, down],
+                  //  [left, up, down, right],
+                  //  [left, down, up, right],
+                  //  [left, down, right, up],
+                   //
+                  //  [right, left, down, up],
+                  //  [right, left, up, down],
+                  //  [right, up, left, down],
+                  //  [right, up, down, left],
+                  //  [right, down, up, left],
+                  //  [right, down, left, up],
+                   //
+                  //  [up, right, left, down],
+                  //  [up, right, down, left],
+                  //  [up, down, right, left],
+                  //  [up, down, left, right],
+                  //  [up, left, down, right],
+                  //  [up, left, right, down],
+                   //
+                  //  [down, right, left, up],
+                  //  [down, right, up, left],
+                  //  [down, up, right, left],
+                  //  [down, up, left, right],
+                  //  [down, left, up, right],
+                  //  [down, left, right, up],
 
                ]
 
