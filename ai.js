@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = ''
+      el.textContent = i +1
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -265,6 +265,7 @@ var wayPoints = [];
   var directionCount;
 
     var forkSquares = [];
+
   function findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal) {
 
     if (!solution) { var solution = {newArr: [] }
@@ -277,6 +278,11 @@ var wayPoints = [];
 
     var objVals;
 
+    directionCount++;
+
+
+
+  if (directionCount == 24)  { directionCount = 0; }
 
       let counter = 0;
 
@@ -350,7 +356,7 @@ var wayPoints = [];
         let down = [current[0], current[1] - 1]
 
         var orderArray = [left, right, up, down];
-        
+
         let objVal_0 = false, objVal_1 = false, objVal_2 = false, objVal_3 = false;
         var objVals = [objVal_0, objVal_1, objVal_2, objVal_3];
 
@@ -358,40 +364,40 @@ var wayPoints = [];
 
 
 
-            [left, right, down, up]
-            // [left, right, up, down],
-            // [left, up, right, down],
-            // [left, up, down, right],
-            // [left, down, up, right],
-            // [left, down, right, up],
-            //
-            // [right, left, down, up],
-            // [right, left, up, down],
-            // [right, up, left, down],
-            // [right, up, down, left],
-            // [right, down, up, left],
-            // [right, down, left, up],
-            //
-            // [up, right, left, down],
-            // [up, right, down, left],
-            // [up, down, right, left],
-            // [up, down, left, right],
-            // [up, left, down, right],
-            // [up, left, right, down],
-            //
-            // [down, right, left, up],
-            // [down, right, up, left],
-            // [down, up, right, left],
-            // [down, up, left, right],
-            // [down, left, up, right],
-            // [down, left, right, up],
+            [left, right, down, up],
+            [left, right, up, down],
+            [left, up, right, down],
+            [left, up, down, right],
+            [left, down, up, right],
+            [left, down, right, up],
+
+            [right, left, down, up],
+            [right, left, up, down],
+            [right, up, left, down],
+            [right, up, down, left],
+            [right, down, up, left],
+            [right, down, left, up],
+
+            [up, right, left, down],
+            [up, right, down, left],
+            [up, down, right, left],
+            [up, down, left, right],
+            [up, left, down, right],
+            [up, left, right, down],
+
+            [down, right, left, up],
+            [down, right, up, left],
+            [down, up, right, left],
+            [down, up, left, right],
+            [down, left, up, right],
+            [down, left, right, up],
 
 
 
         ]
 
 
-        orderArray = direction[0]
+        orderArray = direction[directionCount]
 
 
         // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
@@ -446,38 +452,38 @@ var wayPoints = [];
 
                let direction = [
 
-                   [left, right, down, up]
-                  //  [left, right, up, down],
-                  //  [left, up, right, down],
-                  //  [left, up, down, right],
-                  //  [left, down, up, right],
-                  //  [left, down, right, up],
-                   //
-                  //  [right, left, down, up],
-                  //  [right, left, up, down],
-                  //  [right, up, left, down],
-                  //  [right, up, down, left],
-                  //  [right, down, up, left],
-                  //  [right, down, left, up],
-                   //
-                  //  [up, right, left, down],
-                  //  [up, right, down, left],
-                  //  [up, down, right, left],
-                  //  [up, down, left, right],
-                  //  [up, left, down, right],
-                  //  [up, left, right, down],
-                   //
-                  //  [down, right, left, up],
-                  //  [down, right, up, left],
-                  //  [down, up, right, left],
-                  //  [down, up, left, right],
-                  //  [down, left, up, right],
-                  //  [down, left, right, up],
+                   [left, right, down, up],
+                   [left, right, up, down],
+                   [left, up, right, down],
+                   [left, up, down, right],
+                   [left, down, up, right],
+                   [left, down, right, up],
+
+                   [right, left, down, up],
+                   [right, left, up, down],
+                   [right, up, left, down],
+                   [right, up, down, left],
+                   [right, down, up, left],
+                   [right, down, left, up],
+
+                   [up, right, left, down],
+                   [up, right, down, left],
+                   [up, down, right, left],
+                   [up, down, left, right],
+                   [up, left, down, right],
+                   [up, left, right, down],
+
+                   [down, right, left, up],
+                   [down, right, up, left],
+                   [down, up, right, left],
+                   [down, up, left, right],
+                   [down, left, up, right],
+                   [down, left, right, up],
 
                ]
 
 
-           var orderArray2 = direction[0];
+           var orderArray2 = direction[directionCount];
 
            var count = 0;
 
@@ -525,11 +531,13 @@ var wayPoints = [];
       arr[indexA] = arr[indexB];
       arr[indexB] = temp;
     };
-
+if (obj[current].name == 1492) {
   console.log(objValsArray)
   console.log('current: ' + obj[current].name)
     console.log('last in array '  + nArray)
   console.log(  obj[current].storeObject)
+console.log('direction :' + directionCount)
+}
 
 if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
 if (!(nArray.length in obj[current].storeObject) )  {
@@ -548,39 +556,55 @@ var arrayCount = -1
     }
   obj[current].storeObject[nArray.length].forks =  obj[current].storeObject[nArray.length]['arrays'].length;
 
-if (newObjValsArray.join()  ==  obj[current].storeObject[nArray.length]['arrays'].join() ) {
- if (obj[current] == obj[start]) { console.log('same sequence') }
+  var arrayLenghtMatch;
 
-    if(obj[current].storeObject[nArray.length].swapFactor == undefined || obj[current].storeObject[nArray.length].swapFactor == 4) {
-        obj[current].storeObject[nArray.length].swapFactor = 0
+    for (var prop in obj[current].storeObject) {
+        if (obj[current].storeObject.hasOwnProperty(prop)) {
+          arrayLenghtMatch = obj[current].storeObject[prop]['arrays'].join() == newObjValsArray.join() ? prop : false;
+          if(arrayLenghtMatch) {break;}
+
+        }
+    }
+
+if (arrayLenghtMatch) {
+
+ if (obj[current].name == 1492) { console.log(obj[current].storeObject[arrayLenghtMatch].swapFactor); console.log('same sequence of obj: ' + obj[current].name) }
+
+
+
+
+
+    if (obj[current].storeObject[arrayLenghtMatch].swapFactor != undefined) {
+        var swpFactor = obj[current].storeObject[arrayLenghtMatch].swapFactor;
+        if (indexes.length > 1) {
+          if (swpFactor == 1 && indexes.length == 2) {
+            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
+            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
+         console.log('swapping'); console.log(objValsArray)
+
+
+          }
+
+          if (indexes.length == 3 && swpFactor < 2) {
+            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+     console.log('swapping'); console.log(objValsArray)
+          }
+
+          if (indexes.length == 4 && swpFactor < 3) {
+            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+          console.log('swapping'); console.log(objValsArray)
+          }
+        }
+
+    };
+
+    if(obj[current].storeObject[arrayLenghtMatch].swapFactor == undefined || obj[current].storeObject[arrayLenghtMatch].swapFactor == 3) {
+        obj[current].storeObject[arrayLenghtMatch].swapFactor = 0
     }
     else {
-        obj[current].storeObject[nArray.length].swapFactor++;
-    }
-
-    // console.log(objValsArray)
-    //   objValsArray.swap(indexes[indexes.length -1], indexes[0])
-    // console.log(objValsArray)
-    //
-    var swpFactor = obj[current].storeObject[nArray.length].swapFactor;
-    if (indexes.length > 1) {
-      if (swpFactor == 2 && indexes.length == 2) {
-        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
-        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
-        console.log('swapping')
-      }
-
-      if (indexes.length == 3 && swpFactor < 2) {
-        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
-        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-        console.log('swapping')
-      }
-
-      if (indexes.length == 4 && swpFactor > 0 && swpFactor < 3) {
-        swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
-        swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-        console.log('swapping')
-      }
+        obj[current].storeObject[arrayLenghtMatch].swapFactor++;
     }
 
 
@@ -596,25 +620,23 @@ else {
 
 
 
-  if (  obj[current].isFork) {
+  // if (  obj[current].isFork) {
+  //
+  //       if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
+  //       else {
+  //           obj[current].hasTried = obj[current].hasTried + 6;
+  //       }
+  //
+  //
+  //
+  //
+  //     if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
+  //
+  //
+  //
+  // }
 
-        if (obj[current].hasTried == 23) { obj[current].hasTried = 0  }
-        else {
-            obj[current].hasTried = obj[current].hasTried + 6;
-        }
 
-
-
-
-      if (obj[current].hasTried > 23) { obj[current].hasTried = obj[current].hasTried - 23  }
-
-
-
-  }
-
-
-
-         if (directionCount == 24)  { directionCount = 0; }
 
         return (objValsArray[0] ? find(toBeCurrentArray[0], toAdd + objValsArray[0]) : null)
                || (objValsArray[1] ? find(toBeCurrentArray[1], toAdd + objValsArray[1]) : null)
@@ -639,7 +661,13 @@ else {
 
       var forkCounter = 0;
     for (let x in obj) {
+      if (obj[x].isFork == true && obj[x].isSet == true) {
+        obj[x].isFork = false;
+        if (obj[x].isDestination == false) {
+              document.getElementById(x).style.backgroundColor = 'lightblue'
+        }
 
+      }
       var val = x.split(',')
 
       let left = [Number(val[0]) - 1, Number(val[1])]
@@ -664,6 +692,7 @@ else {
 
       }
 
+
     }
 
     var functionCalls = 0;
@@ -680,9 +709,9 @@ else {
     var startTime = performance.now();
     var solutionArray = [];
     var stepsNotUsedCount = 0;
-    directionCount = 0;
+    directionCount = -1;
     var frequencyCut =2; // maybe eliminate the need for this
-    var functionCounter = 24
+    var functionCounter = 48
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
