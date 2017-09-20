@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = i +1
+      el.textContent =''
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -567,6 +567,7 @@ var arrayCount = -1
     }
 
 if (arrayLenghtMatch) {
+  console.log(arrayLenghtMatch)
 
  if (obj[current].name == 1492) { console.log(obj[current].storeObject[arrayLenghtMatch].swapFactor); console.log('same sequence of obj: ' + obj[current].name) }
 
