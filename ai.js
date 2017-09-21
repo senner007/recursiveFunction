@@ -260,6 +260,12 @@ var wayPoints = [];
     }
   }
 
+  var _swapArrayElements = function(arr, indexA, indexB) {
+    var temp = arr[indexA];
+    arr[indexA] = arr[indexB];
+    arr[indexB] = temp;
+  };
+
 
 
   var directionCount;
@@ -295,7 +301,8 @@ var wayPoints = [];
         nArray.pop();
     //    console.log(nArray)
 
-     if (nArray.length  > solution.newArr.length ) {   console.log('too long!'); return null; }
+        if (nArray.length  > solution.newArr.length ) {   console.log('too long!'); return null; }
+
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
@@ -431,106 +438,95 @@ var wayPoints = [];
      var toBeCurrentArray = ['1','2','3','4'];
 
 
-
+    console.time('while')
    for(var y = 0; y< objVals.length; y++) {
 
        if (objVals[y] != true) { objValsArray[y] = false;}
 
       if (objVals[y] == true && (obj[current].isFork || obj[current].isDestination)) {
 
-      var index = y
+          var index = y;
+          newObj = current;
 
-      newObj = current
+          while (( obj[newObj].isFork == false  && obj[newObj].isDestination == false ) || newObj == current  ) {
+            stackCount++;
+                   let new0 = newObj[0];
+                   let new1 = newObj[1];
 
-      while (( obj[newObj].isFork == false  && obj[newObj].isDestination == false ) || newObj == current  ) {
-        stackCount++;
+                   let left = [new0 - 1, new1]
+                   let right = [new0 + 1, new1]
+                   let up = [new0, new1 + 1]
+                   let down = [new0, new1 - 1]
 
-               let left = [newObj[0] - 1, newObj[1]]
-               let right = [newObj[0] + 1, newObj[1]]
-               let up = [newObj[0], newObj[1] + 1]
-               let down = [newObj[0], newObj[1] - 1]
+                   let direction = [
 
-               let direction = [
+                       [left, right, down, up],
+                       [left, right, up, down],
+                       [left, up, right, down],
+                       [left, up, down, right],
+                       [left, down, up, right],
+                       [left, down, right, up],
 
-                   [left, right, down, up],
-                   [left, right, up, down],
-                   [left, up, right, down],
-                   [left, up, down, right],
-                   [left, down, up, right],
-                   [left, down, right, up],
+                       [right, left, down, up],
+                       [right, left, up, down],
+                       [right, up, left, down],
+                       [right, up, down, left],
+                       [right, down, up, left],
+                       [right, down, left, up],
 
-                   [right, left, down, up],
-                   [right, left, up, down],
-                   [right, up, left, down],
-                   [right, up, down, left],
-                   [right, down, up, left],
-                   [right, down, left, up],
+                       [up, right, left, down],
+                       [up, right, down, left],
+                       [up, down, right, left],
+                       [up, down, left, right],
+                       [up, left, down, right],
+                       [up, left, right, down],
 
-                   [up, right, left, down],
-                   [up, right, down, left],
-                   [up, down, right, left],
-                   [up, down, left, right],
-                   [up, left, down, right],
-                   [up, left, right, down],
+                       [down, right, left, up],
+                       [down, right, up, left],
+                       [down, up, right, left],
+                       [down, up, left, right],
+                       [down, left, up, right],
+                       [down, left, right, up],
 
-                   [down, right, left, up],
-                   [down, right, up, left],
-                   [down, up, right, left],
-                   [down, up, left, right],
-                   [down, left, up, right],
-                   [down, left, right, up],
+                   ];
+                    console.log('in while')
 
-               ]
+              var orderArray2 = direction[directionCount];
+              var count = 0;
+              for (let i = 0;i < 4; i++ ) {
 
+                  if (obj[orderArray2[i]] != undefined) {
 
-           var orderArray2 = direction[directionCount];
-
-           var count = 0;
-
-            for (let i = 0;i < 4; i++ ) {
-
-              if (obj[orderArray2[i]] != undefined) {
-
-                 if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
-
-                    count++;
-                    newObj = orderArray2[i];
-                    var s = objValsArray[index].split(',')
-                    if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {
-
-                        num2ArrayTotal.push(obj[newObj].name);
-                    }
-
-
-                    objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
-                   break;
-
-                 }
-
-              }
-
-             }
+                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+                        count++;
+                        newObj = orderArray2[i];
+                        var s = objValsArray[index].split(',')
+                        if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {  num2ArrayTotal.push(obj[newObj].name);  }
+                        objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
+                        break;
+                     }
+                  }
+               }
 
 
-             if (count == 0) {
-               if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
-             break;}
-             toBeCurrentArray[index] = newObj
+               if (count == 0) {
+                 if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
+                  break;
+               }
+               toBeCurrentArray[index] = newObj
 
-            if(stackCount > 1000) { console.log('broke out'); break}
-           }; // while end
+               if(stackCount > 1000) { console.log('broke out'); break}
+             }; // while end
 
 
 
         };
 
 
-    }  // for of end
-    var swapArrayElements = function(arr, indexA, indexB) {
-      var temp = arr[indexA];
-      arr[indexA] = arr[indexB];
-      arr[indexB] = temp;
-    };
+    }  // for end
+
+    console.timeEnd('while')
+
 if (obj[current].name == 1492) {
   console.log(objValsArray)
   console.log('current: ' + obj[current].name)
@@ -571,31 +567,26 @@ if (arrayLenghtMatch) {
 
  if (obj[current].name == 1492) { console.log(obj[current].storeObject[arrayLenghtMatch].swapFactor); console.log('same sequence of obj: ' + obj[current].name) }
 
-
-
-
-
     if (obj[current].storeObject[arrayLenghtMatch].swapFactor != undefined) {
         var swpFactor = obj[current].storeObject[arrayLenghtMatch].swapFactor;
         if (indexes.length > 1) {
           if (swpFactor == 1 && indexes.length == 2) {
-            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
-            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
-         console.log('swapping'); console.log(objValsArray)
-
+            _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
+            _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
+            console.log('swapping'); console.log(objValsArray)
 
           }
 
           if (indexes.length == 3 && swpFactor < 2) {
-            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
-            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-     console.log('swapping'); console.log(objValsArray)
+            _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+            _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+              console.log('swapping'); console.log(objValsArray)
           }
 
           if (indexes.length == 4 && swpFactor < 3) {
-            swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
-            swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-          console.log('swapping'); console.log(objValsArray)
+            _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
+            _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
+            console.log('swapping'); console.log(objValsArray)
           }
         }
 

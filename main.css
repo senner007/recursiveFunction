@@ -27,9 +27,11 @@ body {
   grid-gap: 0px;
   background-color: #fff;
   color: #444;
-  overflow: hidden;
-  background-image: url('images/3_lighter2.jpg');
-  background-repeat: repeat;
+position: absolute;
+height: 85%;
+width: 99%;
+
+
 }
 
 .box {
@@ -37,14 +39,12 @@ body {
   background-color: #444;
   color: #fff;
 
-  padding: 1px;
 
-  font-size: 60%;
+
   border: none;
-  min-height: 22px;
-  max-height: 22px;
-  min-width: 22px;
-  max-width: 22px;
+
+
+
 }
 
 .set {
