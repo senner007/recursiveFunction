@@ -823,17 +823,6 @@ else {
 
     }
     var endTime = performance.now();
-    if (solution == undefined) { alert('Path not found!')}
-    var time = endTime - startTime;
-    console.log(solutionArray)
-
-
-    document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
-    document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
-    document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
-    document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
-
-    _animateSolution(solutionArray[solutionArray.length -1], 20);
 
     for (let x in obj) {
       obj[x].hasTried = 0;
@@ -842,14 +831,29 @@ else {
       //  console.log(obj[x].hasTriedCount)
 
   //    if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
-      obj[x].hasTriedCount = 0
-      obj[x].storeObject = {};
-}
+        obj[x].hasTriedCount = 0
+        obj[x].storeObject = {};
+      }
 
-      if (obj[x].isMarked == true) {
-          obj[x].isMarked = false;
+        if (obj[x].isMarked == true) {
+            obj[x].isMarked = false;
         };
-      };
+    };
+    
+    if (solution == undefined) { alert('Path not found!')}
+    else {
+        var time = endTime - startTime;
+        console.log(solutionArray)
+
+
+        document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
+        document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
+        document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
+        document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
+
+        _animateSolution(solutionArray[solutionArray.length -1], 20);
+    }
+
 
 
   });
