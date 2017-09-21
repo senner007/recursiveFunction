@@ -52,6 +52,12 @@ body {
   outline: 3px solid black;
   color: black;
 }
+
+.fork {
+  background-color: green;
+  outline: 3px solid black;
+  color: black;
+}
 .waypoint {
   background-color: green;
 }

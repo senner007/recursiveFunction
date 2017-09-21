@@ -567,7 +567,7 @@ var arrayCount = -1
     }
 
 if (arrayLenghtMatch) {
-  console.log(arrayLenghtMatch)
+  //console.log(arrayLenghtMatch)
 
  if (obj[current].name == 1492) { console.log(obj[current].storeObject[arrayLenghtMatch].swapFactor); console.log('same sequence of obj: ' + obj[current].name) }
 
@@ -660,41 +660,35 @@ else {
 
 
 
-      var forkCounter = 0;
+    var forkCounter = 0;
+
     for (let x in obj) {
-      if (obj[x].isFork == true && obj[x].isSet == true) {
+      if (obj[x].isFork == true) {
         obj[x].isFork = false;
-        if (obj[x].isDestination == false) {
-              document.getElementById(x).style.backgroundColor = 'lightblue'
-        }
+       document.getElementById(x).classList.remove('fork')
 
       }
-      var val = x.split(',')
+      if (obj[x].isSet == true) {
+          var val = x.split(',')
 
-      let left = [Number(val[0]) - 1, Number(val[1])]
-      let right = [Number(val[0]) + 1, Number(val[1])]
-      let up = [Number(val[0]), Number(val[1]) + 1]
-      let down = [Number(val[0]), Number(val[1]) - 1]
-      let objDir = [left,right,up,down]
-        forkCounter = 0;
+          let left = [Number(val[0]) - 1, Number(val[1])]
+          let right = [Number(val[0]) + 1, Number(val[1])]
+          let up = [Number(val[0]), Number(val[1]) + 1]
+          let down = [Number(val[0]), Number(val[1]) - 1]
+          let objDir = [left,right,up,down]
+          forkCounter = 0;
 
-      for(let i = 0; i< 4; i++) {
-
-            if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true && obj[x].isSet == true) {
-
-              forkCounter++;
-            }
-      }
-      if(forkCounter > 2) {
-        obj[x].isFork = true;
-        if (obj[x].isDestination == false) {
-            document.getElementById(x).style.backgroundColor = 'green'
-        }
-
-      }
-
-
+          for(let i = 0; i< 4; i++) {
+                if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true && obj[x].isSet == true) {  forkCounter++;  }
+          }
+          if(forkCounter > 2) {
+            obj[x].isFork = true;
+            if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('fork') }
+          }
+       };
     }
+
+
 
     var functionCalls = 0;
     var solution;
@@ -716,6 +710,7 @@ else {
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
+
 
 
 
