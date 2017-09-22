@@ -324,16 +324,30 @@ var wayPoints = [];
 
           if (nArray.length > solution.newArr.length) { return null; }
         //  console.time('f')
-
+          var blcount = 0;
+          var plCount = 0;
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
+                  obj[x].isPath = false;
+                  obj[x].isBlacklisted = false;
                 if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
+                if (obj[x].isPlaza == true && obj[x].isPath == false) {
+                  plCount++
+                    let r = Math.floor((Math.random() * 10) + 1);
+
+                    if (r < 4) {
+                      obj[x].isBlacklisted = true;
+                      blcount++;
+                    }
+                }
               };
 
             }
+            console.log(blcount)
+              console.log('plaza squares : ' + plCount)
           //  console.timeEnd('f')
 
 
@@ -495,7 +509,7 @@ var wayPoints = [];
                        [down, left, right, up],
 
                    ];
-                    console.log('in while')
+                  //  console.log('in while')
 
               var orderArray2 = direction[directionCount];
               var count = 0;
@@ -503,7 +517,7 @@ var wayPoints = [];
 
                   if (obj[orderArray2[i]] != undefined) {
 
-                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
                         count++;
                         newObj = orderArray2[i];
                         var s = objValsArray[index].split(',')
@@ -586,7 +600,7 @@ if (arrayLenghtMatch) {
           if (indexes.length == 3 && swpFactor < 2) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-          //    console.log('swapping'); console.log(objValsArray)
+           console.log('swapping'); console.log(objValsArray)
           }
 
           if (indexes.length == 4 && swpFactor < 3) {
@@ -854,7 +868,8 @@ else {
 
     for (let x in obj) {
       obj[x].hasTried = 0;
-
+      obj[x].isPath = false;
+      obj[x].isBlacklisted = false;
       if (obj[x].isFork == true && obj[x].isSet == true) {
       //  console.log(obj[x].hasTriedCount)
 
