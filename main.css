@@ -58,6 +58,13 @@ width: 99%;
   outline: 3px solid black;
   color: black;
 }
+
+.plaza {
+  background-color: orange;
+  outline: 3px solid black;
+  color: black;
+
+}
 .waypoint {
   background-color: green;
 }

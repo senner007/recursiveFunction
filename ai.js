@@ -50,6 +50,8 @@ $(document).ready(function() {
       obj[tempArr].hasTried = 0;
       obj[tempArr].hasTriedCount = 0;
       obj[tempArr].isFork = false;
+      obj[tempArr].isPlaza = false;
+
     })
 
 
@@ -101,6 +103,8 @@ var wayPoints = [];
       if (obj[this.id].isSet == true || obj[this.id].isWaypoint == true) {
           this.classList.remove('waypoint')
         this.classList.remove('set')
+        this.classList.remove('fork')
+        this.classList.remove('plaza')
         obj[this.id].isWaypoint = false;
         var index = wayPoints.indexOf(obj[this.id].name);
         wayPoints.splice(index, 1);
@@ -109,6 +113,8 @@ var wayPoints = [];
             document.getElementById('wayPoints').innerHTML += '' + (i+1) + ':' + wayPoints[i] + ' '
         }
         obj[this.id].isSet = false;
+        obj[this.id].isFork = false;
+        obj[this.id].isPlaza = false;
       } else {
         this.classList.add('set')
         obj[this.id].isSet = true;
@@ -580,13 +586,13 @@ if (arrayLenghtMatch) {
           if (indexes.length == 3 && swpFactor < 2) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-              console.log('swapping'); console.log(objValsArray)
+          //    console.log('swapping'); console.log(objValsArray)
           }
 
           if (indexes.length == 4 && swpFactor < 3) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-            console.log('swapping'); console.log(objValsArray)
+            console.log('swopping'); console.log(objValsArray)
           }
         }
 
@@ -652,11 +658,14 @@ else {
 
 
     var forkCounter = 0;
+    var plazaCounter = 0;
 
     for (let x in obj) {
       if (obj[x].isFork == true) {
         obj[x].isFork = false;
+        obj[x].isPlaza = false;
        document.getElementById(x).classList.remove('fork')
+        document.getElementById(x).classList.remove('plaza')
 
       }
       if (obj[x].isSet == true) {
@@ -666,15 +675,34 @@ else {
           let right = [Number(val[0]) + 1, Number(val[1])]
           let up = [Number(val[0]), Number(val[1]) + 1]
           let down = [Number(val[0]), Number(val[1]) - 1]
-          let objDir = [left,right,up,down]
-          forkCounter = 0;
 
+          let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
+          let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
+          let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
+          let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
+
+
+          let objDir = [left,right,up,down]
+          let objDirDiag = [leftUp,leftDown,rightUp,rightDown]
+          forkCounter = 0;
+          plazaCounter = 0;
           for(let i = 0; i< 4; i++) {
-                if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true && obj[x].isSet == true) {  forkCounter++;  }
+                if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true) {  forkCounter++;  }
           }
-          if(forkCounter > 2) {
+          for(let i = 0; i< 4; i++) {
+                if(obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isSet == true) {  plazaCounter++;  }
+          }
+
+
+
+          if(forkCounter > 2 && forkCounter < 5) {
             obj[x].isFork = true;
             if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('fork') }
+          }
+          if ( forkCounter  + plazaCounter > 7 ) {
+            obj[x].isFork = true;
+            obj[x].isPlaza = true;
+            if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('plaza') }
           }
        };
     }
@@ -818,7 +846,7 @@ else {
       };
 
       functionCalls++;
-      if (functionCalls > 100) {break;}
+      if (functionCalls > 200) {break;}
 
 
     }
@@ -839,7 +867,7 @@ else {
             obj[x].isMarked = false;
         };
     };
-    
+
     if (solution == undefined) { alert('Path not found!')}
     else {
         var time = endTime - startTime;
@@ -916,8 +944,6 @@ else {
     }
     for (let x of result.newArr) {
       let el = document.getElementsByClassName(x)[0]
-
-
 
 
 
