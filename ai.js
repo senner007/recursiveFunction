@@ -326,11 +326,15 @@ var wayPoints = [];
         //  console.time('f')
           var blcount = 0;
           var plCount = 0;
+
+
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
                   obj[x].isPath = false;
                   obj[x].isBlacklisted = false;
+
+
                 if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
@@ -338,11 +342,14 @@ var wayPoints = [];
                   plCount++
                     let r = Math.floor((Math.random() * 10) + 1);
 
-                    if (r < 4) {
+                    if (r < 4 ||  obj[x].isLocated == false) {
+
                       obj[x].isBlacklisted = true;
                       blcount++;
                     }
                 }
+                // obj[x].locatedFrequency = 0;
+                // obj[x].isLocated = false;
               };
 
             }
@@ -429,12 +436,12 @@ var wayPoints = [];
 
         // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
 
-       //
-      //  if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
-      //     obj[current].locatedFrequency = obj[current].locatedFrequency + 1
-      //  } else {
-      //    obj[current].isLocated = true;
-      //  }
+
+       if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+          obj[current].locatedFrequency++;
+       } else {
+         obj[current].isLocated = true;
+       }
 
 
 
@@ -458,7 +465,7 @@ var wayPoints = [];
      var toBeCurrentArray = ['1','2','3','4'];
 
 
-    console.time('while')
+  //  console.time('while')
    for(var y = 0; y< objVals.length; y++) {
 
        if (objVals[y] != true) { objValsArray[y] = false;}
@@ -545,7 +552,7 @@ var wayPoints = [];
 
     }  // for end
 
-    console.timeEnd('while')
+  //  console.timeEnd('while')
 
 if (obj[current].name == 1492) {
   console.log(objValsArray)
@@ -870,6 +877,8 @@ else {
       obj[x].hasTried = 0;
       obj[x].isPath = false;
       obj[x].isBlacklisted = false;
+      obj[x].locatedFrequency = 0;
+      obj[x].isLocated = false;
       if (obj[x].isFork == true && obj[x].isSet == true) {
       //  console.log(obj[x].hasTriedCount)
 
