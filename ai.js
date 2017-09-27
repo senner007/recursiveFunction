@@ -21,7 +21,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent =''
+      el.textContent = i + 1
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -196,6 +196,7 @@ var wayPoints = [];
     $.getJSON( "path.json", function( json ) {
        obj =  json
        for(let x in obj) {
+         obj[x].toBeUnForked = false;
             if (obj[x].isFork == true) {
             obj[x].isFork = false
           }
@@ -275,23 +276,25 @@ var wayPoints = [];
 
 
   var directionCount;
+  // var forkSquares = [];
+  var blcount = 0;
 
-    var forkSquares = [];
 
-  function findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal) {
+  function findSolution(start, target, obj, wayPoints, solution, solutionArray, functionCalls, countLength) {
 
     if (!solution) { var solution = {newArr: [] }
       solution.newArr.length = 1000;
     }
-    if(blacklistFinal.length > 0) {
-       var blacklistCount = 0;
-    }
+    // if(blacklistFinal.length > 0) {
+    //    var blacklistCount = 0;
+    // }
 
 
     var objVals;
 
     directionCount++;
 
+    var enterOpen = undefined;
 
 
   if (directionCount == 24)  { directionCount = 0; }
@@ -312,21 +315,44 @@ var wayPoints = [];
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
 
-    //    console.log('opt out')
+      //  console.log('opt out')
             return null;
           }
+          // if ( solutionArray[i].newArr.indexOf(nArray[nArray.length - 5]) != -1 && nArray.indexOf(nArray[nArray.length - 5]) != -1 && solutionArray[i].newArr.indexOf(obj[current].name) != -1  ) {
+          //   var equal = solutionArray[i].newArr.indexOf(nArray[nArray.length - 5]) == nArray.indexOf(nArray[nArray.length - 5])
+          //    if (equal &&  (nArray.indexOf(obj[current].name) - nArray.indexOf(nArray[nArray.length - 5])    >  solutionArray[i].newArr.indexOf(obj[current].name) -  solutionArray[i].newArr.indexOf(nArray[nArray.length - 5]) ) ) {
+          //
+          //      console.log('opt out segment')
+          //     return null;
+          //   }
+          // }
         }
 
         if (obj[current] == obj[target]) { // if destination has been reached - return obect with solution
 
+          var differences;
+
+            if (nArray.length == solution.newArr.length && countLength > 24 ) {
+              //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
+                differences = _arrDiff(nArray, solution.newArr)
+                // console.log('arr length: ' + solutionArray[i].newArr.length)
+                // console.log('arr previous length: ' + solutionArray[i -1].newArr.length)
+
+
+
+            }
+
+          console.log(differences)
 
 
 
           if (nArray.length > solution.newArr.length) { return null; }
-        //  console.time('f')
-          var blcount = 0;
-          var plCount = 0;
 
+
+        //  console.time('f')
+
+          var plCount = 0;
+          var pathCounter = 0;
 
             for (let x in obj) {
               if (obj[x].isSet == true) {
@@ -334,27 +360,91 @@ var wayPoints = [];
                   obj[x].isPath = false;
                   obj[x].isBlacklisted = false;
 
-
                 if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
                   obj[x].isPath = true;
                 };
-                if (obj[x].isPlaza == true && obj[x].isPath == false) {
-                  plCount++
-                    let r = Math.floor((Math.random() * 10) + 1);
-
-                    if (r < 4 ||  obj[x].isLocated == false) {
-
-                      obj[x].isBlacklisted = true;
-                      blcount++;
-                    }
+                if (differences != undefined && differences.includes(obj[x].name) && obj[x].isPath != true && obj[x].isFork != true && obj[x].isPlaza != true && obj[x].isEdge != true) {
+                    obj[x].isBlacklisted = true;
+                    console.log('blacklisting!!!!!!')
                 }
+
+
+                if (obj[x].isPath == false && functionCalls < 24) {
+
+                    let r = Math.floor((Math.random() * 10) + 1);
+                     var val = x.split(',')
+
+                  //   if (obj[x].isEdge == true && blcount == 0) {
+                  //       if (r < 4) {
+                  //         obj[x].isBlacklisted = true;
+                  //       }
+                  //   }
+                  //   if (obj[x].isPlaza == true) {
+                  //     if (r < 4) {
+                  //       obj[x].isBlacklisted = true;
+                  //     }
+                  //  }
+                    blcount++;
+                    if (blcount == 2 ) { blcount = 0}
+
+                }
+                else if (obj[x].isPlaza == true && obj[x].isPath == false && functionCalls > 48) {
+                  var val = x.split(',')
+
+                  let left = [Number(val[0]) - 1, Number(val[1])]
+                  let right = [Number(val[0]) + 1, Number(val[1])]
+                  let up = [Number(val[0]), Number(val[1]) + 1]
+                  let down = [Number(val[0]), Number(val[1]) - 1]
+
+                  var objDir = [left,right,up,down]
+
+                  let forkCounter = 0;
+
+                  for(let i = 0; i< 4; i++) {
+                        if(obj[objDir[i]].isPath == true) {  forkCounter++;  }
+                  }
+                  if (forkCounter < 1) {  obj[x].isBlacklisted = true; }
+
+
+
+                }
+
+
+
+
+
+            //
+            //     if(obj[x].isFork == true && obj[x].isPlaza != true && functionCalls > 47 && obj[x].isPath == false) {
+            //       var val = x.split(',')
+            //       let left = [Number(val[0]) - 1, Number(val[1])]
+            //       let right = [Number(val[0]) + 1, Number(val[1])]
+            //       let up = [Number(val[0]), Number(val[1]) + 1]
+            //       let down = [Number(val[0]), Number(val[1]) - 1]
+            //
+            //       var objDir = [left,right,up,down]
+            //
+            //       pathCounter = 0;
+            //       for(let i = 0; i< 4; i++) {
+            //             if(obj[objDir[i]].isFork == true) {  pathCounter++;  }
+            //             if(obj[objDir[i]].isSet  == true && obj[objDir[i]].isFork != true) {  pathCounter--;  }
+            //       }
+            // //      console.log('pathCounter :'  + pathCounter)
+            //       if (pathCounter == 3) { console.log('blacklisting'); obj[x].isBlacklisted = true}
+            //     }
+
+
+
+
+
+
                 // obj[x].locatedFrequency = 0;
                 // obj[x].isLocated = false;
               };
 
             }
-            console.log(blcount)
-              console.log('plaza squares : ' + plCount)
+
+
+
           //  console.timeEnd('f')
 
 
@@ -375,12 +465,28 @@ var wayPoints = [];
 
       }
       else if (nArray.length + ( Math.abs(current[0] - target[0]) ) + ( Math.abs(current[1] - target[1]) ) > solution.newArr.length) {
-           console.log('too far away');
+      //     console.log('too far away');
           return null;
            }
 
       else {
         obj[current].isMarked = true
+        if ( enterOpen == undefined &&  (obj[current].isPlaza == true || obj[current].isEdge == true )) {
+            enterOpen = obj[current].name;
+
+
+        }
+        else if (enterOpen != undefined && obj[current].isPlaza != true && obj[current].isEdge !=true ) {
+
+          enterOpen = undefined;
+
+        }
+        // console.log('enter : ' + enterOpen)
+        //
+        //
+        // console.log('position: ' + (nArray.indexOf(enterOpen)));
+
+
         let toAdd = num;
         if (num == undefined) {  num = ''; toAdd = ''}
 
@@ -523,13 +629,29 @@ var wayPoints = [];
               for (let i = 0;i < 4; i++ ) {
 
                   if (obj[orderArray2[i]] != undefined) {
+                      console.log(obj[newObj])
+                    //  let n1 = Number(obj[orderArray2[i]].name) + 1;
+                    //  let n2 = Number(obj[orderArray2[i]].name) - 1;
+                    //  let n3 = Number(obj[orderArray2[i]].name) - 80;
+                    //  let n4 = Number(obj[orderArray2[i]].name) + 80;
+                    //  let newArray = [n1,n2,n3,n4]
+                    //  var hairpinTurn = false;
+                    //  for (let i = 0; i< newArray.length; i++) {
+                    //    if (nArray.includes(newArray[i].toString()) && newArray[i] != Number(nArray[nArray.length -1]) ) {
+                    //      console.log('hello there hairpin')
+                    //      hairpinTurn = true;
+                    //    }
+                     //
+                    //  }
 
-                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+
+                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true  && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
                         count++;
                         newObj = orderArray2[i];
                         var s = objValsArray[index].split(',')
                         if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {  num2ArrayTotal.push(obj[newObj].name);  }
                         objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
+
                         break;
                      }
                   }
@@ -537,6 +659,7 @@ var wayPoints = [];
 
 
                if (count == 0) {
+                 console.log('break')
                  if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
                   break;
                }
@@ -544,8 +667,11 @@ var wayPoints = [];
 
                if(stackCount > 1000) { console.log('broke out'); break}
              }; // while end
-
-
+            if (  objValsArray[index] != false ) {
+               let tmp = objValsArray[index].split(',');
+               tmp.pop();
+               if (tmp.length + nArray.length > solution.newArr.length) { console.log('is false'); objValsArray[index] = false; }
+           }
 
         };
 
@@ -600,20 +726,20 @@ if (arrayLenghtMatch) {
           if (swpFactor == 1 && indexes.length == 2) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -1])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -1])
-            console.log('swapping'); console.log(objValsArray)
+        console.log('swapping'); console.log(objValsArray)
 
           }
 
           if (indexes.length == 3 && swpFactor < 2) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-           console.log('swapping'); console.log(objValsArray)
+         console.log('swapping'); console.log(objValsArray)
           }
 
           if (indexes.length == 4 && swpFactor < 3) {
             _swapArrayElements(objValsArray, indexes[0], indexes[indexes.length -(1 + swpFactor)])
             _swapArrayElements(toBeCurrentArray, indexes[0], indexes[indexes.length -(1+ swpFactor)])
-            console.log('swopping'); console.log(objValsArray)
+         console.log('swopping'); console.log(objValsArray)
           }
         }
 
@@ -677,10 +803,10 @@ else {
   $('#calc').on('click', function() {
 
 
-
+      var pathCounter = 0;
     var forkCounter = 0;
     var plazaCounter = 0;
-
+console.time('f')
     for (let x in obj) {
       if (obj[x].isFork == true) {
         obj[x].isFork = false;
@@ -703,7 +829,7 @@ else {
           let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
 
 
-          let objDir = [left,right,up,down]
+          var objDir = [left,right,up,down]
           let objDirDiag = [leftUp,leftDown,rightUp,rightDown]
           forkCounter = 0;
           plazaCounter = 0;
@@ -725,14 +851,81 @@ else {
             obj[x].isPlaza = true;
             if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('plaza') }
           }
+
        };
     }
+    for (let x in obj) {
+      if(obj[x].isFork == true && obj[x].isPlaza != true) {
+        var val = x.split(',')
+        let left = [Number(val[0]) - 1, Number(val[1])]
+        let right = [Number(val[0]) + 1, Number(val[1])]
+        let up = [Number(val[0]), Number(val[1]) + 1]
+        let down = [Number(val[0]), Number(val[1]) - 1]
 
+        var objDir = [left,right,up,down]
+
+        pathCounter = 0;
+        for(let i = 0; i< 4; i++) {
+
+              if(obj[objDir[i]] != undefined) {
+                if(obj[objDir[i]].isFork == true) {  pathCounter++;  }
+                if(obj[objDir[i]].isSet  == true && obj[objDir[i]].isFork != true) {  pathCounter--;  }
+            }
+        }
+        console.log('pathCounter :'  + pathCounter)
+        if (pathCounter == 3) { obj[x].isEdge = true;
+
+          document.getElementById(x).classList.add('plazaEdge')
+        }
+
+      }
+    }
+  //
+  //
+  //
+    // for (let x in obj) {
+    //   if (obj[x].toBeUnForked) {
+    //     obj[x].isFork = false;
+    //     document.getElementById(x).classList.remove('fork')
+    //     obj[x].toBeUnForked = false;
+    //   }
+    // }
+
+    for (let x in obj) {
+      if (obj[x].isSet &&  obj[x].isFork == false) {
+        var val = x.split(',')
+        let left = [Number(val[0]) - 1, Number(val[1])]
+        let right = [Number(val[0]) + 1, Number(val[1])]
+        let up = [Number(val[0]), Number(val[1]) + 1]
+        let down = [Number(val[0]), Number(val[1]) - 1];
+
+        var objDir = [left,right,up,down];
+
+        var forkCount = false;
+        for(let i = 0; i< 4; i++) {
+
+              if(obj[objDir[i]] != undefined) {
+
+                  if (obj[objDir[i]].isSet && !obj[objDir[i]].isFork ) {
+                    forkCount = true;
+                  }
+            }
+        }
+        if(forkCount == false) {
+          obj[x].isDisabled = true;
+          obj[x].isSet = false;
+          document.getElementById(x).classList.add('disabled')
+        }
+
+
+      }
+    }
+console.timeEnd('f')
 
 
     var functionCalls = 0;
     var solution;
-    forkSquares = [];
+    // forkSquares = [];
 
     var invalidCount = 0;
     var si = startId.split(',');
@@ -750,75 +943,89 @@ else {
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
-
+    var countLength = 0;
+    var countLengthPlusEqual = 0;
 
 
 
     for (let i = 0; ; i++) {
 
-      let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray, blacklistFinal);
+        let tempSolution = findSolution(start, target, obj, wayPoints, solution, solutionArray, functionCalls, countLength );
 
 
-      // for (let x in obj) {
-      //   obj[x].isMarked = false;
-      // }
+        // for (let x in obj) {
+        //   obj[x].isMarked = false;
+        // }
 
-      if (tempSolution != null) {
-        solutionArray.push(tempSolution)
-        if (solution == undefined) {  solution = tempSolution }
-        if (tempSolution.newArr.length < solution.newArr.length) {
-          solution = tempSolution
+        if (tempSolution != null) {
+          solutionArray.push(tempSolution)
+          if (solution == undefined) {  solution = tempSolution }
+          if (tempSolution.newArr.length < solution.newArr.length) {
+            solution = tempSolution
+          }
+        } else {
+          console.log('solution invalid') // never happens
+          invalidCount++
+          if(invalidCount > 50) break;
         }
-      } else {
-        console.log('solution invalid') // never happens
-        invalidCount++
-        if(invalidCount > 50) break;
-      }
 
 
-      if (solutionArray.length > functionCounter) {
+      if (solutionArray.length > 1) {
 
 
-          var countEqual = 0;
+
           console.log('--------------------------------------------');
           console.log('new count')
           console.log('--------------------------------------------');
           var differences = [];
-          for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
-            if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
-              //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
-                differences.push(_arrDiff(solutionArray[i].newArr, solutionArray[solutionArray.length -1].newArr))
-                // console.log('arr length: ' + solutionArray[i].newArr.length)
-                // console.log('arr previous length: ' + solutionArray[i -1].newArr.length)
+          // for (let i = (solutionArray.length - functionCounter); i < solutionArray.length; i++) {
+          //   if (solutionArray[i].newArr.length == solutionArray[i -1].newArr.length) {
+          //     //  console.log('array diff: ' + _arrDiff(solutionArray[i].newArr, solutionArray[i -1].newArr))
+          //       differences.push(_arrDiff(solutionArray[i].newArr, solutionArray[solutionArray.length -1].newArr))
+          //       // console.log('arr length: ' + solutionArray[i].newArr.length)
+          //       // console.log('arr previous length: ' + solutionArray[i -1].newArr.length)
+          //
+          //
+          //     countEqual++;
+          //   }
+          // }
+          if (solutionArray[solutionArray.length -1].newArr.length == solutionArray[solutionArray.length - 2].newArr.length)  {
+              if (solutionArray[solutionArray.length -1].newArr.join() == solutionArray[solutionArray.length - 2].newArr.join()) {
 
+                countLengthPlusEqual++;
+              } else {
+                countLengthPlusEqual = 0;
+              }
 
-              countEqual++;
-            }
+            countLength++;
+          } else {
+            countLength = 0;
           }
-
-          if (countEqual >= functionCounter) {
+          console.log(countLength)
+          console.log('same and equal: ' + countLengthPlusEqual)
+          if (countLength >= functionCounter || countLengthPlusEqual > 23) {
               break;
 
-      //       var alternateRoutes = [];
-      //       blacklist = [];
-      //       for (let x of differences) {
-      //         //console.log(x)
-      //         if(x.length >0) {
-      //             for(let y of x) {
-      //               if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
-      //                 blacklist.push(y)
-      //               if( !blacklistFinal.includes(blacklist[0]) ) {blacklistFinal.unshift(blacklist[0]) };
-      //                 //console.log(solutionArray[solutionArray.length -1].newArr)
-      //               }
-      //               if(!alternateRoutes.includes(y)){
-      //                 alternateRoutes.push(y)
-      //               }
-      //             }
-      //
-      //         }
-      //
-      //       }
-      //
+            // var alternateRoutes = [];
+            // blacklist = [];
+            // for (let x of differences) {
+            //   //console.log(x)
+            //   if(x.length >0) {
+            //       for(let y of x) {
+            //         if (solutionArray[solutionArray.length -1].newArr.includes(y)) {
+            //           blacklist.push(y)
+            //         if( !blacklistFinal.includes(blacklist[0]) ) {blacklistFinal.unshift(blacklist[0]) };
+            //           //console.log(solutionArray[solutionArray.length -1].newArr)
+            //         }
+            //         if(!alternateRoutes.includes(y)){
+            //           alternateRoutes.push(y)
+            //         }
+            //       }
+            //
+            //   }
+            //
+            // }
+
       //       // console.log('arrays that are different--------------------------------------------');
       //     console.log(blacklistFinal)
       // ///    console.log('solution: ' + solutionArray[solutionArray.length -1].newArr)

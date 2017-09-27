@@ -27,7 +27,8 @@ TODO:
 ---------------------
 + open space tweaking: if curent is next to or diagonally next to plaza square, mark as openSpaceBegin. Check each subsequent square in open space if direct path is faster between current and openSpaceBegin. Replace the path in nArray between openSpaceBegin and current. Then look for direct path between openSpaceBegin + next,  then  between openSpaceBegin + next + next, and so on.
 + optimize to skip while loop when paths are already found on the current storeObject.
-+ skip setting isMarked to false after each iteration.
+
+
 
 
 
@@ -37,5 +38,4 @@ Done:
 + set start and end by clicking
 + paint path on mousedown
 + evaluate length of path on each recursion and return null if path length + actual direct length to target is greater than previous solution.
-+ store solutions not null in array. if path length of the last n number of solutions is identical, break loop.
-+ fix solution path painted red
++ break if the last 24 solutions are same length and identical. Otherwise require 48 with same length
