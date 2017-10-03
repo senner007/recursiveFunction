@@ -1,4 +1,13 @@
-'use strict'
+import {
+  eliminateSquares
+} from "./freespace-logic.js"
+
+
+// ES6 MODULE IMPORT/EXPORT
+////////////////////////////
+
+
+
 $(document).ready(function() {
 
   $.fn.disableSelection = function() {
@@ -21,7 +30,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = i + 1
+      el.textContent = '';
 
       el.className = 'box ' + (i + 1)
       el.id = [nColumn,rows];
@@ -149,6 +158,8 @@ var wayPoints = [];
 
         obj[this.id].isSet = true
         obj[this.id].isDestination = true
+
+
         this.classList.add('set')
         this.classList.add('destination')
       }
@@ -238,9 +249,10 @@ var wayPoints = [];
         if(obj[x].isSet == true) {
          document.getElementById(x).classList.add('set')
         }
-      document.getElementById(x).style.border = 'none';
+       document.getElementById(x).style.border = 'none';
+  //if (obj[x].isSet != true) {delete obj[x] }                                // delete the unused properties
       }
-        document.getElementById('stepsTaken').textContent = 'loading...loaded'
+      document.getElementById('stepsTaken').textContent = 'loading...loaded'
 
    });
 
@@ -278,6 +290,7 @@ var wayPoints = [];
   var directionCount;
   // var forkSquares = [];
   var blcount = 0;
+  var optOutCollection = [];
 
 
   function findSolution(start, target, obj, wayPoints, solution, solutionArray, functionCalls, countLength) {
@@ -295,6 +308,9 @@ var wayPoints = [];
     directionCount++;
 
     var enterOpen = undefined;
+
+    var tempArray;
+
 
 
   if (directionCount == 24)  { directionCount = 0; }
@@ -314,8 +330,10 @@ var wayPoints = [];
 
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
-
-      //  console.log('opt out')
+            console.log(tempArray)
+            console.log(nArray)
+            optOutCollection.push(nArray.join())
+            console.log('opt out')
             return null;
           }
           // if ( solutionArray[i].newArr.indexOf(nArray[nArray.length - 5]) != -1 && nArray.indexOf(nArray[nArray.length - 5]) != -1 && solutionArray[i].newArr.indexOf(obj[current].name) != -1  ) {
@@ -582,70 +600,72 @@ var wayPoints = [];
           newObj = current;
 
           while (( obj[newObj].isFork == false  && obj[newObj].isDestination == false ) || newObj == current  ) {
-            stackCount++;
-                   let new0 = newObj[0];
-                   let new1 = newObj[1];
+             stackCount++;
+             let new0 = newObj[0];
+             let new1 = newObj[1];
 
-                   let left = [new0 - 1, new1]
-                   let right = [new0 + 1, new1]
-                   let up = [new0, new1 + 1]
-                   let down = [new0, new1 - 1]
+             let left = [new0 - 1, new1]
+             let right = [new0 + 1, new1]
+             let up = [new0, new1 + 1]
+             let down = [new0, new1 - 1]
 
-                   let direction = [
+             let direction = [
 
-                       [left, right, down, up],
-                       [left, right, up, down],
-                       [left, up, right, down],
-                       [left, up, down, right],
-                       [left, down, up, right],
-                       [left, down, right, up],
+                 [left, right, down, up],
+                 [left, right, up, down],
+                 [left, up, right, down],
+                 [left, up, down, right],
+                 [left, down, up, right],
+                 [left, down, right, up],
 
-                       [right, left, down, up],
-                       [right, left, up, down],
-                       [right, up, left, down],
-                       [right, up, down, left],
-                       [right, down, up, left],
-                       [right, down, left, up],
+                 [right, left, down, up],
+                 [right, left, up, down],
+                 [right, up, left, down],
+                 [right, up, down, left],
+                 [right, down, up, left],
+                 [right, down, left, up],
 
-                       [up, right, left, down],
-                       [up, right, down, left],
-                       [up, down, right, left],
-                       [up, down, left, right],
-                       [up, left, down, right],
-                       [up, left, right, down],
+                 [up, right, left, down],
+                 [up, right, down, left],
+                 [up, down, right, left],
+                 [up, down, left, right],
+                 [up, left, down, right],
+                 [up, left, right, down],
 
-                       [down, right, left, up],
-                       [down, right, up, left],
-                       [down, up, right, left],
-                       [down, up, left, right],
-                       [down, left, up, right],
-                       [down, left, right, up],
+                 [down, right, left, up],
+                 [down, right, up, left],
+                 [down, up, right, left],
+                 [down, up, left, right],
+                 [down, left, up, right],
+                 [down, left, right, up],
 
-                   ];
-                  //  console.log('in while')
+             ];
+            //  console.log('in while')
 
               var orderArray2 = direction[directionCount];
+
               var count = 0;
               for (let i = 0;i < 4; i++ ) {
 
                   if (obj[orderArray2[i]] != undefined) {
-                      console.log(obj[newObj])
-                    //  let n1 = Number(obj[orderArray2[i]].name) + 1;
-                    //  let n2 = Number(obj[orderArray2[i]].name) - 1;
-                    //  let n3 = Number(obj[orderArray2[i]].name) - 80;
-                    //  let n4 = Number(obj[orderArray2[i]].name) + 80;
-                    //  let newArray = [n1,n2,n3,n4]
-                    //  var hairpinTurn = false;
-                    //  for (let i = 0; i< newArray.length; i++) {
-                    //    if (nArray.includes(newArray[i].toString()) && newArray[i] != Number(nArray[nArray.length -1]) ) {
-                    //      console.log('hello there hairpin')
-                    //      hairpinTurn = true;
-                    //    }
-                     //
-                    //  }
+                     console.log(obj[newObj])
+                     let n1 = Number(obj[orderArray2[i]].name) + 1;
+                     let n2 = Number(obj[orderArray2[i]].name) - 1;
+                     let n3 = Number(obj[orderArray2[i]].name) - 80;
+                     let n4 = Number(obj[orderArray2[i]].name) + 80;
+                     let newArray = [n1,n2,n3,n4]
+                     var hairpinTurn = false;
+                     for (let i = 0; i< newArray.length; i++) {
+                       if (nArray.includes(newArray[i].toString()) && newArray[i] != Number(nArray[nArray.length -1]) ) {
+                         console.log('hello there hairpin')
+                         hairpinTurn = true;
+                        break;                                                    // break from loop when hairpin found - optimize!!!
+                       }
+
+                     }
 
 
-                     if (obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true  && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+                     if (hairpinTurn == false && obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true  && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
                         count++;
                         newObj = orderArray2[i];
                         var s = objValsArray[index].split(',')
@@ -667,11 +687,18 @@ var wayPoints = [];
 
                if(stackCount > 1000) { console.log('broke out'); break}
              }; // while end
-            if (  objValsArray[index] != false ) {
+            if (  objValsArray[index] != false ) { // check if going to new fork will result in longer path than previous solution
                let tmp = objValsArray[index].split(',');
                tmp.pop();
                if (tmp.length + nArray.length > solution.newArr.length) { console.log('is false'); objValsArray[index] = false; }
-           }
+               let conc = nArray.concat(tmp)  // check if going to new fork will result in an array in the optOutCollection, and therefore not valid
+               if (optOutCollection.length > 1 && optOutCollection.includes(conc.join() )) {
+                 console.log('opt out beforehand')
+                     objValsArray[index] = false;
+               }
+
+            }
+
 
         };
 
@@ -781,7 +808,7 @@ else {
   //
   // }
 
-
+    tempArray = nArray;
 
         return (objValsArray[0] ? find(toBeCurrentArray[0], toAdd + objValsArray[0]) : null)
                || (objValsArray[1] ? find(toBeCurrentArray[1], toAdd + objValsArray[1]) : null)
@@ -802,125 +829,11 @@ else {
  var param;
   $('#calc').on('click', function() {
 
+   eliminateSquares(obj)
 
-      var pathCounter = 0;
-    var forkCounter = 0;
-    var plazaCounter = 0;
-console.time('f')
-    for (let x in obj) {
-      if (obj[x].isFork == true) {
-        obj[x].isFork = false;
-        obj[x].isPlaza = false;
-       document.getElementById(x).classList.remove('fork')
-        document.getElementById(x).classList.remove('plaza')
+  //  calculateRoute();
 
-      }
-      if (obj[x].isSet == true) {
-          var val = x.split(',')
-
-          let left = [Number(val[0]) - 1, Number(val[1])]
-          let right = [Number(val[0]) + 1, Number(val[1])]
-          let up = [Number(val[0]), Number(val[1]) + 1]
-          let down = [Number(val[0]), Number(val[1]) - 1]
-
-          let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-          let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-          let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-          let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
-
-
-          var objDir = [left,right,up,down]
-          let objDirDiag = [leftUp,leftDown,rightUp,rightDown]
-          forkCounter = 0;
-          plazaCounter = 0;
-          for(let i = 0; i< 4; i++) {
-                if(obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true) {  forkCounter++;  }
-          }
-          for(let i = 0; i< 4; i++) {
-                if(obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isSet == true) {  plazaCounter++;  }
-          }
-
-
-
-          if(forkCounter > 2 && forkCounter < 5) {
-            obj[x].isFork = true;
-            if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('fork') }
-          }
-          if ( forkCounter  + plazaCounter > 7 ) {
-            obj[x].isFork = true;
-            obj[x].isPlaza = true;
-            if (obj[x].isDestination == false) {  document.getElementById(x).classList.add('plaza') }
-          }
-
-       };
-    }
-    for (let x in obj) {
-      if(obj[x].isFork == true && obj[x].isPlaza != true) {
-        var val = x.split(',')
-        let left = [Number(val[0]) - 1, Number(val[1])]
-        let right = [Number(val[0]) + 1, Number(val[1])]
-        let up = [Number(val[0]), Number(val[1]) + 1]
-        let down = [Number(val[0]), Number(val[1]) - 1]
-
-        var objDir = [left,right,up,down]
-
-        pathCounter = 0;
-        for(let i = 0; i< 4; i++) {
-
-              if(obj[objDir[i]] != undefined) {
-                if(obj[objDir[i]].isFork == true) {  pathCounter++;  }
-                if(obj[objDir[i]].isSet  == true && obj[objDir[i]].isFork != true) {  pathCounter--;  }
-            }
-        }
-        console.log('pathCounter :'  + pathCounter)
-        if (pathCounter == 3) { obj[x].isEdge = true;
-
-          document.getElementById(x).classList.add('plazaEdge')
-        }
-
-      }
-    }
-  //
-  //
-  //
-    // for (let x in obj) {
-    //   if (obj[x].toBeUnForked) {
-    //     obj[x].isFork = false;
-    //     document.getElementById(x).classList.remove('fork')
-    //     obj[x].toBeUnForked = false;
-    //   }
-    // }
-
-    for (let x in obj) {
-      if (obj[x].isSet &&  obj[x].isFork == false) {
-        var val = x.split(',')
-        let left = [Number(val[0]) - 1, Number(val[1])]
-        let right = [Number(val[0]) + 1, Number(val[1])]
-        let up = [Number(val[0]), Number(val[1]) + 1]
-        let down = [Number(val[0]), Number(val[1]) - 1];
-
-        var objDir = [left,right,up,down];
-
-        var forkCount = false;
-        for(let i = 0; i< 4; i++) {
-
-              if(obj[objDir[i]] != undefined) {
-
-                  if (obj[objDir[i]].isSet && !obj[objDir[i]].isFork ) {
-                    forkCount = true;
-                  }
-            }
-        }
-        if(forkCount == false) {
-          obj[x].isDisabled = true;
-          obj[x].isSet = false;
-          document.getElementById(x).classList.add('disabled')
-        }
-
-
-      }
-    }
-console.timeEnd('f')
+function calculateRoute() {
 
 
     var functionCalls = 0;
@@ -1112,6 +1025,10 @@ console.timeEnd('f')
 
         _animateSolution(solutionArray[solutionArray.length -1], 20);
     }
+
+  };
+
+
 
 
 

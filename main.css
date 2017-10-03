@@ -17,7 +17,6 @@ body {
   overflow: hidden;
   background-image: url('images/3_lighter2.jpg');
   background-repeat: repeat;
-
   /*counter-reset: section;*/
 }
 
@@ -27,24 +26,16 @@ body {
   grid-gap: 0px;
   background-color: #fff;
   color: #444;
-position: absolute;
-height: 85%;
-width: 99%;
-
-
+  position: absolute;
+  height: 85%;
+  width: 99%;
 }
 
 .box {
-
   background-color: #444;
   color: #fff;
-
-
-font-size: 60%;
+  font-size: 60%;
   border: none;
-
-
-
 }
 
 .set {
@@ -63,22 +54,20 @@ font-size: 60%;
   background-color: orange;
   outline: 3px solid black;
   color: black;
-
 }
 
 .plazaEdge {
   background-color: grey;
   outline: 3px solid black;
   color: black;
-
 }
 
 .disabled {
   background-color: red;
   outline: 3px solid black;
   color: black;
-
 }
+
 .waypoint {
   background-color: green;
 }
@@ -105,16 +94,11 @@ span {
 }
 
 #predefWrapper {
-
-
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 2%;
-    font-size: 16px;
-    margin-bottom: 10px;
-
-
-
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 2%;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 #dataWrapper span {
@@ -127,5 +111,5 @@ span {
 }
 
 .isPath {
-    background-color: lightgreen;
+  background-color: lightgreen;
 }
