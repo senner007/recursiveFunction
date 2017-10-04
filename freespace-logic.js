@@ -364,6 +364,7 @@ var SquaresToDisable = true;
         let isAcrossUnset = false;
         let nextToUnset = false;
         let nextToPlazaCount = 0;
+        let nextToDestination = false;
 
 
 
@@ -391,6 +392,9 @@ var SquaresToDisable = true;
             }
             if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
               nextToPlazaCount++;
+            }
+            if (obj[objDir[i]].isDestination == true ) {
+              nextToDestination = true;
             }
 
 
@@ -480,7 +484,7 @@ var SquaresToDisable = true;
 
 
         if (
-          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true
+          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true
           )
 
           {
@@ -563,10 +567,10 @@ var SquaresToDisable = true;
             document.getElementById(x).classList.remove('fork')
             obj[x].toBeUnforked = true;
 
-            obj[objDir[0]].isDisabled = true;
-            obj[objDir[0]].isFork = false;
-            obj[objDir[0]].isSet = false;
-            document.getElementById(objDir[0]).classList.add('disabled')
+            // obj[objDir[0]].isDisabled = true;
+            // obj[objDir[0]].isFork = false;
+            // obj[objDir[0]].isSet = false;
+            // document.getElementById(objDir[0]).classList.add('disabled')
 
         }
 
