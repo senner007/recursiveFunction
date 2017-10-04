@@ -275,12 +275,11 @@ console.time('f')
 
 var SquaresToDisable = true;
 
-while (SquaresToDisable == true) {
+//while (SquaresToDisable == true) {
 
     SquaresToDisable = false;
     var pathCounter = 0;
-    var forkCounter = 0;
-    var plazaCounter = 0;
+
 
     for (let x in obj) {
       if (obj[x].isFork == true) { // remove previous
@@ -307,11 +306,11 @@ while (SquaresToDisable == true) {
 
         let objDir = [left, right, up, down]
         let objDirDiag = [leftUp, leftDown, rightUp, rightDown]
-        forkCounter = 0;
-        plazaCounter = 0;
+        let isSetCounter = 0;
+        let plazaCounter = 0;
         for (let i = 0; i < 4; i++) {
           if (obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true) {
-            forkCounter++;
+            isSetCounter++;
           }
           if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isSet == true) {
             plazaCounter++;
@@ -320,13 +319,13 @@ while (SquaresToDisable == true) {
 
 
 
-        if (forkCounter > 2 && forkCounter < 5 && obj[x].toBeUnforked != true) {
+        if (isSetCounter > 2 && isSetCounter < 5 && obj[x].toBeUnforked != true) {
           obj[x].isFork = true;
           if (obj[x].isDestination == false) {
             document.getElementById(x).classList.add('fork')
           }
         }
-        if (forkCounter + plazaCounter > 7) {
+        if (isSetCounter + plazaCounter > 7) {
           obj[x].isFork = true;
           obj[x].isPlaza = true;
           if (obj[x].isDestination == false) {
@@ -354,13 +353,17 @@ while (SquaresToDisable == true) {
         let objDirDiag = [leftDown, rightUp, rightDown, leftUp]
 
         let nextToSet = false;
-        let nextToUnsetCount = 0;
+        let nextToUnsetOrDisabledCount = 0;
+        let isBetweenUnset = false;
         let isBetweenDisabled = false;
         let isAcrossDisabled = false;
         let nextToSetCount = 0;
         let nextToForkCount = 0;
         let nextToDisabledCount = 0;
+        let isAcrossUnsetAndDisabled = false;
         let isAcrossUnset = false;
+        let nextToUnset = false;
+        let nextToPlazaCount = 0;
 
 
 
@@ -372,15 +375,22 @@ while (SquaresToDisable == true) {
 
             if (obj[objDir[i]].isSet && obj[objDir[i]].isFork != true ) {   // check if x is next to a set (blue element) and not a fork
               nextToSet = true;
+
             }
-            if (obj[objDir[i]].isSet != true ) {
-              nextToUnsetCount++;
+            if (obj[objDir[i]].isSet != true) {
+              nextToUnsetOrDisabledCount++;
+            }
+            if (obj[objDir[i]].isSet != true && obj[objDir[i]].isDisabled != true) {
+              nextToUnset++;
             }
             // if (obj[objDir[i]].isSet == true &&  obj[objDir[i]].isFork == true &&  obj[objDir[i]].isPlaza == true) {
             //   nextToForkCount++;
             // }
             if (obj[objDir[i]].isDisabled == true ) {
               nextToDisabledCount++;
+            }
+            if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
+              nextToPlazaCount++;
             }
 
 
@@ -395,12 +405,28 @@ while (SquaresToDisable == true) {
             //   (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isDisabled != true)
 
              ) {
-               if (nextToUnsetCount != 3) {
+              if (nextToUnsetOrDisabledCount != 3) {
                    isBetweenDisabled = true;
                }
 
 
-        }
+
+         }
+
+         if (
+           (obj[objDir[0]] != undefined && obj[objDir[1]] != undefined && obj[objDir[0]].isSet != true && obj[objDir[0]].isDisabled != true && obj[objDir[1]].isSet != true && obj[objDir[1]].isDisabled != true)  ||
+           (obj[objDir[2]] != undefined && obj[objDir[3]] != undefined && obj[objDir[2]].isSet != true && obj[objDir[2]].isDisabled != true && obj[objDir[3]].isSet != true && obj[objDir[3]].isDisabled != true)
+             // || (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isDisabled != true) ||
+             //   (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isDisabled != true)
+
+              ) {
+
+              //  isBetweenUnset = true;
+
+
+
+
+          }
 
         if (
             (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isDisabled != true)
@@ -424,19 +450,37 @@ while (SquaresToDisable == true) {
 
             )
         {
-          if (nextToDisabledCount == 2) {
-            isAcrossUnset = true;
+          if ((nextToUnset  == 2 || nextToDisabledCount == 2 ) && nextToPlazaCount == 0) { // don't paint
+            isAcrossUnsetAndDisabled = true;
           //  console.log(obj[x].name)
 
           }
 
         }
 
+        if (
+               (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isSet != true && obj[objDirDiag[1]].isDisabled != true)
+            || (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isSet != true && obj[objDirDiag[3]].isDisabled != true)
+
+            // ||  (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isSet != true)
+            // ||    (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isSet != true)
+
+            )
+        {
+
+      // isAcrossUnset = true;
+          //  console.log(obj[x].name)
+
+        }
+
+
+
+
+
 
 
         if (
-          (nextToSet == false || nextToUnsetCount > 2) && isBetweenDisabled != true && isAcrossUnset != true
-
+          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true
           )
 
           {
@@ -447,6 +491,7 @@ while (SquaresToDisable == true) {
           obj[x].isSet = false;
           document.getElementById(x).classList.add('disabled')
         }
+
 
 
 
@@ -531,7 +576,8 @@ while (SquaresToDisable == true) {
 
 
 
-}
+
+//}
 
 
 
