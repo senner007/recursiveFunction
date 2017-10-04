@@ -339,8 +339,9 @@ var SquaresToDisable = true;
     for (let x in obj) {
       if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
         let val = x.split(',')
-        let left = [Number(val[0]) - 1, Number(val[1])]
+        let left = [Number(val[0]) - 1, Number(val[1])];
         let right = [Number(val[0]) + 1, Number(val[1])]
+        let rightRight = [Number(val[0]) + 2, Number(val[1])]
         let up = [Number(val[0]), Number(val[1]) + 1]
         let down = [Number(val[0]), Number(val[1]) - 1];
 
@@ -365,6 +366,7 @@ var SquaresToDisable = true;
         let nextToUnset = false;
         let nextToPlazaCount = 0;
         let nextToDestination = false;
+        let partOfDoubleToBeDisabled = false;
 
 
 
@@ -477,10 +479,25 @@ var SquaresToDisable = true;
 
         }
 
+        if (
+          (obj[objDir[0]] != undefined && obj[objDir[1]] != undefined && obj[objDir[2]] != undefined && obj[objDir[3]] != undefined && obj[objDir[0]].isDisabled == true && obj[objDir[1]].isSet == true && obj[objDir[1]].isFork != true && obj[objDir[2]].isFork == true && obj[objDir[3]].isSet !=true && obj[rightRight].isSet !=true)  // if true - disable
+
+          ) {
+              partOfDoubleToBeDisabled = true
+
+         }
 
 
 
 
+         if (partOfDoubleToBeDisabled) {
+           SquaresToDisable = true;
+           obj[x].isDisabled = true;
+           obj[x].isFork = false;
+           obj[x].isSet = false;
+           document.getElementById(x).classList.add('disabled')
+
+         }
 
 
         if (
@@ -494,6 +511,8 @@ var SquaresToDisable = true;
           obj[x].isFork = false;
           obj[x].isSet = false;
           document.getElementById(x).classList.add('disabled')
+
+
         }
 
 
