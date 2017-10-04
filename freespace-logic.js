@@ -450,7 +450,7 @@ var SquaresToDisable = true;
 
             )
         {
-          if ((nextToUnset  == 2 || nextToDisabledCount == 2 ) && nextToPlazaCount == 0) { // don't paint
+          if ((nextToUnset  == 2 || (nextToDisabledCount == 2 && nextToUnsetOrDisabledCount  != 3  )) && nextToPlazaCount == 0) { // don't paint
             isAcrossUnsetAndDisabled = true;
           //  console.log(obj[x].name)
 
