@@ -380,20 +380,25 @@ var SquaresToDisable = true;
               nextToSet = true;
 
             }
+            if (obj[objDir[i]].isSet) {   // check if x is next to a set (blue element) and not a fork
+              nextToSetCount++;
+
+            }
             if (obj[objDir[i]].isSet != true) {
               nextToUnsetOrDisabledCount++;
             }
             if (obj[objDir[i]].isSet != true && obj[objDir[i]].isDisabled != true) {
               nextToUnset++;
             }
-            // if (obj[objDir[i]].isSet == true &&  obj[objDir[i]].isFork == true &&  obj[objDir[i]].isPlaza == true) {
-            //   nextToForkCount++;
-            // }
+
             if (obj[objDir[i]].isDisabled == true ) {
               nextToDisabledCount++;
             }
             if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
               nextToPlazaCount++;
+            }
+            if (obj[objDir[i]] != undefined && obj[objDir[i]].isFork == true && obj[objDir[i]].isPlaza != true) {
+              nextToForkCount++;
             }
             if (obj[objDir[i]].isDestination == true ) {
               nextToDestination = true;
@@ -473,8 +478,10 @@ var SquaresToDisable = true;
 
             )
         {
+            if (nextToPlazaCount < 1 && nextToSetCount > 1 ) {
+                isAcrossUnset = true;
+            }
 
-      // isAcrossUnset = true;
           //  console.log(obj[x].name)
 
         }
@@ -490,6 +497,9 @@ var SquaresToDisable = true;
 
 
 
+
+
+
          if (partOfDoubleToBeDisabled) {
            SquaresToDisable = true;
            obj[x].isDisabled = true;
@@ -501,7 +511,7 @@ var SquaresToDisable = true;
 
 
         if (
-          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true
+          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true && nextToForkCount <3 && isAcrossUnset == false
           )
 
           {
