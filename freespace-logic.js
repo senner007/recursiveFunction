@@ -556,12 +556,18 @@ var SquaresToDisable = true;
           // }
 
 
-        if ((plazaAlone && obj[x].isPlaza) || (nextToPlazaCount == 4 && nextToDisabledCount > 1) || isAcrossUnset == true) {
+        if ((plazaAlone && obj[x].isPlaza) ) {
             obj[x].isFork = false;
             obj[x].isPlaza = false;
             document.getElementById(x).classList.remove('plaza')
             document.getElementById(x).classList.remove('fork')
-              obj[x].toBeUnforked = true;
+            obj[x].toBeUnforked = true;
+
+            obj[objDir[0]].isDisabled = true;
+            obj[objDir[0]].isFork = false;
+            obj[objDir[0]].isSet = false;
+            document.getElementById(objDir[0]).classList.add('disabled')
+
         }
 
 
