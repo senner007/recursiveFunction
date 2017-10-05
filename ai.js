@@ -30,10 +30,10 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-      el.textContent = i +1;
+    //  el.textContent = '';
 
-      el.className = 'box ' + (i + 1)
-      el.id = [nColumn,rows];
+    //  el.className = 'box ' + (i + 1)
+    //  el.id = [nColumn,rows];
 
       if (nColumn == columns) {
         nColumn = 0;
@@ -371,7 +371,7 @@ var wayPoints = [];
 
           var plCount = 0;
           var pathCounter = 0;
-
+          console.time('fd')
             for (let x in obj) {
               if (obj[x].isSet == true) {
                   obj[x].isMarked = false;
@@ -460,7 +460,7 @@ var wayPoints = [];
               };
 
             }
-
+            console.timeEnd('fd')
 
 
           //  console.timeEnd('f')
@@ -657,7 +657,7 @@ var wayPoints = [];
                      var hairpinTurn = false;
                      for (let i = 0; i< newArray.length; i++) {
                        if (nArray.includes(newArray[i].toString()) && newArray[i] != Number(nArray[nArray.length -1]) ) {
-                         console.log('hello there hairpin')
+                        // console.log('hello there hairpin')
                          hairpinTurn = true;
                         break;                                                    // break from loop when hairpin found - optimize!!!
                        }
@@ -680,7 +680,7 @@ var wayPoints = [];
 
 
                if (count == 0) {
-                 console.log('break')
+                // console.log('break')
                  if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
                   break;
                }
