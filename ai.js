@@ -250,7 +250,7 @@ var wayPoints = [];
          document.getElementById(x).classList.add('set')
         }
        document.getElementById(x).style.border = 'none';
-  //if (obj[x].isSet != true) {delete obj[x] }                                // delete the unused properties
+    //if (obj[x].isSet != true) {delete obj[x] }                                // delete the unused properties
       }
       document.getElementById('stepsTaken').textContent = 'loading...loaded'
 
@@ -378,54 +378,54 @@ var wayPoints = [];
                   obj[x].isPath = false;
                   obj[x].isBlacklisted = false;
 
-                if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
-                  obj[x].isPath = true;
-                };
-                if (differences != undefined && differences.includes(obj[x].name) && obj[x].isPath != true && obj[x].isFork != true && obj[x].isPlaza != true && obj[x].isEdge != true) {
-                    obj[x].isBlacklisted = true;
-                    console.log('blacklisting!!!!!!')
-                }
+                // if(nArray.includes(obj[x].name)) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+                //   obj[x].isPath = true;
+                // };
+                // if (differences != undefined && differences.includes(obj[x].name) && obj[x].isPath != true && obj[x].isFork != true && obj[x].isPlaza != true && obj[x].isEdge != true) {
+                //     obj[x].isBlacklisted = true;
+                //     console.log('blacklisting!!!!!!')
+                // }
 
 
-                if (obj[x].isPath == false && functionCalls < 24) {
-
-                    let r = Math.floor((Math.random() * 10) + 1);
-                     var val = x.split(',')
-
-                  //   if (obj[x].isEdge == true && blcount == 0) {
-                  //       if (r < 4) {
-                  //         obj[x].isBlacklisted = true;
-                  //       }
-                  //   }
-                  //   if (obj[x].isPlaza == true) {
-                  //     if (r < 4) {
-                  //       obj[x].isBlacklisted = true;
-                  //     }
-                  //  }
-                    blcount++;
-                    if (blcount == 2 ) { blcount = 0}
-
-                }
-                else if (obj[x].isPlaza == true && obj[x].isPath == false && functionCalls > 48) {
-                  var val = x.split(',')
-
-                  let left = [Number(val[0]) - 1, Number(val[1])]
-                  let right = [Number(val[0]) + 1, Number(val[1])]
-                  let up = [Number(val[0]), Number(val[1]) + 1]
-                  let down = [Number(val[0]), Number(val[1]) - 1]
-
-                  var objDir = [left,right,up,down]
-
-                  let forkCounter = 0;
-
-                  for(let i = 0; i< 4; i++) {
-                        if(obj[objDir[i]].isPath == true) {  forkCounter++;  }
-                  }
-                  if (forkCounter < 1) {  obj[x].isBlacklisted = true; }
-
-
-
-                }
+                // if (obj[x].isPath == false && functionCalls < 24) {
+                //
+                //     let r = Math.floor((Math.random() * 10) + 1);
+                //      var val = x.split(',')
+                //
+                //   //   if (obj[x].isEdge == true && blcount == 0) {
+                //   //       if (r < 4) {
+                //   //         obj[x].isBlacklisted = true;
+                //   //       }
+                //   //   }
+                //   //   if (obj[x].isPlaza == true) {
+                //   //     if (r < 4) {
+                //   //       obj[x].isBlacklisted = true;
+                //   //     }
+                //   //  }
+                //     blcount++;
+                //     if (blcount == 2 ) { blcount = 0}
+                //
+                // }
+                // else if (obj[x].isPlaza == true && obj[x].isPath == false && functionCalls > 48) {
+                //   var val = x.split(',')
+                //
+                //   let left = [Number(val[0]) - 1, Number(val[1])]
+                //   let right = [Number(val[0]) + 1, Number(val[1])]
+                //   let up = [Number(val[0]), Number(val[1]) + 1]
+                //   let down = [Number(val[0]), Number(val[1]) - 1]
+                //
+                //   var objDir = [left,right,up,down]
+                //
+                //   let forkCounter = 0;
+                //
+                //   for(let i = 0; i< 4; i++) {
+                //         if(obj[objDir[i]].isPath == true) {  forkCounter++;  }
+                //   }
+                //   if (forkCounter < 1) {  obj[x].isBlacklisted = true; }
+                //
+                //
+                //
+                // }
 
 
 
@@ -646,13 +646,13 @@ var wayPoints = [];
 
               var count = 0;
               for (let i = 0;i < 4; i++ ) {
+                    let objDir = obj[orderArray2[i]];
+                  if (objDir != undefined) {
 
-                  if (obj[orderArray2[i]] != undefined) {
-                     console.log(obj[newObj])
-                     let n1 = Number(obj[orderArray2[i]].name) + 1;
-                     let n2 = Number(obj[orderArray2[i]].name) - 1;
-                     let n3 = Number(obj[orderArray2[i]].name) - 80;
-                     let n4 = Number(obj[orderArray2[i]].name) + 80;
+                     let n1 = Number(objDir.name) + 1;
+                     let n2 = Number(objDir.name) - 1;
+                     let n3 = Number(objDir.name) - 80;
+                     let n4 = Number(objDir.name) + 80;
                      let newArray = [n1,n2,n3,n4]
                      var hairpinTurn = false;
                      for (let i = 0; i< newArray.length; i++) {
@@ -665,9 +665,10 @@ var wayPoints = [];
                      }
 
 
-                     if (hairpinTurn == false && obj[orderArray2[i]].isMarked != true && obj[orderArray2[i]].isSet == true  && obj[orderArray2[i]].isBlacklisted != true && !num2ArrayTotal.includes(obj[orderArray2[i]].name)) {
+                     if (hairpinTurn == false && objDir.isMarked != true && objDir.isSet == true  && objDir.isBlacklisted != true && !num2ArrayTotal.includes(objDir.name)) {
                         count++;
                         newObj = orderArray2[i];
+
                         var s = objValsArray[index].split(',')
                         if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {  num2ArrayTotal.push(obj[newObj].name);  }
                         objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
@@ -707,7 +708,8 @@ var wayPoints = [];
 
   //  console.timeEnd('while')
 
-if (obj[current].name == 1492) {
+if (obj[current].name == 1165) {
+    console.log( obj[[45,32]] )
   console.log(objValsArray)
   console.log('current: ' + obj[current].name)
     console.log('last in array '  + nArray)
@@ -829,9 +831,9 @@ else {
  var param;
   $('#calc').on('click', function() {
 
-   eliminateSquares(obj)
+ eliminateSquares(obj)
 
-  //  calculateRoute();
+   calculateRoute();
 
 function calculateRoute() {
 

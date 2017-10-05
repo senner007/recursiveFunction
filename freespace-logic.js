@@ -208,10 +208,10 @@ while (SquaresToDisable == true) {
         }
 
         if (
-               (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightUp.isDisabled == true)
-            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objLeftUp.isDisabled == true)
-            || (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled == true && objRightUp.isSet != true)
-            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled == true && objLeftUp.isSet != true)
+               (objLeftDown != undefined && objRightUp != undefined && (objLeftDown.isSet != true || (objLeft.isSet != true && objDown.isSet !=true))  && objRightUp.isDisabled == true)
+            || (objRightDown != undefined && objLeftUp != undefined && (objRightDown.isSet != true || (objRight.isSet != true && objDown.isSet !=true))  && objLeftUp.isDisabled == true )
+            || (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled == true && (objRightUp.isSet != true || (objRight.isSet != true && objUp.isSet !=true)))
+            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled == true && (objLeftUp.isSet != true || (objLeft.isSet != true && objUp.isSet !=true)))
 
 
             )
@@ -231,8 +231,9 @@ while (SquaresToDisable == true) {
 
             )
         {
-            if (acrossPlazaCount < 1 && nextToSetCount > 1 ) {
+            if (acrossPlazaCount == 0 && nextToSetCount > 1 ) {
                 isAcrossUnset = true;
+
             }
 
 
@@ -264,7 +265,7 @@ while (SquaresToDisable == true) {
 
 
           ) {  // if true - disable
-              partOfDoubleToBeDisabled = true
+          partOfDoubleToBeDisabled = true
 
          }
 
@@ -272,22 +273,26 @@ while (SquaresToDisable == true) {
 
          if (
             (
-              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
+              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined
+              && objRightDown.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
               && (objRight.isFork && objRight.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
             )
             ||
             (
-              (objLeftUp != undefined && objLeftDown != undefined && objRightDown != undefined && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightDown.isSet != true)
+              (objLeftUp != undefined && objLeftDown != undefined && objRightDown != undefined && objRightUp != undefined
+              && objRightUp.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightDown.isSet != true)
               && (objRight.isFork && objRight.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
             )
             ||
             (
-              (objLeftDown != undefined && objRightDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightDown.isSet != true && objRightUp.isSet != true)
+              (objLeftDown != undefined && objLeftUp != undefined && objRightDown != undefined && objRightUp != undefined
+              && objLeftUp.isSet == true && objLeftDown.isSet != true  && objRightDown.isSet != true && objRightUp.isSet != true)
               && (objLeft.isFork && objLeft.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
             )
             ||
             (
-              (objLeftUp != undefined && objRightUp != undefined && objRightDown != undefined && objLeftUp.isSet != true && objRightUp.isSet != true && objRightDown.isSet != true)
+              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined
+              && objLeftDown.isSet == true && objLeftUp.isSet != true && objRightUp.isSet != true && objRightDown.isSet != true)
               && (objLeft.isFork && objLeft.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
             )
 
@@ -313,6 +318,10 @@ while (SquaresToDisable == true) {
 
          }
 
+         if (obj[x].name == '1892') {
+            console.log('isAcrossUnsetAndDisabled :' + isAcrossUnsetAndDisabled )
+         }
+
 
         if (
           (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true && nextToForkCount <3 && isAcrossUnset == false
@@ -328,6 +337,7 @@ while (SquaresToDisable == true) {
 
 
         }
+
 
 
 
@@ -416,6 +426,53 @@ while (SquaresToDisable == true) {
 
     }
 
+    if (SquaresToDisable == false) {
+        for (let x in obj) {
+
+          if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
+            let val = x.split(',')
+
+            let val0 = Number(val[0]);
+            let val1 =  Number(val[1]);
+
+            let objLeft = obj[[val0 - 1, val1]];
+            let objRight = obj[[val0 + 1, val1]];
+            let objUp = obj[[val0, val1 + 1]];
+            let objDown = obj[[val0, val1 - 1]];
+
+            let objDir = [objLeft, objRight, objUp, objDown];
+            let isSetCount = 0;
+
+            for (let i = 0; i < 4; i++) {
+              let dir = objDir[i];
+
+
+              if (dir != undefined) {
+
+
+                if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
+                  isSetCount++;
+                }
+              }
+
+            }
+            if(isSetCount == 3) {
+              obj[x].isFork = true;
+
+              document.getElementById(x).classList.add('fork')
+  
+            }
+
+            if(isSetCount == 4) {
+              obj[x].isFork = true;
+              obj[x].isPlaza = true;
+              document.getElementById(x).classList.add('fork')
+              document.getElementById(x).classList.add('plaza')
+            }
+          }
+
+        }
+    }
 
 
 
