@@ -6,276 +6,13 @@ export {
 
 function eliminateSquares(obj) {
 
-  //
-  // var pathCounter = 0;
-  // var forkCounter = 0;
-  // var plazaCounter = 0;
-  //
-  // for (let x in obj) {
-  //   if (obj[x].isFork == true) { // remove previous
-  //     obj[x].isFork = false;
-  //     obj[x].isPlaza = false;
-  //     document.getElementById(x).classList.remove('fork')
-  //     document.getElementById(x).classList.remove('plaza')
-  //
-  //   }
-  //
-  //   if (obj[x].isSet == true) {
-  //     var val = x.split(',')
-  //
-  //     let left = [Number(val[0]) - 1, Number(val[1])]
-  //     let right = [Number(val[0]) + 1, Number(val[1])]
-  //     let up = [Number(val[0]), Number(val[1]) + 1]
-  //     let down = [Number(val[0]), Number(val[1]) - 1]
-  //
-  //     let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-  //     let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-  //     let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-  //     let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
-  //
-  //
-  //     let objDir = [left, right, up, down]
-  //     let objDirDiag = [leftUp, leftDown, rightUp, rightDown]
-  //     forkCounter = 0;
-  //     plazaCounter = 0;
-  //     for (let i = 0; i < 4; i++) {
-  //       if (obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true) {
-  //         forkCounter++;
-  //       }
-  //     }
-  //     for (let i = 0; i < 4; i++) {
-  //       if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isSet == true) {
-  //         plazaCounter++;
-  //       }
-  //     }
-  //
-  //
-  //
-  //     if (forkCounter > 2 && forkCounter < 5 && obj[x].tobeUnforked != true) {
-  //       obj[x].isFork = true;
-  //       if (obj[x].isDestination == false) {
-  //         document.getElementById(x).classList.add('fork')
-  //       }
-  //     }
-  //     if (forkCounter + plazaCounter > 7) {
-  //       obj[x].isFork = true;
-  //       obj[x].isPlaza = true;
-  //       if (obj[x].isDestination == false) {
-  //         document.getElementById(x).classList.add('plaza')
-  //       }
-  //     }
-  //
-  //   };
-  // }
-  // // for (let x in obj) {
-  // //   if(obj[x].isFork == true && obj[x].isPlaza != true) {
-  // //     var val = x.split(',')
-  // //     let left = [Number(val[0]) - 1, Number(val[1])]
-  // //     let right = [Number(val[0]) + 1, Number(val[1])]
-  // //     let up = [Number(val[0]), Number(val[1]) + 1]
-  // //     let down = [Number(val[0]), Number(val[1]) - 1]
-  // //
-  // //     var objDir = [left,right,up,down]
-  // //
-  // //     pathCounter = 0;
-  // //     for(let i = 0; i< 4; i++) {
-  // //
-  // //           if(obj[objDir[i]] != undefined) {
-  // //             if(obj[objDir[i]].isFork == true) {  pathCounter++;  }
-  // //             if(obj[objDir[i]].isSet  == true && obj[objDir[i]].isFork != true) {  pathCounter--;  }
-  // //         }
-  // //     }
-  // // //    console.log('pathCounter :'  + pathCounter)
-  // //     if (pathCounter == 3) { obj[x].isEdge = true;
-  // //
-  // //       document.getElementById(x).classList.add('plazaEdge')
-  // //     }
-  // //
-  // //   }
-  // // }
-  // //
-  // //
-  // //
-  // // for (let x in obj) {
-  // //   if (obj[x].toBeUnForked) {
-  // //     obj[x].isFork = false;
-  // //     document.getElementById(x).classList.remove('fork')
-  // //     obj[x].toBeUnForked = false;
-  // //   }
-  // // }
-  //
-  // for (let x in obj) {
-  //   if (obj[x].isSet && obj[x].isFork != true ) {
-  //     let val = x.split(',')
-  //     let left = [Number(val[0]) - 1, Number(val[1])]
-  //     let right = [Number(val[0]) + 1, Number(val[1])]
-  //     let up = [Number(val[0]), Number(val[1]) + 1]
-  //     let down = [Number(val[0]), Number(val[1]) - 1];
-  //
-  //     let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-  //     let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-  //     let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-  //     let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
-  //
-  //     let objDir = [left, right, up, down];
-  //     let objDirDiag = [leftUp, leftDown, rightUp, rightDown]
-  //
-  //     let nextToSet = false;
-  //     let acrossFromDisabled = 0;
-  //     let betweenUnsetAndDisabled = false;
-  //
-  //     for (let i = 0; i < 4; i++) {
-  //
-  //       if (obj[objDir[i]] != undefined) {
-  //
-  //         if (obj[objDir[i]].isSet && obj[objDir[i]].isFork != true) {   // check if x is next to a set (blue element) and not a fork
-  //           nextToSet = true;
-  //         }
-  //         if (obj[objDir[i]].isSet == false) {   // check if x is next to a set (blue element) and not a fork
-  //           if ((obj[objDir[i -2]] != undefined && obj[objDir[i -2]].isSet == false) || (obj[objDir[i +2]] != undefined && obj[objDir[i +2]].isSet == false))
-  //           betweenUnsetAndDisabled = true;
-  //         }
-  //
-  //
-  //       }
-  //     }
-  //
-  //     for (let dirDiag of objDirDiag) {
-  //
-  //       if (obj[dirDiag] != undefined) {
-  //
-  //         if (obj[dirDiag].isDisabled == true) {
-  //           acrossFromDisabled++;
-  //           console.log('across')
-  //
-  //         }
-  //       }
-  //     }
-  //
-  //
-  //     if (nextToSet == false && acrossFromDisabled < 3 && betweenUnsetAndDisabled == false) {
-  //       obj[x].isDisabled = true;
-  //       obj[x].isFork = false;
-  //       obj[x].isSet = false;
-  //       document.getElementById(x).classList.add('disabled')
-  //     }
-  //
-  //
-  //   }
-  //
-  //
-  //
-  //
-  // }
-  //
-  // //
-  // // for (let x in obj) {
-  // //   if (obj[x].isFork == true) {
-  // //
-  // //     let val = x.split(',')
-  // //     let left = [Number(val[0]) - 1, Number(val[1])]
-  // //     let right = [Number(val[0]) + 1, Number(val[1])]
-  // //     let up = [Number(val[0]), Number(val[1]) + 1]
-  // //     let down = [Number(val[0]), Number(val[1]) - 1];
-  // //           var objDir = [left,right,up,down];
-  // //       let setCount = 0;
-  // //       for(let i = 0; i< 4; i++) {
-  // //
-  // //           if(obj[objDir[i]] != undefined) {
-  // //                 if (obj[objDir[i]].isSet == true && obj[objDir[i]].isFork != true) {  setCount++; }
-  // //           }
-  // //       }
-  // //       if(setCount == 1) {
-  // //         obj[x].tobeUnforked = true;
-  // //         console.log(obj[x].name)
-  // //         // obj[x].isPlaza = false;
-  // //         // document.getElementById(x).classList.remove('plaza')
-  // //
-  // //
-  // //       }
-  // //     }
-  // //   }
-  // // for (let x in obj) {
-  // //   if(obj[x].tobeUnforked == true) {
-  // //
-  // //     obj[x].isFork = false;
-  // //  console.log('dsfdsfd;')
-  // //     document.getElementById(x).classList.remove('fork')
-  // //
-  // //     obj[x].isSet = true;
-  // //
-  // //   }
-  // //
-  // // }
-  //
-  //
-  //
-  // for (let x in obj) {
-  //
-  //   if (obj[x].isPlaza == true) {
-  //     let val = x.split(',')
-  //     let left = [Number(val[0]) - 1, Number(val[1])]
-  //     let right = [Number(val[0]) + 1, Number(val[1])]
-  //     let up = [Number(val[0]), Number(val[1]) + 1]
-  //     let down = [Number(val[0]), Number(val[1]) - 1];
-  //     let objDir = [left, right, up, down];
-  //     let plazaCount = 0;
-  //
-  //     for (let i = 0; i < 4; i++) {
-  //
-  //       if (obj[objDir[i]] != undefined) {
-  //         if (obj[objDir[i]].isSet == true && obj[objDir[i]].isPlaza == true) {
-  //           plazaCount++;
-  //         }
-  //       }
-  //     }
-  //     if (plazaCount == 0) {
-  //       obj[x].isPlaza = false;
-  //       obj[x].isFork = false;
-  //       document.getElementById(x).classList.remove('plaza');
-  //       document.getElementById(x).classList.remove('fork');
-  //       obj[x].tobeUnforked = true
-  //
-  //     }
-  //   }
-  //   if (obj[x].isSet == true && obj[x].isFork != true) {   // check if x is next to a set (blue element) and not a fork
-  //
-  //     let val = x.split(',')
-  //     let left = [Number(val[0]) - 1, Number(val[1])]
-  //     let right = [Number(val[0]) + 1, Number(val[1])]
-  //     let up = [Number(val[0]), Number(val[1]) + 1]
-  //     let down = [Number(val[0]), Number(val[1]) - 1];
-  //     let objDir = [left, right, up, down];
-  //     let isSetAlone = true;
-  //     let countUnset = 0;
-  //     for (let i = 0; i < 4; i++) {
-  //
-  //       if (obj[objDir[i]] != undefined) {
-  //         if (obj[objDir[i]].isSet != true && (obj[objDir[i +1]] != undefined &&  obj[objDir[i +1]].isSet != true) || (obj[objDir[i +1]] != undefined && obj[objDir[i +1]].isSet != true)) { countUnset++}
-  //         if (obj[objDir[i]].isSet == true && obj[objDir[i]].isFork != true) {
-  //
-  //           isSetAlone = false;
-  //         }
-  //       }
-  //     }
-  //     if (  isSetAlone == true && countUnset > 1) {
-  //         console.log('dsfdsfdsf')
-  //       obj[x].isDisabled = true;
-  //       obj[x].isFork = false;
-  //       obj[x].isSet = false;
-  //       document.getElementById(x).classList.add('disabled')
-  //     }
-  //
-  //
-  //   }
-  //
-  // }
+
 
 console.time('f')
 
 var SquaresToDisable = true;
 
-//while (SquaresToDisable == true) {
+while (SquaresToDisable == true) {
 
     SquaresToDisable = false;
     var pathCounter = 0;
@@ -337,21 +74,29 @@ var SquaresToDisable = true;
     }
 
     for (let x in obj) {
+      let objX = obj[x];
       if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
         let val = x.split(',')
-        let left = [Number(val[0]) - 1, Number(val[1])];
-        let right = [Number(val[0]) + 1, Number(val[1])]
-        let rightRight = [Number(val[0]) + 2, Number(val[1])]
-        let up = [Number(val[0]), Number(val[1]) + 1]
-        let down = [Number(val[0]), Number(val[1]) - 1];
 
-        let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-        let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-        let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-        let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
+        let val0 = Number(val[0]);
+        let val1 =  Number(val[1]);
 
-        let objDir = [left, right, up, down];
-        let objDirDiag = [leftDown, rightUp, rightDown, leftUp]
+        let rightRight = [val0 + 2, val1]
+        let downDown = [val0, val1 - 2];
+
+        let objLeft = obj[[val0 - 1, val1]];
+        let objRight = obj[[val0 + 1, val1]];
+        let objUp = obj[[val0, val1 + 1]];
+        let objDown = obj[[val0, val1 - 1]];
+
+        let objLeftDown = obj[[val0 - 1, val1 - 1]];
+        let objRightUp = obj[[val0 + 1, val1 + 1]];
+        let objRightDown = obj[[val0 + 1, val1 - 1]];
+        let objLeftUp = obj[[val0 - 1, val1 + 1]];
+
+        let objDir = [objLeft, objRight, objUp, objDown];
+
+        let objDirDiag = [objLeftDown, objRightUp, objRightDown, objLeftUp]
 
         let nextToSet = false;
         let nextToUnsetOrDisabledCount = 0;
@@ -374,43 +119,46 @@ var SquaresToDisable = true;
 
 
 
+
         for (let i = 0; i < 4; i++) {
+          let dir = objDir[i];
+          let dirDiag = objDirDiag[i];
 
-          if (obj[objDir[i]] != undefined) {
+          if (dir != undefined) {
 
-            if (obj[objDir[i]].isSet && obj[objDir[i]].isFork != true ) {   // check if x is next to a set (blue element) and not a fork
+            if (dir.isSet && dir.isFork != true ) {   // check if x is next to a set (blue element) and not a fork
               nextToSet = true;
 
             }
-            if (obj[objDir[i]].isSet) {   // check if x is next to a set (blue element) and not a fork
+            if (dir.isSet) {   // check if x is next to a set (blue element) and not a fork
               nextToSetCount++;
 
             }
-            if (obj[objDir[i]].isSet != true) {
+            if (dir.isSet != true) {
               nextToUnsetOrDisabledCount++;
             }
-            if (obj[objDir[i]].isSet != true && obj[objDir[i]].isDisabled != true) {
+            if (dir.isSet != true && dir.isDisabled != true) {
               nextToUnset++;
             }
 
-            if (obj[objDir[i]].isDisabled == true ) {
+            if (dir.isDisabled == true ) {
               nextToDisabledCount++;
             }
 
-            if (obj[objDir[i]] != undefined && obj[objDir[i]].isFork == true && obj[objDir[i]].isPlaza != true) {
+            if (dir != undefined && dir.isFork == true && dir.isPlaza != true) {
               nextToForkCount++;
             }
-            if (obj[objDir[i]].isDestination == true ) {
+            if (dir.isDestination == true ) {
               nextToDestination = true;
             }
-            if (obj[objDirDiag[i]] != undefined) {
-              if (obj[objDirDiag[i]].isSet != true ) {
+            if (dirDiag != undefined) {
+              if (dirDiag.isSet != true ) {
 
                 acrossUnsetOrDisabledCount++;
 
 
               }
-              if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
+              if (dirDiag != undefined && dirDiag.isPlaza == true ) {
                 acrossPlazaCount++;
               }
             }
@@ -421,10 +169,9 @@ var SquaresToDisable = true;
           }
         }
         if (
-          (obj[objDir[0]] != undefined && obj[objDir[1]] != undefined && obj[objDir[0]].isSet != true && obj[objDir[1]].isSet != true)  ||
-          (obj[objDir[2]] != undefined && obj[objDir[3]] != undefined && obj[objDir[2]].isSet != true && obj[objDir[3]].isSet != true)
-            // || (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isDisabled != true) ||
-            //   (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isDisabled != true)
+          (objLeft != undefined && objRight != undefined && objLeft.isSet != true && objRight.isSet != true)  ||
+          (objUp != undefined && objDown != undefined && objUp.isSet != true && objDown.isSet != true)
+
 
              ) {
               if (nextToUnsetOrDisabledCount != 3) {
@@ -436,10 +183,9 @@ var SquaresToDisable = true;
          }
 
          if (
-           (obj[objDir[0]] != undefined && obj[objDir[1]] != undefined && obj[objDir[0]].isSet != true && obj[objDir[0]].isDisabled != true && obj[objDir[1]].isSet != true && obj[objDir[1]].isDisabled != true)  ||
-           (obj[objDir[2]] != undefined && obj[objDir[3]] != undefined && obj[objDir[2]].isSet != true && obj[objDir[2]].isDisabled != true && obj[objDir[3]].isSet != true && obj[objDir[3]].isDisabled != true)
-             // || (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isDisabled != true) ||
-             //   (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isDisabled != true)
+           (objLeft != undefined && objRight != undefined && objLeft.isSet != true && objLeft.isDisabled != true && objRight.isSet != true && objRight.isDisabled != true)  ||
+           (objUp != undefined && objDown != undefined && objUp.isSet != true && objUp.isDisabled != true && objDown.isSet != true && objDown.isDisabled != true)
+
 
               ) {
 
@@ -451,24 +197,22 @@ var SquaresToDisable = true;
           }
 
         if (
-            (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isDisabled != true)
-            || (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isDisabled != true)
-            // ||  (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isSet != true)
-            // ||    (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isSet != true)
+            (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled != true && objRightUp.isDisabled != true)
+            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled != true && objLeftUp.isDisabled != true)
+
 
             )
         {
          isAcrossDisabled = true;
-      //    console.log('dsfdsf')
+
         }
 
         if (
-               (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isDisabled == true)
-            || (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isDisabled == true)
-            || (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isDisabled == true && obj[objDirDiag[1]].isSet != true)
-            || (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isDisabled == true && obj[objDirDiag[3]].isSet != true)
-            // ||  (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isSet != true)
-            // ||    (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isSet != true)
+               (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightUp.isDisabled == true)
+            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objLeftUp.isDisabled == true)
+            || (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled == true && objRightUp.isSet != true)
+            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled == true && objLeftUp.isSet != true)
+
 
             )
         {
@@ -481,11 +225,9 @@ var SquaresToDisable = true;
         }
 
         if (
-               (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[0]].isDisabled != true && obj[objDirDiag[1]].isSet != true && obj[objDirDiag[1]].isDisabled != true)
-            || (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[2]].isDisabled != true && obj[objDirDiag[3]].isSet != true && obj[objDirDiag[3]].isDisabled != true)
+               (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objLeftDown.isDisabled != true && objRightUp.isSet != true && objRightUp.isDisabled != true)
+            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objRightDown.isDisabled != true && objLeftUp.isSet != true && objLeftUp.isDisabled != true)
 
-            // ||  (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isSet != true)
-            // ||    (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isSet != true)
 
             )
         {
@@ -493,14 +235,35 @@ var SquaresToDisable = true;
                 isAcrossUnset = true;
             }
 
-          //  console.log(obj[x].name)
+
 
         }
 
-        if (
-          (obj[objDir[0]] != undefined && obj[objDir[1]] != undefined && obj[objDir[2]] != undefined && obj[objDir[3]] != undefined && obj[objDir[0]].isDisabled == true && obj[objDir[1]].isSet == true && obj[objDir[1]].isFork != true && obj[objDir[2]].isFork == true && obj[objDir[3]].isSet !=true && obj[rightRight].isSet !=true)  // if true - disable
 
-          ) {
+        if (
+          (
+            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+            && objLeft.isDisabled == true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true
+          )
+          ||
+          (
+            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+            && objLeft.isDisabled == true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true
+          )
+          ||
+          (
+            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+            && objUp.isDisabled == true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true
+          )
+          ||
+          (
+            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+            && objUp.isDisabled == true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true
+          )
+
+
+
+          ) {  // if true - disable
               partOfDoubleToBeDisabled = true
 
          }
@@ -509,23 +272,23 @@ var SquaresToDisable = true;
 
          if (
             (
-              (obj[leftUp] != undefined && obj[leftDown] != undefined && obj[rightUp] != undefined && obj[leftUp].isSet != true && obj[leftDown].isSet != true && obj[rightUp].isSet != true)
-              && (obj[right].isFork && obj[right].isPlaza != true && obj[down].isFork && obj[down].isPlaza != true)
+              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
+              && (objRight.isFork && objRight.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
             )
             ||
             (
-              (obj[leftUp] != undefined && obj[leftDown] != undefined && obj[rightDown] != undefined && obj[leftUp].isSet != true && obj[leftDown].isSet != true && obj[rightDown].isSet != true)
-              && (obj[right].isFork && obj[right].isPlaza != true && obj[up].isFork && obj[up].isPlaza != true)
+              (objLeftUp != undefined && objLeftDown != undefined && objRightDown != undefined && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightDown.isSet != true)
+              && (objRight.isFork && objRight.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
             )
             ||
             (
-              (obj[leftDown] != undefined && obj[rightDown] != undefined && obj[rightUp] != undefined && obj[leftDown].isSet != true && obj[rightDown].isSet != true && obj[rightUp].isSet != true)
-              && (obj[left].isFork && obj[left].isPlaza != true && obj[up].isFork && obj[up].isPlaza != true)
+              (objLeftDown != undefined && objRightDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightDown.isSet != true && objRightUp.isSet != true)
+              && (objLeft.isFork && objLeft.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
             )
             ||
             (
-              (obj[leftUp] != undefined && obj[rightUp] != undefined && obj[rightDown] != undefined && obj[leftUp].isSet != true && obj[rightUp].isSet != true && obj[rightDown].isSet != true)
-              && (obj[left].isFork && obj[left].isPlaza != true && obj[down].isFork && obj[down].isPlaza != true)
+              (objLeftUp != undefined && objRightUp != undefined && objRightDown != undefined && objLeftUp.isSet != true && objRightUp.isSet != true && objRightDown.isSet != true)
+              && (objLeft.isFork && objLeft.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
             )
 
 
@@ -534,8 +297,7 @@ var SquaresToDisable = true;
 
            ) {
 
-             console.log('single : ' +obj[x].name)
-              console.log('single : ' + acrossUnsetOrDisabledCount)
+
             singleToBeDisabled = true
 
           }
@@ -597,18 +359,18 @@ var SquaresToDisable = true;
 
 
           for (let i = 0; i < 4; i++) {
+            let dir = obj[objDir[i]];
+            if (dir != undefined) {
 
-            if (obj[objDir[i]] != undefined) {
-
-              if (obj[objDir[i]].isPlaza == true) {   // check if x is next to a set (blue element) and not a fork
+              if (dir.isPlaza == true) {   // check if x is next to a set (blue element) and not a fork
                 plazaAlone = false;
               }
               if (obj[x].isPlaza != true ) {
-                  if (obj[objDir[i]].isPlaza != true) {
+                  if (dir.isPlaza != true) {
                     nextToPlazaCount++;
 
                   }
-                  if (obj[objDir[i]].isDisabled == true) {
+                  if (dir.isDisabled == true) {
                     nextToDisabledCount++;
 
                   }
@@ -622,8 +384,8 @@ var SquaresToDisable = true;
             }
           }
           // if (
-          //     (obj[objDirDiag[0]] != undefined && obj[objDirDiag[1]] != undefined && obj[objDirDiag[0]].isSet != true && obj[objDirDiag[1]].isSet != true) ||
-          //     (obj[objDirDiag[2]] != undefined && obj[objDirDiag[3]] != undefined && obj[objDirDiag[2]].isSet != true && obj[objDirDiag[3]].isSet != true)
+          //     (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightUp.isSet != true) ||
+          //     (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objLeftUp.isSet != true)
           //     )
           // {
           //   isAcrossUnset = true;
@@ -638,7 +400,7 @@ var SquaresToDisable = true;
             document.getElementById(x).classList.remove('fork')
             obj[x].toBeUnforked = true;
 
-            // obj[objDir[0]].isDisabled = true;
+            // objLeft.isDisabled = true;
             // obj[objDir[0]].isFork = false;
             // obj[objDir[0]].isSet = false;
             // document.getElementById(objDir[0]).classList.add('disabled')
@@ -658,7 +420,7 @@ var SquaresToDisable = true;
 
 
 
-//}
+}
 
 
 
