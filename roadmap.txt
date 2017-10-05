@@ -27,8 +27,9 @@ TODO:
 ---------------------
 + open space tweaking: if curent is next to or diagonally next to plaza square, mark as openSpaceBegin. Check each subsequent square in open space if direct path is faster between current and openSpaceBegin. Replace the path in nArray between openSpaceBegin and current. Then look for direct path between openSpaceBegin + next,  then  between openSpaceBegin + next + next, and so on.
 + optimize to skip while loop when paths are already found on the current storeObject.
-
-
++ avoid looping through obj efter each function call
++ improve logic of 'staircase' appearance
++ disable 3 set squares in a triangle next to fork squares  
 
 
 
