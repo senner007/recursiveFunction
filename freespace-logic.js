@@ -364,9 +364,11 @@ var SquaresToDisable = true;
         let isAcrossUnsetAndDisabled = false;
         let isAcrossUnset = false;
         let nextToUnset = false;
-        let nextToPlazaCount = 0;
+        let acrossPlazaCount = 0;
         let nextToDestination = false;
         let partOfDoubleToBeDisabled = false;
+        let singleToBeDisabled = false;
+        let acrossUnsetOrDisabledCount = 0;
 
 
 
@@ -394,14 +396,23 @@ var SquaresToDisable = true;
             if (obj[objDir[i]].isDisabled == true ) {
               nextToDisabledCount++;
             }
-            if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
-              nextToPlazaCount++;
-            }
+
             if (obj[objDir[i]] != undefined && obj[objDir[i]].isFork == true && obj[objDir[i]].isPlaza != true) {
               nextToForkCount++;
             }
             if (obj[objDir[i]].isDestination == true ) {
               nextToDestination = true;
+            }
+            if (obj[objDirDiag[i]] != undefined) {
+              if (obj[objDirDiag[i]].isSet != true ) {
+
+                acrossUnsetOrDisabledCount++;
+
+
+              }
+              if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isPlaza == true ) {
+                acrossPlazaCount++;
+              }
             }
 
 
@@ -461,9 +472,9 @@ var SquaresToDisable = true;
 
             )
         {
-          if ((nextToUnset  == 2 || (nextToDisabledCount == 2 && nextToUnsetOrDisabledCount  != 3  )) && nextToPlazaCount == 0) { // don't paint
+          if ((nextToUnset  == 2 || (nextToDisabledCount > 0 && nextToUnsetOrDisabledCount  != 3  )) && acrossPlazaCount == 0) { // don't paint
             isAcrossUnsetAndDisabled = true;
-          //  console.log(obj[x].name)
+
 
           }
 
@@ -478,7 +489,7 @@ var SquaresToDisable = true;
 
             )
         {
-            if (nextToPlazaCount < 1 && nextToSetCount > 1 ) {
+            if (acrossPlazaCount < 1 && nextToSetCount > 1 ) {
                 isAcrossUnset = true;
             }
 
@@ -496,11 +507,42 @@ var SquaresToDisable = true;
 
 
 
+         if (
+            (
+              (obj[leftUp] != undefined && obj[leftDown] != undefined && obj[rightUp] != undefined && obj[leftUp].isSet != true && obj[leftDown].isSet != true && obj[rightUp].isSet != true)
+              && (obj[right].isFork && obj[right].isPlaza != true && obj[down].isFork && obj[down].isPlaza != true)
+            )
+            ||
+            (
+              (obj[leftUp] != undefined && obj[leftDown] != undefined && obj[rightDown] != undefined && obj[leftUp].isSet != true && obj[leftDown].isSet != true && obj[rightDown].isSet != true)
+              && (obj[right].isFork && obj[right].isPlaza != true && obj[up].isFork && obj[up].isPlaza != true)
+            )
+            ||
+            (
+              (obj[leftDown] != undefined && obj[rightDown] != undefined && obj[rightUp] != undefined && obj[leftDown].isSet != true && obj[rightDown].isSet != true && obj[rightUp].isSet != true)
+              && (obj[left].isFork && obj[left].isPlaza != true && obj[up].isFork && obj[up].isPlaza != true)
+            )
+            ||
+            (
+              (obj[leftUp] != undefined && obj[rightUp] != undefined && obj[rightDown] != undefined && obj[leftUp].isSet != true && obj[rightUp].isSet != true && obj[rightDown].isSet != true)
+              && (obj[left].isFork && obj[left].isPlaza != true && obj[down].isFork && obj[down].isPlaza != true)
+            )
 
 
 
+            && (nextToUnsetOrDisabledCount == 2 && nextToSet == false && acrossUnsetOrDisabledCount == 3 && nextToForkCount == 2)
 
-         if (partOfDoubleToBeDisabled) {
+           ) {
+
+             console.log('single : ' +obj[x].name)
+              console.log('single : ' + acrossUnsetOrDisabledCount)
+            singleToBeDisabled = true
+
+          }
+
+
+
+         if (partOfDoubleToBeDisabled || singleToBeDisabled) {
            SquaresToDisable = true;
            obj[x].isDisabled = true;
            obj[x].isFork = false;
