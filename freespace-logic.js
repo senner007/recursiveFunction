@@ -15,17 +15,14 @@ var SquaresToDisable = true;
 while (SquaresToDisable == true) {
 
     SquaresToDisable = false;
-    var pathCounter = 0;
-
 
     for (let x in obj) {
       if (obj[x].isFork == true) { // remove previous
         obj[x].isFork = false;
         obj[x].isPlaza = false;
-        document.getElementById(x).classList.remove('fork')
-        document.getElementById(x).classList.remove('plaza')
-
+        document.getElementById(x).classList.remove('fork', 'plaza')
       }
+
 
       if (obj[x].isSet == true) {
         var val = x.split(',')
@@ -116,10 +113,6 @@ while (SquaresToDisable == true) {
         let acrossUnsetOrDisabledCount = 0;
 
 
-
-
-
-
         for (let i = 0; i < 4; i++) {
           let dir = objDir[i];
           let dirDiag = objDirDiag[i];
@@ -156,15 +149,11 @@ while (SquaresToDisable == true) {
 
                 acrossUnsetOrDisabledCount++;
 
-
               }
               if (dirDiag != undefined && dirDiag.isPlaza == true ) {
                 acrossPlazaCount++;
               }
             }
-
-
-
 
           }
         }
@@ -178,8 +167,6 @@ while (SquaresToDisable == true) {
                    isBetweenDisabled = true;
                }
 
-
-
          }
 
          if (
@@ -192,12 +179,10 @@ while (SquaresToDisable == true) {
               //  isBetweenUnset = true;
 
 
-
-
           }
 
         if (
-            (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled != true && objRightUp.isDisabled != true)
+               (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled != true && objRightUp.isDisabled != true)
             || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled != true && objLeftUp.isDisabled != true)
 
 
@@ -242,105 +227,77 @@ while (SquaresToDisable == true) {
 
 
         if (
-          (
-            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right below
-            && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objRightUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true
-          )
-          ||
-          (
-            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right above
-            && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true
-          )
-          ||
-          (
-            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
-            && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true
-          )
-          ||
-          (
-            objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
-            && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true
-          )
-
-
+            (
+              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right below
+              && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objRightUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true
+            )
+            ||
+            (
+              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right above
+              && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true
+            )
+            ||
+            (
+              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+              && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true
+            )
+            ||
+            (
+              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
+              && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true
+            )
 
           ) {  // if true - disable
           partOfDoubleToBeDisabled = true
 
          }
 
+         if (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined) {
 
+           if (
+              ( objRightDown.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
+                && (objRight.isFork && objRight.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
 
-         if (
-            (
-              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined
-              && objRightDown.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
-              && (objRight.isFork && objRight.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
-            )
-            ||
-            (
-              (objLeftUp != undefined && objLeftDown != undefined && objRightDown != undefined && objRightUp != undefined
-              && objRightUp.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightDown.isSet != true)
-              && (objRight.isFork && objRight.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
-            )
-            ||
-            (
-              (objLeftDown != undefined && objLeftUp != undefined && objRightDown != undefined && objRightUp != undefined
-              && objLeftUp.isSet == true && objLeftDown.isSet != true  && objRightDown.isSet != true && objRightUp.isSet != true)
-              && (objLeft.isFork && objLeft.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
-            )
-            ||
-            (
-              (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined
-              && objLeftDown.isSet == true && objLeftUp.isSet != true && objRightUp.isSet != true && objRightDown.isSet != true)
-              && (objLeft.isFork && objLeft.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
-            )
+              ||
+              (objRightUp.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightDown.isSet != true)
+                && (objRight.isFork && objRight.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
 
-
-
-            && (nextToUnsetOrDisabledCount == 2 && nextToSet == false && acrossUnsetOrDisabledCount == 3 && nextToForkCount == 2)
-
-           ) {
-
-
-            singleToBeDisabled = true
-
-          }
-
-
-
-         if (partOfDoubleToBeDisabled || singleToBeDisabled) {
-           SquaresToDisable = true;
-           obj[x].isDisabled = true;
-           obj[x].isFork = false;
-           obj[x].isSet = false;
-           document.getElementById(x).classList.add('disabled')
+              ||
+              ( objLeftUp.isSet == true && objLeftDown.isSet != true  && objRightDown.isSet != true && objRightUp.isSet != true)
+                && (objLeft.isFork && objLeft.isPlaza != true && objUp.isFork && objUp.isPlaza != true)
+              ||
+              (  objLeftDown.isSet == true && objLeftUp.isSet != true && objRightUp.isSet != true && objRightDown.isSet != true)
+                && (objLeft.isFork && objLeft.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
+              && (nextToUnsetOrDisabledCount == 2 && nextToSet == false && acrossUnsetOrDisabledCount == 3 && nextToForkCount == 2)
+             )
+             {  singleToBeDisabled = true }
 
          }
 
-         if (obj[x].name == '1892') {
-            console.log('isAcrossUnsetAndDisabled :' + isAcrossUnsetAndDisabled )
-         }
+         //
+        //  if (partOfDoubleToBeDisabled || singleToBeDisabled) {
+        //    SquaresToDisable = true;
+        //    obj[x].isDisabled = true;
+        //    obj[x].isFork = false;
+        //    obj[x].isSet = false;
+        //    document.getElementById(x).classList.add('disabled')
+         //
+        //  }
+
+
 
 
         if (
-          (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true && nextToForkCount <3 && isAcrossUnset == false
-          )
-
-          {
-
+            (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true
+            && nextToForkCount <3 && isAcrossUnset == false || (partOfDoubleToBeDisabled || singleToBeDisabled)
+           )
+        {
           SquaresToDisable = true;
           obj[x].isDisabled = true;
           obj[x].isFork = false;
           obj[x].isSet = false;
-          document.getElementById(x).classList.add('disabled')
-
-
+          document.getElementById(x).classList.add('disabled');
         }
-
-
-
-
 
       }
       if (obj[x].isFork == true) {
@@ -385,11 +342,7 @@ while (SquaresToDisable == true) {
 
                   }
 
-
-
-
               }
-
 
             }
           }
@@ -406,8 +359,8 @@ while (SquaresToDisable == true) {
         if ( (plazaAlone && obj[x].isPlaza) ) {
             obj[x].isFork = false;
             obj[x].isPlaza = false;
-            document.getElementById(x).classList.remove('plaza')
-            document.getElementById(x).classList.remove('fork')
+            // document.getElementById(x).classList.remove('plaza')
+            // document.getElementById(x).classList.remove('fork')
             obj[x].toBeUnforked = true;
 
             // objLeft.isDisabled = true;
@@ -419,12 +372,14 @@ while (SquaresToDisable == true) {
 
 
 
-      }
+      } // end of if  - isFork
+      // if (obj[x].isSet != true && obj[x].isDisabled != true  ) {
+      //     delete obj[x]
+      // }
 
 
 
-
-    }
+    } // end of obj loop
 
     if (SquaresToDisable == false) {
         for (let x in obj) {
@@ -466,7 +421,6 @@ while (SquaresToDisable == true) {
             if(isSetCount == 4) {
               obj[x].isFork = true;
               obj[x].isPlaza = true;
-              document.getElementById(x).classList.add('fork')
               document.getElementById(x).classList.add('plaza')
             }
           }
