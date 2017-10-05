@@ -63,7 +63,7 @@ body {
 }
 
 .disabled {
-  background-color: red;
+  background-color: FireBrick;
   outline: 3px solid black;
   color: black;
 }
