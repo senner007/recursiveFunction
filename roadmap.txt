@@ -29,9 +29,8 @@ TODO:
 + optimize to skip while loop when paths are already found on the current storeObject.
 + avoid looping through obj efter each function call
 + improve logic of 'staircase' appearance
-+ disable 3 set squares in a triangle next to fork squares  
-
-
++ disable 3 set squares in a triangle next to fork squares
++ improve save/load speed/logic
 
 
 Done:

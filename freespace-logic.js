@@ -8,7 +8,7 @@ function eliminateSquares(obj) {
 
 
 
-console.time('f')
+var startTime = performance.now();
 
 var SquaresToDisable = true;
 
@@ -25,28 +25,40 @@ while (SquaresToDisable == true) {
 
 
       if (obj[x].isSet == true) {
-        var val = x.split(',')
 
-        let left = [Number(val[0]) - 1, Number(val[1])]
-        let right = [Number(val[0]) + 1, Number(val[1])]
-        let up = [Number(val[0]), Number(val[1]) + 1]
-        let down = [Number(val[0]), Number(val[1]) - 1]
+        if( obj[x].objDir == undefined) { // store the directions on the object property
+          let val = x.split(',')
 
-        let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-        let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-        let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-        let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
+          let val0 = Number(val[0]);
+          let val1 =  Number(val[1]);
 
+          let rightRight = [val0 + 2, val1]
+          let downDown = [val0, val1 - 2];
 
-        let objDir = [left, right, up, down]
-        let objDirDiag = [leftUp, leftDown, rightUp, rightDown]
+          let objLeft = obj[[val0 - 1, val1]];
+          let objRight = obj[[val0 + 1, val1]];
+          let objUp = obj[[val0, val1 + 1]];
+          let objDown = obj[[val0, val1 - 1]];
+
+          let objLeftDown = obj[[val0 - 1, val1 - 1]];
+          let objRightUp = obj[[val0 + 1, val1 + 1]];
+          let objRightDown = obj[[val0 + 1, val1 - 1]];
+          let objLeftUp = obj[[val0 - 1, val1 + 1]];
+
+          obj[x].objDir = [objLeft, objRight, objUp, objDown];
+
+          obj[x].objDirDiag = [objLeftDown, objRightUp, objRightDown, objLeftUp]
+        };
+
         let isSetCounter = 0;
         let plazaCounter = 0;
         for (let i = 0; i < 4; i++) {
-          if (obj[objDir[i]] != undefined && obj[objDir[i]].isSet == true) {
+          let dir = obj[x].objDir[i];
+          let dirDiag = obj[x].objDirDiag[i];
+          if (dir != undefined && dir.isSet == true) {
             isSetCounter++;
           }
-          if (obj[objDirDiag[i]] != undefined && obj[objDirDiag[i]].isSet == true) {
+          if (dirDiag != undefined && dirDiag.isSet == true) {
             plazaCounter++;
           }
         }
@@ -91,9 +103,6 @@ while (SquaresToDisable == true) {
         let objRightDown = obj[[val0 + 1, val1 - 1]];
         let objLeftUp = obj[[val0 - 1, val1 + 1]];
 
-        let objDir = [objLeft, objRight, objUp, objDown];
-
-        let objDirDiag = [objLeftDown, objRightUp, objRightDown, objLeftUp]
 
         let nextToSet = false;
         let nextToUnsetOrDisabledCount = 0;
@@ -114,8 +123,8 @@ while (SquaresToDisable == true) {
 
 
         for (let i = 0; i < 4; i++) {
-          let dir = objDir[i];
-          let dirDiag = objDirDiag[i];
+          let dir = obj[x].objDir[i];
+          let dirDiag = obj[x].objDirDiag[i];
 
           if (dir != undefined) {
 
@@ -300,79 +309,74 @@ while (SquaresToDisable == true) {
         }
 
       }
-      if (obj[x].isFork == true) {
-
-        let val = x.split(',')
-        let left = [Number(val[0]) - 1, Number(val[1])]
-        let right = [Number(val[0]) + 1, Number(val[1])]
-        let up = [Number(val[0]), Number(val[1]) + 1]
-        let down = [Number(val[0]), Number(val[1]) - 1];
-
-        let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
-        let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
-        let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
-        let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
-
-
-        let objDirDiag = [leftDown, rightUp, rightDown, leftUp]
-
-        let objDir = [left, right, up, down];
-        let plazaAlone = true;
-        let nextToPlazaCount = 0;
-        let nextToDisabledCount = 0;
-        let nextToSetCount = false;
-        let isAcrossUnset = false;
-
-
-
-          for (let i = 0; i < 4; i++) {
-            let dir = obj[objDir[i]];
-            if (dir != undefined) {
-
-              if (dir.isPlaza == true) {   // check if x is next to a set (blue element) and not a fork
-                plazaAlone = false;
-              }
-              if (obj[x].isPlaza != true ) {
-                  if (dir.isPlaza != true) {
-                    nextToPlazaCount++;
-
-                  }
-                  if (dir.isDisabled == true) {
-                    nextToDisabledCount++;
-
-                  }
-
-              }
-
-            }
-          }
-          // if (
-          //     (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightUp.isSet != true) ||
-          //     (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objLeftUp.isSet != true)
-          //     )
-          // {
-          //   isAcrossUnset = true;
-          //   console.log('dsfdsf')
-          // }
-
-
-        if ( (plazaAlone && obj[x].isPlaza) ) {
-            obj[x].isFork = false;
-            obj[x].isPlaza = false;
-            // document.getElementById(x).classList.remove('plaza')
-            // document.getElementById(x).classList.remove('fork')
-            obj[x].toBeUnforked = true;
-
-            // objLeft.isDisabled = true;
-            // obj[objDir[0]].isFork = false;
-            // obj[objDir[0]].isSet = false;
-            // document.getElementById(objDir[0]).classList.add('disabled')
-
-        }
+      // if (obj[x].isFork == true) {
+      //
+      //   let val = x.split(',')
+      //   let left = [Number(val[0]) - 1, Number(val[1])]
+      //   let right = [Number(val[0]) + 1, Number(val[1])]
+      //   let up = [Number(val[0]), Number(val[1]) + 1]
+      //   let down = [Number(val[0]), Number(val[1]) - 1];
+      //
+      //   let leftUp = [Number(val[0]) - 1, Number(val[1]) + 1]
+      //   let leftDown = [Number(val[0]) - 1, Number(val[1]) - 1]
+      //   let rightUp = [Number(val[0]) + 1, Number(val[1]) + 1]
+      //   let rightDown = [Number(val[0]) + 1, Number(val[1]) - 1]
+      //
+      //
+      //   let objDirDiag = [leftDown, rightUp, rightDown, leftUp]
+      //
+      //   let objDir = [left, right, up, down];
+      //   let plazaAlone = true;
+      //   let acrossUnsetCount = 0;
+      //
+      //
+      //
+      //
+      //     for (let i = 0; i < 4; i++) {
+      //       let dir = obj[objDir[i]];
+      //       let dirDiag = obj[objDirDiag[i]];
+      //
+      //
+      //       if (dir != undefined && dir.isPlaza == true) {   // check if x is next to a set (blue element) and not a fork
+      //         plazaAlone = false;
+      //       }
+      //       if (dirDiag != undefined && dirDiag.isSet != true) {   // check if x is next to a set (blue element) and not a fork
+      //         acrossUnsetCount++;
+      //       }
+      //
+      //
+      //
+      //     }
+      //     console.log(acrossUnsetCount)
+      //     // if (
+      //     //     (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objRightUp.isSet != true) ||
+      //     //     (objRightDown != undefined && objLeftUp != undefined && objRightDown.isSet != true && objLeftUp.isSet != true)
+      //     //     )
+      //     // {
+      //     //   isAcrossUnset = true;
+      //     //   console.log('dsfdsf')
+      //     // }
+      //
+      //
+      //   if ( plazaAlone && obj[x].isPlaza && acrossUnsetCount < 2 ) {
+      //       obj[x].isFork = false;
+      //       obj[x].isPlaza = false;
+      //       // document.getElementById(x).classList.remove('plaza')
+      //       // document.getElementById(x).classList.remove('fork')
+      //       obj[x].toBeUnforked = true;
+      //
+      //       // objLeft.isDisabled = true;
+      //       // obj[objDir[0]].isFork = false;
+      //       // obj[objDir[0]].isSet = false;
+      //       // document.getElementById(objDir[0]).classList.add('disabled')
+      //
+      //   }
+      //
+      //
+      //
+      // } // end of if  - isFork
 
 
-
-      } // end of if  - isFork
       // if (obj[x].isSet != true && obj[x].isDisabled != true  ) {
       //     delete obj[x]
       // }
@@ -430,14 +434,15 @@ while (SquaresToDisable == true) {
 
 
 
-
-}
-
+ }   // while loop end
 
 
 
 
-console.timeEnd('f')
+
+var endTime = performance.now();
+var time = endTime - startTime;
+return time;
 
 
 }

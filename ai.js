@@ -360,7 +360,7 @@ var wayPoints = [];
 
             }
 
-          console.log(differences)
+        //  console.log(differences)
 
 
 
@@ -831,7 +831,7 @@ else {
  var param;
   $('#calc').on('click', function() {
 
- eliminateSquares(obj)
+ var timeToEliminate = eliminateSquares(obj);
 
    calculateRoute();
 
@@ -1001,17 +1001,13 @@ function calculateRoute() {
       obj[x].isBlacklisted = false;
       obj[x].locatedFrequency = 0;
       obj[x].isLocated = false;
-      if (obj[x].isFork == true && obj[x].isSet == true) {
-      //  console.log(obj[x].hasTriedCount)
+      delete obj[x].objDir;
+      delete obj[x].objDirDiag;
+      obj[x].hasTriedCount = 0;
+      delete obj[x].storeObject;
+      obj[x].isMarked = false;
+      optOutCollection = [];
 
-  //    if(  obj[x].hasTriedCount  > 24) { document.getElementById(x).style.backgroundColor = 'green'; }
-        obj[x].hasTriedCount = 0
-        obj[x].storeObject = {};
-      }
-
-        if (obj[x].isMarked == true) {
-            obj[x].isMarked = false;
-        };
     };
 
     if (solution == undefined) { alert('Path not found!')}
@@ -1020,10 +1016,10 @@ function calculateRoute() {
         console.log(solutionArray)
 
 
-        document.getElementById('stepsTaken').innerHTML = 'Steps taken (recursive calls): ' + '<span>' + solution.stepsTaken + '</span>' ;
+        document.getElementById('stepsTaken').innerHTML = 'Time to eliminate squares: ' + '<span>' + + Math.floor(timeToEliminate * 100)/100 + '</span>' + ' ms';
         document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
         document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
-        document.getElementById('time').innerHTML = 'time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
+        document.getElementById('time').innerHTML = 'Time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
 
         _animateSolution(solutionArray[solutionArray.length -1], 20);
     }
