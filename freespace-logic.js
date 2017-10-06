@@ -55,6 +55,7 @@ while (SquaresToDisable == true) {
         for (let i = 0; i < 4; i++) {
           let dir = obj[x].objDir[i];
           let dirDiag = obj[x].objDirDiag[i];
+          
           if (dir != undefined && dir.isSet == true) {
             isSetCounter++;
           }
@@ -84,24 +85,21 @@ while (SquaresToDisable == true) {
 
     for (let x in obj) {
       let objX = obj[x];
-      if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
+      if (objX.isSet && objX.isFork != true && objX.isDestination != true  ) {
+
         let val = x.split(',')
+        let rightRight = [Number(val[0]) + 2, Number(val[1])]
+        let downDown = [Number(val[0]), Number(val[1]) - 2];
 
-        let val0 = Number(val[0]);
-        let val1 =  Number(val[1]);
+        let objLeft = objX.objDir[0];
+        let objRight = objX.objDir[1];
+        let objUp = objX.objDir[2];
+        let objDown = objX.objDir[3];
 
-        let rightRight = [val0 + 2, val1]
-        let downDown = [val0, val1 - 2];
-
-        let objLeft = obj[[val0 - 1, val1]];
-        let objRight = obj[[val0 + 1, val1]];
-        let objUp = obj[[val0, val1 + 1]];
-        let objDown = obj[[val0, val1 - 1]];
-
-        let objLeftDown = obj[[val0 - 1, val1 - 1]];
-        let objRightUp = obj[[val0 + 1, val1 + 1]];
-        let objRightDown = obj[[val0 + 1, val1 - 1]];
-        let objLeftUp = obj[[val0 - 1, val1 + 1]];
+        let objLeftDown = objX.objDirDiag[0];
+        let objRightUp = objX.objDirDiag[1];
+        let objRightDown = objX.objDirDiag[2];
+        let objLeftUp = objX.objDirDiag[3];
 
 
         let nextToSet = false;
@@ -121,10 +119,13 @@ while (SquaresToDisable == true) {
         let singleToBeDisabled = false;
         let acrossUnsetOrDisabledCount = 0;
 
+        let dirDiagCheck = (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined);
+        let dirCheck = (objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined);
+
 
         for (let i = 0; i < 4; i++) {
-          let dir = obj[x].objDir[i];
-          let dirDiag = obj[x].objDirDiag[i];
+          let dir = objX.objDir[i];
+          let dirDiag = objX.objDirDiag[i];
 
           if (dir != undefined) {
 
@@ -235,33 +236,23 @@ while (SquaresToDisable == true) {
         }
 
 
-        if (
-            (
-              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right below
-              && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objRightUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true
-            )
-            ||
-            (
-              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined // left of left -right above
-              && objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true
-            )
-            ||
-            (
-              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
-              && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true
-            )
-            ||
-            (
-              objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined
-              && objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true
-            )
+        if (dirCheck) {
+          if (
+              (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objRightUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true)
+              ||
+              (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true)
+              ||
+              (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true)
+              ||
+              (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true)
 
-          ) {  // if true - disable
-          partOfDoubleToBeDisabled = true
+            ) {  // if true - disable
+            partOfDoubleToBeDisabled = true
 
-         }
+           }
+       }
 
-         if (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined) {
+         if (dirDiagCheck) {
 
            if (
               ( objRightDown.isSet == true && objLeftUp.isSet != true && objLeftDown.isSet != true && objRightUp.isSet != true)
@@ -286,9 +277,9 @@ while (SquaresToDisable == true) {
          //
         //  if (partOfDoubleToBeDisabled || singleToBeDisabled) {
         //    SquaresToDisable = true;
-        //    obj[x].isDisabled = true;
-        //    obj[x].isFork = false;
-        //    obj[x].isSet = false;
+        //    objX.isDisabled = true;
+        //    objX.isFork = false;
+        //    objX.isSet = false;
         //    document.getElementById(x).classList.add('disabled')
          //
         //  }
@@ -302,9 +293,9 @@ while (SquaresToDisable == true) {
            )
         {
           SquaresToDisable = true;
-          obj[x].isDisabled = true;
-          obj[x].isFork = false;
-          obj[x].isSet = false;
+          objX.isDisabled = true;
+          objX.isFork = false;
+          objX.isSet = false;
           document.getElementById(x).classList.add('disabled');
         }
 
@@ -389,25 +380,16 @@ while (SquaresToDisable == true) {
         for (let x in obj) {
 
           if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
-            let val = x.split(',')
 
-            let val0 = Number(val[0]);
-            let val1 =  Number(val[1]);
-
-            let objLeft = obj[[val0 - 1, val1]];
-            let objRight = obj[[val0 + 1, val1]];
-            let objUp = obj[[val0, val1 + 1]];
-            let objDown = obj[[val0, val1 - 1]];
-
-            let objDir = [objLeft, objRight, objUp, objDown];
+            let objLeft = obj[x].objDir[0];
+            let objRight = obj[x].objDir[1];
+            let objUp = obj[x].objDir[2];
+            let objDown = obj[x].objDir[3];
             let isSetCount = 0;
 
             for (let i = 0; i < 4; i++) {
-              let dir = objDir[i];
-
-
+              let dir = obj[x].objDir[i];
               if (dir != undefined) {
-
 
                 if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
                   isSetCount++;
@@ -417,11 +399,9 @@ while (SquaresToDisable == true) {
             }
             if(isSetCount == 3) {
               obj[x].isFork = true;
-
               document.getElementById(x).classList.add('fork')
 
             }
-
             if(isSetCount == 4) {
               obj[x].isFork = true;
               obj[x].isPlaza = true;
@@ -431,7 +411,6 @@ while (SquaresToDisable == true) {
 
         }
     }
-
 
 
  }   // while loop end
