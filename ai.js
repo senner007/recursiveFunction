@@ -265,8 +265,10 @@ var wayPoints = [];
 
   });
 
+
   $('#reset').on('click', function() {
   var $reset = $('.disabled');
+  document.getElementById('additionalSteps').innerHTML = 'Steps reactivated : ' + '<span>' +  $reset.length + '</span>';
     $reset.each(function(i,el) {
       obj[el.id].isSet = true;
       el.classList.remove('disabled')
@@ -887,7 +889,7 @@ else {
 
  var timeToEliminate = eliminateSquares(obj);
 
-   //calculateRoute();
+   calculateRoute();
 
 function calculateRoute() {
 
@@ -1073,7 +1075,7 @@ function calculateRoute() {
 
         document.getElementById('stepsTaken').innerHTML = 'Time to eliminate squares: ' + '<span>' + + Math.floor(timeToEliminate * 100)/100 + '</span>' + ' ms';
         document.getElementById('pathLength').innerHTML = 'Path length: ' + '<span>' + solution.newArr.length + '</span>';
-        document.getElementById('additionalSteps').innerHTML = 'Additional steps taken : ' + '<span>' + (solution.stepsTaken - solution.newArr.length) + '</span>';
+
         document.getElementById('time').innerHTML = 'Time to do ' + '<span>' + functionCalls + '</span>'+ ' function calls: ' + '<span>' + Math.floor(time * 100)/100 + '</span>' + ' ms';
 
         _animateSolution(solutionArray[solutionArray.length -1], 20);

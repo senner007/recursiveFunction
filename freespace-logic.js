@@ -120,6 +120,9 @@ while (SquaresToDisable == true) {
         let partOfSingleToBeDisabled = false;
         let acrossUnsetOrDisabledCount = 0;
         let singleToBeDisabled = false;
+        let acrossUnset_Not_DisabledCount = 0;
+        let acrosDisabledCount = 0;
+        let nextToSet_Not_ForkCount = 0;
 
 
 
@@ -136,7 +139,7 @@ while (SquaresToDisable == true) {
 
             if (dir.isSet && dir.isFork != true ) {   // check if x is next to a set (blue element) and not a fork
               nextToSet = true;
-
+              nextToSet_Not_ForkCount++
             }
             if (dir.isSet) {
               nextToSetCount++;
@@ -155,7 +158,7 @@ while (SquaresToDisable == true) {
               nextToDisabledCount++;
             }
 
-            if (dir != undefined && dir.isFork == true && dir.isPlaza != true) {
+            if (dir.isFork == true && dir.isPlaza != true) {
               nextToForkCount++;
             }
             if (dir.isDestination == true ) {
@@ -167,7 +170,17 @@ while (SquaresToDisable == true) {
                 acrossUnsetOrDisabledCount++;
 
               }
-              if (dirDiag != undefined && dirDiag.isPlaza == true ) {
+              if (dirDiag.isDisabled == true ) {
+
+                acrosDisabledCount++;
+
+              }
+              if (dirDiag.isSet != true && dirDiag.isDisabled != true) {
+
+                acrossUnset_Not_DisabledCount++;
+
+              }
+              if (dirDiag.isPlaza == true ) {
                 acrossPlazaCount++;
               }
             }
@@ -241,9 +254,9 @@ while (SquaresToDisable == true) {
 
 
         }
-        if (dirCheck) {
+         if (dirCheck) {
 
-              if (nextToSetCount < 2 && nextToUnsetOrDisabledCount > 2) {
+              if (nextToSetCount < 2 && nextToUnsetOrDisabledCount > 2  ) {
               //  console.log(nextToSetCount)
                   singleToBeDisabled = true
               //    console.log('hello')
@@ -251,23 +264,39 @@ while (SquaresToDisable == true) {
 
         }
 
+        // if (dirCheck) {
+        //
+        //       if (nextToForkCount == 2 && nextToSet_Not_ForkCount == 0 && nextToUnsetOrDisabledCount == 2 && acrossUnsetOrDisabledCount == 1) {
+        //         if (
+        //              (objLeft.isFork == true && objDown.isFork == true)
+        //           || (objRight.isFork == true && objDown.isFork == true)
+        //           || (objUp.isFork == true && objRight.isFork == true)
+        //           || (objUp.isFork == true && objLeft.isFork == true)
+        //         ) {
+        //             singleToBeDisabled = true
+        //         }
+        //
+        //       }
+        //
+        // }
 
 
-        if (dirCheck) {
-          if (
-              (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objRightUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true)
-              ||
-              (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objRightDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true)
-              ||
-              (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && objRightDown.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true)
-              ||
-              (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true && objLeftDown.isFork == true && obj[downDown].isSet !=true && objRightDown.isSet !=true)
 
-            ) {  // if true - disable
-            partOfDoubleToBeDisabled = true
+      if (dirCheck) {
+        if (
+            (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objUp.isFork == true && objDown.isSet !=true && obj[rightRight].isSet !=true && objRightDown.isSet !=true) // left of left-right below fork
+            ||
+            (objLeft.isSet != true && objRight.isSet == true && objRight.isFork != true && objDown.isFork == true && objUp.isSet !=true && obj[rightRight].isSet !=true && objRightUp.isSet !=true)
+            ||
+            (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objRight.isFork == true && obj[downDown].isSet !=true && objLeftDown.isSet !=true) // up of up -down left side
+            ||
+            (objUp.isSet != true && objDown.isSet == true && objDown.isFork != true && objLeft.isFork == true  && obj[downDown].isSet !=true && objRightDown.isSet !=true)
 
-           }
-       }
+          ) {  // if true - disable
+          partOfDoubleToBeDisabled = true
+
+         }
+     }
 
          if (dirDiagCheck) {
 
