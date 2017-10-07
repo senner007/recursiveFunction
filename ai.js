@@ -582,7 +582,7 @@ console.log('------------------------')
 
        for (let i = 0;i < 4; i++ ) {
          let dir = obj[orderArray[i]];
-         if (nArray[nArray.length -2] == dir.name) { dir.isMarked = true}
+         if (dir != undefined && nArray[nArray.length -2] == dir.name) { dir.isMarked = true}
          if (dir != undefined) {
             objVals[i] =  dir.isMarked == true || dir.isBlacklisted == true || dir.isSet == false ? false : true
 
