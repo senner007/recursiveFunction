@@ -264,21 +264,21 @@ while (SquaresToDisable == true) {
 
         }
 
-        // if (dirCheck) {
-        //
-        //       if (nextToForkCount == 2 && nextToSet_Not_ForkCount == 0 && nextToUnsetOrDisabledCount == 2 && acrossUnsetOrDisabledCount == 1) {
-        //         if (
-        //              (objLeft.isFork == true && objDown.isFork == true)
-        //           || (objRight.isFork == true && objDown.isFork == true)
-        //           || (objUp.isFork == true && objRight.isFork == true)
-        //           || (objUp.isFork == true && objLeft.isFork == true)
-        //         ) {
-        //             singleToBeDisabled = true
-        //         }
-        //
-        //       }
-        //
-        // }
+        if (dirCheck) {
+
+              if (nextToForkCount == 2 && nextToSet_Not_ForkCount == 0 && nextToUnsetOrDisabledCount == 2 && acrossUnsetOrDisabledCount == 1) {
+                if (
+                     (objLeft.isFork == true && objDown.isFork == true)
+                  || (objRight.isFork == true && objDown.isFork == true)
+                  || (objUp.isFork == true && objRight.isFork == true)
+                  || (objUp.isFork == true && objLeft.isFork == true)
+                ) {
+                    singleToBeDisabled = true
+                }
+
+              }
+
+        }
 
 
 
