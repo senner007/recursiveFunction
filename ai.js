@@ -266,10 +266,10 @@ var wayPoints = [];
   });
 
   $('#reset').on('click', function() {
-  var $reset = $('.dottedBorder');
+  var $reset = $('.disabled');
     $reset.each(function(i,el) {
       obj[el.id].isSet = true;
-      $(el).removeClass('dottedBorder')
+      el.classList.remove('disabled')
     })
   })
 
@@ -742,16 +742,16 @@ console.log('------------------------')
 
 
     }  // for end
-console.log(inWhile)
+ console.log(inWhile)
  console.log(objValsArray)
 
 if (obj[current].name == 1165) {
-    console.log( obj[[45,32]] )
+  console.log( obj[[45,32]] )
   console.log(objValsArray)
   console.log('current: ' + obj[current].name)
-    console.log('last in array '  + nArray)
+  console.log('last in array '  + nArray)
   console.log(  obj[current].storeObject)
-console.log('direction :' + directionCount)
+  console.log('direction :' + directionCount)
 }
 
 if (obj[current].storeObject == undefined ) { obj[current].storeObject = {}; }
@@ -908,7 +908,7 @@ function calculateRoute() {
     var stepsNotUsedCount = 0;
     directionCount = -1;
     var frequencyCut =2; // maybe eliminate the need for this
-    var functionCounter = 48
+    var functionCounter = 24
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
@@ -1059,6 +1059,7 @@ function calculateRoute() {
       delete obj[x].objDirDiag;
       obj[x].hasTriedCount = 0;
       delete obj[x].storeObject;
+      delete obj[x].storeObjectAll;
       obj[x].isMarked = false;
       optOutCollection = [];
 

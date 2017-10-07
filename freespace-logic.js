@@ -377,39 +377,39 @@ while (SquaresToDisable == true) {
     } // end of obj loop
 
     if (SquaresToDisable == false) {
-        for (let x in obj) {
-
-          if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
-
-            let objLeft = obj[x].objDir[0];
-            let objRight = obj[x].objDir[1];
-            let objUp = obj[x].objDir[2];
-            let objDown = obj[x].objDir[3];
-            let isSetCount = 0;
-
-            for (let i = 0; i < 4; i++) {
-              let dir = obj[x].objDir[i];
-              if (dir != undefined) {
-
-                if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
-                  isSetCount++;
-                }
-              }
-
-            }
-            if(isSetCount == 3) {
-              obj[x].isFork = true;
-              document.getElementById(x).classList.add('fork')
-
-            }
-            if(isSetCount == 4) {
-              obj[x].isFork = true;
-              obj[x].isPlaza = true;
-              document.getElementById(x).classList.add('plaza')
-            }
-          }
-
-        }
+        // for (let x in obj) {
+        //
+        //   if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
+        //
+        //     let objLeft = obj[x].objDir[0];
+        //     let objRight = obj[x].objDir[1];
+        //     let objUp = obj[x].objDir[2];
+        //     let objDown = obj[x].objDir[3];
+        //     let isSetCount = 0;
+        //
+        //     for (let i = 0; i < 4; i++) {
+        //       let dir = obj[x].objDir[i];
+        //       if (dir != undefined) {
+        //
+        //         if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
+        //           isSetCount++;
+        //         }
+        //       }
+        //
+        //     }
+        //     if(isSetCount == 3) {
+        //       obj[x].isFork = true;
+        //       document.getElementById(x).classList.add('fork')
+        //
+        //     }
+        //     if(isSetCount == 4) {
+        //       obj[x].isFork = true;
+        //       obj[x].isPlaza = true;
+        //       document.getElementById(x).classList.add('plaza')
+        //     }
+        //   }
+        //
+        // }
     }
 
 
