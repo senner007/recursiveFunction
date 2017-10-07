@@ -31,6 +31,8 @@ TODO:
 + improve logic of 'staircase' appearance
 + disable 3 set squares in a triangle next to fork squares
 + improve save/load speed/logic
++ fix reset
++ allow reload without window refresh
 
 
 Done:

@@ -55,7 +55,7 @@ while (SquaresToDisable == true) {
         for (let i = 0; i < 4; i++) {
           let dir = obj[x].objDir[i];
           let dirDiag = obj[x].objDirDiag[i];
-          
+
           if (dir != undefined && dir.isSet == true) {
             isSetCounter++;
           }

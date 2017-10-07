@@ -23,14 +23,15 @@ $(document).ready(function() {
 
 
   var divs = $('.wrapper').find('div'),
-    obj = {};
+    obj = {},
+    objRef = {}
     var columns = 80;
     var rows = 45;
     var nRows = rows;
     var nColumn = 1;
     divs.each(function(i, el) {
 
-    //  el.textContent = '';
+  //el.textContent = i +1;
 
     //  el.className = 'box ' + (i + 1)
     //  el.id = [nColumn,rows];
@@ -60,6 +61,9 @@ $(document).ready(function() {
       obj[tempArr].hasTriedCount = 0;
       obj[tempArr].isFork = false;
       obj[tempArr].isPlaza = false;
+      objRef[obj[tempArr].name] = { key :[Number(res[0]), Number(res[1])] }
+
+
 
     })
 
@@ -207,6 +211,7 @@ var wayPoints = [];
     $.getJSON( "path.json", function( json ) {
        obj =  json
        for(let x in obj) {
+
          obj[x].toBeUnForked = false;
             if (obj[x].isFork == true) {
             obj[x].isFork = false
@@ -321,7 +326,7 @@ var wayPoints = [];
 
     function find(current, num) {
 
-    //    console.log(obj[current])
+
         var nArray = num == undefined ? [] : num.split(',')
         nArray.pop();
     //    console.log(nArray)
@@ -330,9 +335,9 @@ var wayPoints = [];
 
         for (let i = 0; i < solutionArray.length; i++) {
           if ( solutionArray[i].newArr.indexOf(obj[current].name) != -1 && nArray.indexOf(obj[current].name) > solutionArray[i].newArr.indexOf(obj[current].name) ) {
-            console.log(tempArray)
-            console.log(nArray)
-            optOutCollection.push(nArray.join())
+            // console.log(tempArray)
+            // console.log(nArray)
+        //    optOutCollection.push(nArray.join())
             console.log('opt out')
             return null;
           }
@@ -489,16 +494,19 @@ var wayPoints = [];
 
       else {
         obj[current].isMarked = true
-        if ( enterOpen == undefined &&  (obj[current].isPlaza == true || obj[current].isEdge == true )) {
-            enterOpen = obj[current].name;
 
 
-        }
-        else if (enterOpen != undefined && obj[current].isPlaza != true && obj[current].isEdge !=true ) {
 
-          enterOpen = undefined;
-
-        }
+        // if ( enterOpen == undefined &&  (obj[current].isPlaza == true || obj[current].isEdge == true )) {
+        //     enterOpen = obj[current].name;
+        //
+        //
+        // }
+        // else if (enterOpen != undefined && obj[current].isPlaza != true && obj[current].isEdge !=true ) {
+        //
+        //   enterOpen = undefined;
+        //
+        // }
         // console.log('enter : ' + enterOpen)
         //
         //
@@ -561,19 +569,37 @@ var wayPoints = [];
         // if (obj[current].isBlacklisted) { console.log('blacklisted : ' + obj[current].name )}
 
 
-       if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
-          obj[current].locatedFrequency++;
-       } else {
-         obj[current].isLocated = true;
-       }
+      //  if ( obj[current].isLocated == true) { // this number should not be 5 but the point in the solutionArray where thre length starts to flatten
+      //     obj[current].locatedFrequency++;
+      //  } else {
+      //    obj[current].isLocated = true;
+      //  }
 
+console.log('------------------------')
 
-
+         var toBeCurrentArray = ['1','2','3','4'];
+          var num2ArrayTotal = [];
 
        for (let i = 0;i < 4; i++ ) {
+         let dir = obj[orderArray[i]];
+         if (nArray[nArray.length -2] == dir.name) { dir.isMarked = true}
+         if (dir != undefined) {
+            objVals[i] =  dir.isMarked == true || dir.isBlacklisted == true || dir.isSet == false ? false : true
 
-         if (obj[orderArray[i]] != undefined) {
-            objVals[i] = obj[orderArray[i]].isMarked == true || obj[orderArray[i]].isBlacklisted == true || obj[orderArray[i]].isSet == false ? false : true
+            if (obj[current].storeObjectAll !== undefined && objVals[i] == true)  {
+
+              if (dir.name in obj[current].storeObjectAll) {
+
+                if (!nArray.includes(obj[current].storeObjectAll[dir.name].end)) {
+                  objVals[i] = obj[current].storeObjectAll[dir.name].array;
+                  toBeCurrentArray[i] = objRef[obj[current].storeObjectAll[dir.name].end].key;
+                  num2ArrayTotal.push(dir.name);
+                }
+
+              }
+
+            }
+
          }
 
        }
@@ -585,17 +611,26 @@ var wayPoints = [];
      var num3 = '';
      var objValsArray = [num0,num1,num2,num3];
      var stackCount = 0;
-     var num2ArrayTotal = [];
-     var toBeCurrentArray = ['1','2','3','4'];
+
+     var inWhile = 0;
 
 
-  //  console.time('while')
-   for(var y = 0; y< objVals.length; y++) {
+  console.log(objVals)
+  console.log('name : ' + obj[current].name)
+  console.log('direction : ' + directionCount)
 
-       if (objVals[y] != true) { objValsArray[y] = false;}
 
-      if (objVals[y] == true && (obj[current].isFork || obj[current].isDestination)) {
+   for(var y = 0; y < objVals.length; y++) {
 
+
+      if (objVals[y] == false) { objValsArray[y] = false;}
+
+      if (typeof objVals[y] == 'string') { objValsArray[y] = objVals[y];}
+
+
+      if (objVals[y] === true && (obj[current].isFork || obj[current].isDestination)) {
+        console.log('hello in while')
+        inWhile++;
           var index = y;
           newObj = current;
 
@@ -646,7 +681,7 @@ var wayPoints = [];
 
               var count = 0;
               for (let i = 0;i < 4; i++ ) {
-                    let objDir = obj[orderArray2[i]];
+                  let objDir = obj[orderArray2[i]];
                   if (objDir != undefined) {
 
                      let n1 = Number(objDir.name) + 1;
@@ -671,7 +706,7 @@ var wayPoints = [];
 
                         var s = objValsArray[index].split(',')
                         if (!obj[newObj].isFork && !obj[newObj].isDestination || ( s.length < 2 ) ) {  num2ArrayTotal.push(obj[newObj].name);  }
-                        objValsArray[index] = objValsArray[index] +  obj[newObj].name + ',';
+                        objValsArray[index] +=  obj[newObj].name + ',';
 
                         break;
                      }
@@ -680,33 +715,35 @@ var wayPoints = [];
 
 
                if (count == 0) {
-                // console.log('break')
-                 if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {objValsArray[index] = false;}
+
+                 if (obj[newObj].isFork == false && obj[newObj].isDestination == false)  {console.log('break: ' + index);  objValsArray[index] = false;}
                   break;
                }
                toBeCurrentArray[index] = newObj
 
                if(stackCount > 1000) { console.log('broke out'); break}
              }; // while end
-            if (  objValsArray[index] != false ) { // check if going to new fork will result in longer path than previous solution
-               let tmp = objValsArray[index].split(',');
-               tmp.pop();
-               if (tmp.length + nArray.length > solution.newArr.length) { console.log('is false'); objValsArray[index] = false; }
-               let conc = nArray.concat(tmp)  // check if going to new fork will result in an array in the optOutCollection, and therefore not valid
-               if (optOutCollection.length > 1 && optOutCollection.includes(conc.join() )) {
-                 console.log('opt out beforehand')
-                     objValsArray[index] = false;
-               }
 
-            }
+            // if (  objValsArray[index] != false ) { // check if going to new fork will result in longer path than previous solution
+            //    let tmp = objValsArray[index].split(',');
+            //    tmp.pop();
+            //    if (tmp.length + nArray.length > solution.newArr.length) { console.log('is false'); objValsArray[index] = false; }
+            //    let conc = nArray.concat(tmp)  // check if going to new fork will result in an array in the optOutCollection, and therefore not valid
+            //    console.log(conc)
+            //    if (optOutCollection.length > 1 && optOutCollection.includes(conc.join() )) {
+            //      console.log('opt out beforehand')
+            //          objValsArray[index] = false;
+            //    }
+            //
+            // }
 
 
         };
 
 
     }  // for end
-
-  //  console.timeEnd('while')
+console.log(inWhile)
+ console.log(objValsArray)
 
 if (obj[current].name == 1165) {
     console.log( obj[[45,32]] )
@@ -717,21 +754,38 @@ if (obj[current].name == 1165) {
 console.log('direction :' + directionCount)
 }
 
-if (obj[current].storeObject == undefined ) { obj[current].storeObject = {} }
-if (!(nArray.length in obj[current].storeObject) )  {
-  obj[current].storeObject[nArray.length] = {'arrays': []};
-}
-var newObjValsArray = [];
-var indexes = []
-var arrayCount = -1
-    for (let val of objValsArray) {
-      arrayCount++;
-        if (val != false) { indexes.push(arrayCount); newObjValsArray.push(val)}
-      if (val != false && !obj[current].storeObject[nArray.length]['arrays'].includes(val)) {
+if (obj[current].storeObject == undefined ) { obj[current].storeObject = {}; }
+if (obj[current].storeObjectAll == undefined ) { obj[current].storeObjectAll = {}; }
 
-            obj[current].storeObject[nArray.length]['arrays'].push(val)
-      }
+if (!(nArray.length in obj[current].storeObject) )  {  obj[current].storeObject[nArray.length] = {'arrays': []}; }
+
+var newObjValsArray = [];
+var indexes = [];
+var arrayCount = -1;
+
+for (let val of objValsArray) {
+
+  arrayCount++;
+  if (val != false) {
+
+    let p = val.slice(0,-1);
+    p = p.split(',');
+
+    indexes.push(arrayCount); newObjValsArray.push(val);
+    if (!obj[current].storeObject[nArray.length]['arrays'].includes(val)) {
+
+          obj[current].storeObject[nArray.length]['arrays'].push(val)
     }
+    if (obj[current].storeObjectAll[p[0]] == undefined && p.length > 1) {
+
+          obj[current].storeObjectAll[p[0]] = {};
+          obj[current].storeObjectAll[p[0]]['end'] = p[p.length -1];
+          obj[current].storeObjectAll[p[0]]['array'] = val;
+
+    }
+  }
+}
+
   obj[current].storeObject[nArray.length].forks =  obj[current].storeObject[nArray.length]['arrays'].length;
 
   var arrayLenghtMatch;
