@@ -108,6 +108,7 @@ while (SquaresToDisable == true) {
         let isBetweenDisabled = false;
         let isAcrossDisabled = false;
         let nextToSetCount = 0;
+        let nextToSetNotForkCount = 0;
         let nextToForkCount = 0;
         let nextToDisabledCount = 0;
         let isAcrossUnsetAndDisabled = false;
@@ -116,8 +117,11 @@ while (SquaresToDisable == true) {
         let acrossPlazaCount = 0;
         let nextToDestination = false;
         let partOfDoubleToBeDisabled = false;
-        let singleToBeDisabled = false;
+        let partOfSingleToBeDisabled = false;
         let acrossUnsetOrDisabledCount = 0;
+        let singleToBeDisabled = false;
+
+
 
         let dirDiagCheck = (objLeftUp != undefined && objLeftDown != undefined && objRightUp != undefined && objRightDown != undefined);
         let dirCheck = (objLeft != undefined && objRight != undefined && objUp != undefined && objDown != undefined);
@@ -127,14 +131,16 @@ while (SquaresToDisable == true) {
           let dir = objX.objDir[i];
           let dirDiag = objX.objDirDiag[i];
 
+
           if (dir != undefined) {
 
             if (dir.isSet && dir.isFork != true ) {   // check if x is next to a set (blue element) and not a fork
               nextToSet = true;
 
             }
-            if (dir.isSet) {   // check if x is next to a set (blue element) and not a fork
+            if (dir.isSet) {
               nextToSetCount++;
+
 
             }
             if (dir.isSet != true) {
@@ -142,6 +148,7 @@ while (SquaresToDisable == true) {
             }
             if (dir.isSet != true && dir.isDisabled != true) {
               nextToUnset++;
+
             }
 
             if (dir.isDisabled == true ) {
@@ -234,6 +241,16 @@ while (SquaresToDisable == true) {
 
 
         }
+        if (dirCheck) {
+
+              if (nextToSetCount < 2 && nextToUnsetOrDisabledCount > 2) {
+              //  console.log(nextToSetCount)
+                  singleToBeDisabled = true
+              //    console.log('hello')
+              }
+
+        }
+
 
 
         if (dirCheck) {
@@ -270,12 +287,12 @@ while (SquaresToDisable == true) {
                 && (objLeft.isFork && objLeft.isPlaza != true && objDown.isFork && objDown.isPlaza != true)
               && (nextToUnsetOrDisabledCount == 2 && nextToSet == false && acrossUnsetOrDisabledCount == 3 && nextToForkCount == 2)
              )
-             {  singleToBeDisabled = true }
+             {  partOfSingleToBeDisabled = true }
 
          }
 
          //
-        //  if (partOfDoubleToBeDisabled || singleToBeDisabled) {
+        //  if (partOfDoubleToBeDisabled || partOfSingleToBeDisabled) {
         //    SquaresToDisable = true;
         //    objX.isDisabled = true;
         //    objX.isFork = false;
@@ -289,7 +306,7 @@ while (SquaresToDisable == true) {
 
         if (
             (nextToSet == false || nextToUnsetOrDisabledCount > 2) && isBetweenDisabled != true  && isBetweenUnset != true && isAcrossUnsetAndDisabled != true && nextToDestination != true
-            && nextToForkCount <3 && isAcrossUnset == false || (partOfDoubleToBeDisabled || singleToBeDisabled)
+            && nextToForkCount <3 && isAcrossUnset == false || (partOfDoubleToBeDisabled || partOfSingleToBeDisabled || singleToBeDisabled)
            )
         {
           SquaresToDisable = true;

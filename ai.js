@@ -887,7 +887,7 @@ else {
 
  var timeToEliminate = eliminateSquares(obj);
 
-   calculateRoute();
+   //calculateRoute();
 
 function calculateRoute() {
 
@@ -908,7 +908,7 @@ function calculateRoute() {
     var stepsNotUsedCount = 0;
     directionCount = -1;
     var frequencyCut =2; // maybe eliminate the need for this
-    var functionCounter = 24
+    var functionCounter = 23
     param = false;
     var blacklist = [];
     var blacklistFinal = [];
