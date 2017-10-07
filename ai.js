@@ -31,7 +31,7 @@ $(document).ready(function() {
     var nColumn = 1;
     divs.each(function(i, el) {
 
-  //el.textContent = i +1;
+  el.textContent = i +1;
 
     //  el.className = 'box ' + (i + 1)
     //  el.id = [nColumn,rows];
@@ -889,7 +889,7 @@ else {
 
  var timeToEliminate = eliminateSquares(obj);
 
-   calculateRoute();
+   //calculateRoute();
 
 function calculateRoute() {
 

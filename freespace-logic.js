@@ -137,7 +137,7 @@ while (SquaresToDisable == true) {
 
           if (dir != undefined) {
 
-            if (dir.isSet && dir.isFork != true ) {   // check if x is next to a set (blue element) and not a fork
+            if (dir.isSet == true && dir.isFork != true ) {   // check if x is next to a set (blue element) and not a fork
               nextToSet = true;
               nextToSet_Not_ForkCount++
             }
@@ -264,15 +264,19 @@ while (SquaresToDisable == true) {
 
         }
 
+        
+
+        //
         if (dirCheck) {
 
-              if (nextToForkCount == 2 && nextToSet_Not_ForkCount == 0 && nextToUnsetOrDisabledCount == 2 && acrossUnsetOrDisabledCount == 1) {
+              if (nextToForkCount == 2 && nextToSet_Not_ForkCount == 0 && nextToUnsetOrDisabledCount == 2) {
                 if (
-                     (objLeft.isFork == true && objDown.isFork == true)
-                  || (objRight.isFork == true && objDown.isFork == true)
-                  || (objUp.isFork == true && objRight.isFork == true)
-                  || (objUp.isFork == true && objLeft.isFork == true)
+                     (objLeft.isFork == true && objDown.isFork == true && objLeftDown.isFork == true)
+                   || (objRight.isFork == true && objDown.isFork == true && objRightDown.isFork == true )
+                   || (objUp.isFork == true && objRight.isFork == true && objRightUp.isFork == true )
+                   || (objUp.isFork == true && objLeft.isFork == true && objLeftUp.isFork == true)
                 ) {
+
                     singleToBeDisabled = true
                 }
 
@@ -344,6 +348,9 @@ while (SquaresToDisable == true) {
           objX.isSet = false;
           document.getElementById(x).classList.add('disabled');
         }
+
+
+
 
       }
       // if (obj[x].isFork == true) {
