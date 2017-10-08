@@ -1,41 +1,20 @@
 TODO:
+0.2:
++ compare against 'actual' solution
+
 0.1:
-+ + calculate multiple routes and select the shortest : not optimized
 + add 'waypoints'
-+ save layout to json
-+  + create route description from path. ex: turn right, move straight ahead 4 squares, turn left... : temporary solution by storing direction to obj.directions
-+ do not add start position to final solution before return;
-+ set predefined directions to be called in recursive function before randomization
-+ break from loop if path length is equal to actual distance
++ create route description from path. ex: turn right, move straight ahead 4 squares, turn left...
 + return the difference between the path length and the straight course length
-+ learn from each iteration: if path to waypoint is bigger - return null - iterate until path is found
-+ store the path including steps taken in solutions object
-+ refactor ui clicking logic
-+ register each turn event and store in object. send out 'sonar' on each event meaning a for loop searching left and right on each step in the new direction for the target element.
-+ write logic that checks if direction is the same for a while to minimize recursive function calls – or if same direction leads to distination
-+ identify fork squares and make sure that each path takes a different route and doesn't randomize
-+ identify fork squares and use amount as a basis for determining functionCounter and frequencyCut
-+ write logic prevent stack overflow
-+ store the the 4 directions in an object with an attached property indicting direction. Prevent uturn movements.
-+ define movement patterns for open space
-+ create 10 predefined
 + save with localstorage
-+ show expected result with predefined
-
-
----------------------
-+ open space tweaking: if curent is next to or diagonally next to plaza square, mark as openSpaceBegin. Check each subsequent square in open space if direct path is faster between current and openSpaceBegin. Replace the path in nArray between openSpaceBegin and current. Then look for direct path between openSpaceBegin + next,  then  between openSpaceBegin + next + next, and so on.
-+ optimize to skip while loop when paths are already found on the current storeObject.
++ define movement patterns for open space: if curent is next to or diagonally next to plaza square, mark as openSpaceBegin. Check each subsequent square in open space if direct path is faster between current and openSpaceBegin. Replace the path in nArray between openSpaceBegin and current. Then look for direct path between openSpaceBegin + next,  then  between openSpaceBegin + next + next, and so on.
 + avoid looping through obj efter each function call
-+ improve logic of 'staircase' appearance
-+ disable 3 set squares in a triangle next to fork squares
 + improve save/load speed/logic
-+ fix reset
 + allow reload without window refresh
 + count and display disabled on eliminateSquares call
 + add paint/rubber features
 + show expected path length and disabled count
-+ add logic to determine functionCounter value : ie. n of fork squares as a parameter 
++ add logic to determine functionCounter value : ie. n of fork squares as a parameter
 
 
 Done:
@@ -44,3 +23,8 @@ Done:
 + paint path on mousedown
 + evaluate length of path on each recursion and return null if path length + actual direct length to target is greater than previous solution.
 + break if the last 24 solutions are same length and identical. Otherwise require 48 with same length
++ optimize to skip while loop when paths are already found on the current storeObject.
++ improve logic of 'staircase' appearance
++ disable 3 set squares in a triangle next to fork squares
++ fix reset
+Prevent hairpin turns.
