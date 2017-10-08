@@ -35,6 +35,7 @@ TODO:
 + count and display disabled on eliminateSquares call
 + add paint/rubber features
 + show expected path length and disabled count
++ add logic to determine functionCounter value : ie. n of fork squares as a parameter 
 
 
 Done:
