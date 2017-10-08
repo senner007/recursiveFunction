@@ -27,6 +27,7 @@ while (SquaresToDisable == true) {
       if (obj[x].isSet == true) {
 
         if( obj[x].objDir == undefined) { // store the directions on the object property
+          console.log('fgfdgdfgg')
           let val = x.split(',')
 
           let val0 = Number(val[0]);
@@ -52,6 +53,7 @@ while (SquaresToDisable == true) {
 
         let isSetCounter = 0;
         let plazaCounter = 0;
+
         for (let i = 0; i < 4; i++) {
           let dir = obj[x].objDir[i];
           let dirDiag = obj[x].objDirDiag[i];
@@ -65,8 +67,7 @@ while (SquaresToDisable == true) {
         }
 
 
-
-        if (isSetCounter > 2 && isSetCounter < 5 && obj[x].toBeUnforked != true) {
+        if (isSetCounter > 2 && isSetCounter < 5) {
           obj[x].isFork = true;
           if (obj[x].isDestination == false) {
             document.getElementById(x).classList.add('fork')
@@ -187,6 +188,8 @@ while (SquaresToDisable == true) {
 
           }
         }
+
+
         if (
           (objLeft != undefined && objRight != undefined && objLeft.isSet != true && objRight.isSet != true)  ||
           (objUp != undefined && objDown != undefined && objUp.isSet != true && objDown.isSet != true)
@@ -199,28 +202,30 @@ while (SquaresToDisable == true) {
 
          }
 
-         if (
-           (objLeft != undefined && objRight != undefined && objLeft.isSet != true && objLeft.isDisabled != true && objRight.isSet != true && objRight.isDisabled != true)  ||
-           (objUp != undefined && objDown != undefined && objUp.isSet != true && objUp.isDisabled != true && objDown.isSet != true && objDown.isDisabled != true)
+        //  if (
+        //    (objLeft != undefined && objRight != undefined && objLeft.isSet != true && objLeft.isDisabled != true && objRight.isSet != true && objRight.isDisabled != true)  ||
+        //    (objUp != undefined && objDown != undefined && objUp.isSet != true && objUp.isDisabled != true && objDown.isSet != true && objDown.isDisabled != true)
+         //
+         //
+        //       ) {
+         //
+        //       //  isBetweenUnset = true;
+         //
+         //
+        //   }
 
+        //
+        // if (
+        //        (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled != true && objRightUp.isDisabled != true)
+        //     || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled != true && objLeftUp.isDisabled != true)
+        //
+        //
+        //     )
+        // {
+        //  isAcrossDisabled = true;
+        //
+        // }
 
-              ) {
-
-              //  isBetweenUnset = true;
-
-
-          }
-
-        if (
-               (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isDisabled != true && objRightUp.isDisabled != true)
-            || (objRightDown != undefined && objLeftUp != undefined && objRightDown.isDisabled != true && objLeftUp.isDisabled != true)
-
-
-            )
-        {
-         isAcrossDisabled = true;
-
-        }
 
         if (
                (objLeftDown != undefined && objRightUp != undefined && (objLeftDown.isSet != true || (objLeft.isSet != true && objDown.isSet !=true))  && objRightUp.isDisabled == true)
@@ -234,10 +239,10 @@ while (SquaresToDisable == true) {
           if ((nextToUnset  == 2 || (nextToDisabledCount > 0 && nextToUnsetOrDisabledCount  != 3  )) && acrossPlazaCount == 0) { // don't paint
             isAcrossUnsetAndDisabled = true;
 
-
           }
 
         }
+
 
         if (
                (objLeftDown != undefined && objRightUp != undefined && objLeftDown.isSet != true && objLeftDown.isDisabled != true && objRightUp.isSet != true && objRightUp.isDisabled != true)
@@ -246,25 +251,15 @@ while (SquaresToDisable == true) {
 
             )
         {
-            if (acrossPlazaCount == 0 && nextToSetCount > 1 ) {
-                isAcrossUnset = true;
-
-            }
-
-
-
+            if (acrossPlazaCount == 0 && nextToSetCount > 1 ) {  isAcrossUnset = true; }
         }
+
+
          if (dirCheck) {
+              if (nextToSetCount < 2 && nextToUnsetOrDisabledCount > 2  ) {  singleToBeDisabled = true  }
+         }
 
-              if (nextToSetCount < 2 && nextToUnsetOrDisabledCount > 2  ) {
-              //  console.log(nextToSetCount)
-                  singleToBeDisabled = true
-              //    console.log('hello')
-              }
 
-        }
-
-        
 
         //
         if (dirCheck) {
@@ -276,13 +271,10 @@ while (SquaresToDisable == true) {
                    || (objUp.isFork == true && objRight.isFork == true && objRightUp.isFork == true )
                    || (objUp.isFork == true && objLeft.isFork == true && objLeftUp.isFork == true)
                 ) {
-
                     singleToBeDisabled = true
                 }
-
               }
-
-        }
+         }
 
 
 
@@ -429,41 +421,41 @@ while (SquaresToDisable == true) {
 
     } // end of obj loop
 
-    if (SquaresToDisable == false) {
-        // for (let x in obj) {
-        //
-        //   if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
-        //
-        //     let objLeft = obj[x].objDir[0];
-        //     let objRight = obj[x].objDir[1];
-        //     let objUp = obj[x].objDir[2];
-        //     let objDown = obj[x].objDir[3];
-        //     let isSetCount = 0;
-        //
-        //     for (let i = 0; i < 4; i++) {
-        //       let dir = obj[x].objDir[i];
-        //       if (dir != undefined) {
-        //
-        //         if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
-        //           isSetCount++;
-        //         }
-        //       }
-        //
-        //     }
-        //     if(isSetCount == 3) {
-        //       obj[x].isFork = true;
-        //       document.getElementById(x).classList.add('fork')
-        //
-        //     }
-        //     if(isSetCount == 4) {
-        //       obj[x].isFork = true;
-        //       obj[x].isPlaza = true;
-        //       document.getElementById(x).classList.add('plaza')
-        //     }
-        //   }
-        //
-        // }
-    }
+    // if (SquaresToDisable == false) {
+    //     for (let x in obj) {
+    //
+    //       if (obj[x].isSet && obj[x].isFork != true && obj[x].isDestination != true  ) {
+    //
+    //         let objLeft = obj[x].objDir[0];
+    //         let objRight = obj[x].objDir[1];
+    //         let objUp = obj[x].objDir[2];
+    //         let objDown = obj[x].objDir[3];
+    //         let isSetCount = 0;
+    //
+    //         for (let i = 0; i < 4; i++) {
+    //           let dir = obj[x].objDir[i];
+    //           if (dir != undefined) {
+    //
+    //             if (dir.isSet == true) {   // check if x is next to a set (blue element) and not a fork
+    //               isSetCount++;
+    //             }
+    //           }
+    //
+    //         }
+    //         if(isSetCount == 3) {
+    //           obj[x].isFork = true;
+    //           document.getElementById(x).classList.add('fork')
+    //
+    //         }
+    //         if(isSetCount == 4) {
+    //           obj[x].isFork = true;
+    //           obj[x].isPlaza = true;
+    //           document.getElementById(x).classList.add('plaza')
+    //         }
+    //       }
+    //
+    //     }
+    // }
 
 
  }   // while loop end
