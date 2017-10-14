@@ -15,6 +15,8 @@ TODO:
 + add paint/rubber features
 + show expected path length and disabled count
 + add logic to determine functionCounter value : ie. n of fork squares as a parameter
++ remove need for isMarked. Use if nArray.includes() instead
++ count fork squares and save in array. Check every 4th fork square if distance to previous ones are shorter in the solutions in the solutionArray. In open space, mark entrance to open space and for every fourth step check for shorter distance to 4th, 8th, 16th and 32nd previous open space(if present since entry)
 
 
 Done:
